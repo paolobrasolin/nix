@@ -67,6 +67,14 @@
     };
   };
 
+
+  location = {
+    provider = "manual";
+    latitude = 45.2;
+    longitude = 11.9;
+  };
+  services.redshift.enable = true;
+
   # Configure keymap in X11
   services.xserver = {
     layout = "it";

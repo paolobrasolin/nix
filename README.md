@@ -17,4 +17,5 @@ sudo ln -vfisr machines/<MACHINE>/*.nix /etc/nixos/
 * https://github.com/mikidep/dotfiles
 * https://www.youtube.com/watch?v=wr22CyoyRo4
 * https://github.com/michaelpj/nixos-config
+* https://github.com/dmadisetti/.dots
 

@@ -5,7 +5,9 @@
   home.homeDirectory = "/home/paolo";
 
   home.packages = with pkgs; [
-    cowsay
+    google-chrome
+    dmenu
+    alacritty
   ];
   
   programs.home-manager.enable = true;

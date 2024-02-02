@@ -12,7 +12,18 @@
 
   programs.home-manager.enable = true;
 
-  programs.git {
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "github.com" = {
+        user = "git";
+        host = "github.com";
+        identityFile = "~/.ssh/github"; # TODO: is there a better way?
+      };
+    };
+  };
+
+  programs.git = {
     enable = true;
     userName = "Paolo Brasolin";
     userEmail = "paolo.brasolin@gmail.com";

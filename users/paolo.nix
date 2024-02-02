@@ -12,6 +12,12 @@
 
   programs.home-manager.enable = true;
 
+  programs.git {
+    enable = true;
+    userName = "Paolo Brasolin";
+    userEmail = "paolo.brasolin@gmail.com";
+  };
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;

@@ -113,6 +113,7 @@
     isNormalUser = true;
     description = "Paolo Brasolin";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     # packages = with pkgs; [];
   };
 
@@ -134,6 +135,16 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "Hack" ]; })
+  ];
+
+  fonts.fontconfig = {
+    defaultFonts = { monospace = [ "Hack Nerd Font" ]; };
+  };
+
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
 

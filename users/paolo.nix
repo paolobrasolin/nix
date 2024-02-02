@@ -9,6 +9,24 @@
     dmenu
     alacritty
   ];
-  
+
   programs.home-manager.enable = true;
+
+  programs.zsh = {
+    enable = true;
+    enableAutosuggestions = true;
+    syntaxHighlighting.enable = true;
+    history.ignoreDups = true;
+    historySubstringSearch.enable = true;
+    prezto = {
+      enable = true;
+      prompt = {
+        showReturnVal = true;
+        theme = "pure";
+      };
+    };
+    shellAliases = {
+      snix = "sudo nixos-rebuild switch";
+    };
+  };
 }

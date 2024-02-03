@@ -42,16 +42,20 @@
     syntaxHighlighting.enable = true;
     history.ignoreDups = true;
     historySubstringSearch.enable = true;
-    prezto = {
-      enable = true;
-      prompt = {
-        showReturnVal = true;
-        theme = "pure";
-      };
-    };
     shellAliases = {
       vim = "lvim";
       snix = "sudo nixos-rebuild switch";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+      # username.show_always = true;
+      # hostname.ssh_only = false;
+      memory_usage.disabled = false;
+      status.disabled = false;
+      sudo.disabled = false;
     };
   };
 }

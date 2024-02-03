@@ -9,6 +9,7 @@
     dmenu
     alacritty
     lunarvim
+    telegram-desktop
     # ripgrep fzf fd zoxide
   ];
 

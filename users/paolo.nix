@@ -9,6 +9,7 @@
     dmenu
     alacritty
     lunarvim
+    xclip
     telegram-desktop
     # ripgrep fzf fd zoxide
   ];
@@ -60,5 +61,5 @@
     };
   };
 
-  home.file.".config/lvim/config.lua".source = ./lvim_config.lua;
+  #home.file.".config/lvim/config.lua".source = ./lvim_config.lua;
 }

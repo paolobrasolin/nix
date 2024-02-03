@@ -11,6 +11,7 @@
     lunarvim
     xclip
     telegram-desktop
+    hcloud
     # ripgrep fzf fd zoxide
   ];
 
@@ -22,12 +23,12 @@
       "github.com" = {
         user = "git";
         host = "github.com";
-        identityFile = "~/.ssh/github"; # TODO: is there a better way?
+        identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
       };
       "hetzner" = {
         user = "root";
         host = "195.201.130.78";
-        identityFile = "~/.ssh/hetzner"; # TODO: is there a better way?
+        identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
       };
     };
   };

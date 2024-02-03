@@ -23,7 +23,7 @@
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
-    (builtins.readFile ./hetzner.pub)
+    (builtins.readFile ../../keys/id_ed25519.pub)
   ];
 
   # NOTE: what's this?
@@ -53,7 +53,7 @@
     shell = pkgs.zsh;
     # packages = with pkgs; [];
     openssh.authorizedKeys.keys = [
-      (builtins.readFile ./hetzner.pub)
+      (builtins.readFile ../../keys/id_ed25519.pub)
     ];
   };
 

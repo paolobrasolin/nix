@@ -59,4 +59,6 @@
       sudo.disabled = false;
     };
   };
+
+  home.file.".config/lvim/config.lua".source = ./lvim_config.lua;
 }

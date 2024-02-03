@@ -8,6 +8,8 @@
     google-chrome
     dmenu
     alacritty
+    lunarvim
+    # ripgrep fzf fd zoxide
   ];
 
   programs.home-manager.enable = true;
@@ -19,6 +21,11 @@
         user = "git";
         host = "github.com";
         identityFile = "~/.ssh/github"; # TODO: is there a better way?
+      };
+      "hetzner" = {
+        user = "root";
+        host = "195.201.130.78";
+        identityFile = "~/.ssh/hetzner"; # TODO: is there a better way?
       };
     };
   };
@@ -43,6 +50,7 @@
       };
     };
     shellAliases = {
+      vim = "lvim";
       snix = "sudo nixos-rebuild switch";
     };
   };

@@ -2,6 +2,11 @@
 
 Let's have fun.
 
+## TODO
+
+- [ ] handle secrets for inari -- see https://github.com/nix-community/nixos-anywhere/blob/main/docs/howtos/secrets.md
+- [ ] handle IP of inari in a way smarter than hardcoding
+
 ## Machines
 
 Machine-level configurations are in `machines/`.

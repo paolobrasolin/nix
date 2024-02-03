@@ -14,7 +14,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.hosts = {
-    "195.201.130.78" = [ "inari" ];
+    "195.201.130.78" = [ "inari" ]; # TODO: how do i keep this updated?
   };
 
   # Configure network proxy if necessary

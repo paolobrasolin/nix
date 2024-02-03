@@ -19,18 +19,18 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
-      "github.com" = {
-        user = "git";
-        host = "github.com";
-        identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
-      };
-      "hetzner" = {
-        user = "root";
-        host = "195.201.130.78";
-        identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
-      };
-    };
+    # matchBlocks = {
+    #   "github.com" = {
+    #     user = "git";
+    #     host = "github.com";
+    #     identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
+    #   };
+    #   "hetzner" = {
+    #     user = "root";
+    #     host = "195.201.130.78";
+    #     identityFile = "~/.ssh/id_ed25519"; # TODO: is there a better way?
+    #   };
+    # };
   };
 
   programs.git = {

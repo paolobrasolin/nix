@@ -29,6 +29,11 @@
         modules = [
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.paolo = import ./users/paolo/home-tty.nix;
+          }
         ];
       };
     };

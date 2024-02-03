@@ -9,10 +9,10 @@
 
   outputs = { self, nixpkgs, home-manager, ... }: {
     nixosConfigurations = {
-      "inari" = nixpkgs.lib.nixosSystem {
+      "kitsune" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/inari/configuration.nix
+          ./hosts/kitsune/configuration.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

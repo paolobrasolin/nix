@@ -7,7 +7,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
-    ../shared/locale-it.nix
   ];
 
   # Boot loader

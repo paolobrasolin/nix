@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   imports = [
     ./hardware-configuration.nix
-    ../shared/locale-it.nix
   ];
 
   # Bootloader

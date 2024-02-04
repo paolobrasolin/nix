@@ -1,55 +1,55 @@
-{ modulesPath, config, lib, pkgs, ... }: {
+{
+  modulesPath,
+  pkgs,
+  ...
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
+    ../shared/locale-it.nix
   ];
 
+  # Boot loader
   boot.loader.grub = {
     # devices = [ ]; # NOTE: disko will add to the list all devices with an EF02 partition
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
 
-  networking.hostName = "inari";
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-  time.timeZone = "Europe/Rome";
-
-  # TODO: i18n, see kitsune
-
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-  };
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    (builtins.readFile ../../keys/id_ed25519.pub)
+  # System-level packages
+  environment.systemPackages = with pkgs; [
+    git
   ];
 
-  # NOTE: what's this?
-  # environment.systemPackages = map lib.lowPrio [
-  #   pkgs.curl
-  #   pkgs.gitMinimal
-  # ];
+  # Networking basics
+  networking.hostName = "inari";
 
-  # systemd.tmpfiles.rules = [
-  #   "d /home/${username}/.config 0755 ${username} users"
-  #   "d /home/${username}/.config/lvim 0755 ${username} users"
-  # ];
-
-  # FIXME: change your shell here if you don't want zsh
-  programs.zsh.enable = true;
-  environment.pathsToLink = ["/share/zsh"];
-  environment.shells = [pkgs.zsh];
-
-  environment.enableAllTerminfo = true;
+  # Timezone
+  time.timeZone = "Europe/Rome";
 
   security.sudo.wheelNeedsPassword = false;
+
+  # Basic terminal QOL
+  programs.zsh.enable = true;
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    defaultEditor = true;
+  };
+
+  # environment.pathsToLink = ["/share/zsh"];
+  # environment.shells = [pkgs.zsh];
+  # environment.enableAllTerminfo = true;
 
   users.users.paolo = {
     isNormalUser = true;
     description = "Paolo Brasolin";
-    extraGroups = [ "wheel" ]; # "docker"
+    extraGroups = ["wheel" "docker"];
     shell = pkgs.zsh;
     # packages = with pkgs; [];
     openssh.authorizedKeys.keys = [
@@ -57,45 +57,20 @@
     ];
   };
 
-  # virtualisation.docker = {
-  #   enable = true;
-  #   enableOnBoot = true;
-  #   autoPrune.enable = true;
-  # };
+  # SSH connection
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+  };
+  users.users.root.openssh.authorizedKeys.keys = [
+    (builtins.readFile ../../keys/id_ed25519.pub)
+  ];
 
-  # nix = {
-  #   settings = {
-  #     trusted-users = [username];
-  #     # FIXME: use your access tokens from secrets.json here to be able to clone private repos on GitHub and GitLab
-  #     # access-tokens = [
-  #     #   "github.com=${secrets.github_token}"
-  #     #   "gitlab.com=OAuth2:${secrets.gitlab_token}"
-  #     # ];
-
-  #     accept-flake-config = true;
-  #     auto-optimise-store = true;
-  #   };
-
-  #   registry = {
-  #     nixpkgs = {
-  #       flake = inputs.nixpkgs;
-  #     };
-  #   };
-
-  #   nixPath = [
-  #     "nixpkgs=${inputs.nixpkgs.outPath}"
-  #     "nixos-config=/etc/nixos/configuration.nix"
-  #     "/nix/var/nix/profiles/per-user/root/channels"
-  #   ];
-
-  #   package = pkgs.nixFlakes;
-  #   extraOptions = ''experimental-features = nix-command flakes'';
-
-  #   gc = {
-  #     automatic = true;
-  #     options = "--delete-older-than 7d";
-  #   };
-  # };
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+    autoPrune.enable = true;
+  };
 
   system.stateVersion = "23.11";
 }

@@ -12,6 +12,7 @@
     xclip
     telegram-desktop
     hcloud
+    alejandra
     # ripgrep fzf fd zoxide
   ];
 

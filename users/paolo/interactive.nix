@@ -77,5 +77,6 @@
     };
   };
 
+  home.file.".editorconfig".source = ./files/editor_config.ini;
   home.file.".config/lvim/config.lua".source = ./files/lvim_config.lua;
 }

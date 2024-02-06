@@ -22,10 +22,14 @@
 
   # Networking basics
   networking.hostName = "kitsune";
-  networking.hosts = {
-    "195.201.130.78" = ["inari"]; # TODO: how do i keep this updated?
-  };
   networking.networkmanager.enable = true;
+
+  # TODO: maybe there's some more clever way.
+  # networking.hosts."142.132.166.85" = ["inari"];
+  # services.dnsmasq = {
+  #   enable = true;
+  #   settings.hostsdir = "~/.hosts";
+  # };
 
   # Timezone and locale
   time.timeZone = "Europe/Rome";

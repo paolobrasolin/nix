@@ -3,5 +3,6 @@
     google-chrome
     dmenu
     alacritty
+    xclip
   ];
 }

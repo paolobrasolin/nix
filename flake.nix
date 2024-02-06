@@ -20,7 +20,11 @@
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.paolo = import ./users/paolo/home.nix;
+            home-manager.users."paolo".imports = [
+              ./users/paolo/base.nix
+              ./users/paolo/interactive.nix
+              ./users/paolo/graphical.nix
+            ];
           }
         ];
       };
@@ -32,7 +36,10 @@
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.paolo = import ./users/paolo/home-tty.nix;
+            home-manager.users."paolo".imports = [
+              ./users/paolo/base.nix
+              ./users/paolo/interactive.nix
+            ];
           }
         ];
       };

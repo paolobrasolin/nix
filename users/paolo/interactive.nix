@@ -1,22 +1,10 @@
-{ config, pkgs, ... }: {
-  home.stateVersion = "23.11";
-
-  home.username = "paolo";
-  home.homeDirectory = "/home/paolo";
-
+{ pkgs, ... }: {
   home.packages = with pkgs; [
-    google-chrome
-    dmenu
-    alacritty
     lunarvim
-    xclip
-    telegram-desktop
     hcloud
     alejandra
     # ripgrep fzf fd zoxide
   ];
-
-  programs.home-manager.enable = true;
 
   programs.ssh = {
     enable = true;
@@ -34,10 +22,36 @@
     # };
   };
 
+  # TODO: experiment with these
+  # nix-index.enable = true;
+  # nix-index.enableZshIntegration = true;
+  # nix-index-database.comma.enable = true;
+  # fzf.enable = true;
+  # fzf.enableZshIntegration = true;
+  # lsd.enable = true;
+  # lsd.enableAliases = true;
+  # zoxide.enable = true;
+  # zoxide.enableZshIntegration = true;
+  # broot.enable = true;
+  # broot.enableZshIntegration = true;
+  # direnv.enable = true;
+  # direnv.enableZshIntegration = true;
+  # direnv.nix-direnv.enable = true;
+
   programs.git = {
     enable = true;
     userName = "Paolo Brasolin";
     userEmail = "paolo.brasolin@gmail.com";
+    delta.enable = true;
+    delta.options = {
+      line-numbers = true;
+      side-by-side = true;
+      navigate = true;
+    };
+    extraConfig = {
+      merge.conflictstyle = "diff3";
+      diff.colorMoved = "default";
+    };
   };
 
   programs.zsh = {
@@ -63,5 +77,5 @@
     };
   };
 
-  #home.file.".config/lvim/config.lua".source = ./lvim_config.lua;
+  home.file.".config/lvim/config.lua".source = ./files/lvim_config.lua;
 }

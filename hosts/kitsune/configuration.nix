@@ -18,6 +18,7 @@
   # System-level packages
   environment.systemPackages = with pkgs; [
     git
+    pulseaudio # so pactl is available in $PATH
   ];
 
   # Networking basics
@@ -94,6 +95,10 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
+  # Bluetooth
+  services.blueman.enable = true;
+  hardware.bluetooth.enable = true;
 
   # Fonts
   fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["Hack"];})];

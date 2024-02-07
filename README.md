@@ -45,7 +45,10 @@ ssh-keygen -R $(hcloud server ip inari)
 
 To update,
 ```bash
-nixos-rebuild switch --flake .#inari --target-host root@$(hcloud server ip inari)
+nixos-rebuild switch \
+    --flake .#inari \
+    --build-host root@$(hcloud server ip inari) \
+    --target-host root@$(hcloud server ip inari)
 ```
 
 To connect,

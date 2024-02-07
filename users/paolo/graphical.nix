@@ -1,6 +1,7 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     google-chrome
+    telegram-desktop
     dmenu
     alacritty
     xclip

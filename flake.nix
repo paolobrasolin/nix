@@ -17,14 +17,23 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/kitsune/configuration.nix
+          # NOTE: inari's IP is only semi-static
+          { networking.hosts."142.132.166.85" = ["inari"]; }
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users."paolo".imports = [
-              ./users/paolo/base.nix
-              ./users/paolo/interactive.nix
-              ./users/paolo/graphical.nix
-            ];
+            home-manager.users."paolo" = {
+              imports = [
+                ./users/paolo/base.nix
+                ./users/paolo/interactive.nix
+                ./users/paolo/graphical.nix
+              ];
+              programs.ssh.matchBlocks."inari" = {
+                host = "inari";
+                forwardAgent = true;
+                identityFile = "~/.ssh/id_ed25519";
+              };
+            };
           }
         ];
       };

@@ -60,6 +60,8 @@
     settings.PasswordAuthentication = false;
   };
 
+  programs.ssh.startAgent = true;
+
   # Docker
   virtualisation.docker = {
     enable = true;

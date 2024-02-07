@@ -24,13 +24,7 @@
   # Networking basics
   networking.hostName = "kitsune";
   networking.networkmanager.enable = true;
-
-  # TODO: maybe there's some more clever way.
-  # networking.hosts."142.132.166.85" = ["inari"];
-  # services.dnsmasq = {
-  #   enable = true;
-  #   settings.hostsdir = "~/.hosts";
-  # };
+  programs.ssh.startAgent = true;
 
   # Timezone and locale
   time.timeZone = "Europe/Rome";

@@ -5,4 +5,5 @@
   home.homeDirectory = "/home/paolo";
 
   programs.home-manager.enable = true;
+  programs.ssh.enable = true;
 }

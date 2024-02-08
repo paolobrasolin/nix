@@ -7,15 +7,6 @@ Let's have fun.
 - [ ] handle secrets for inari -- see https://github.com/nix-community/nixos-anywhere/blob/main/docs/howtos/secrets.md
 - [ ] handle IP of inari in a way smarter than hardcoding
 
-## Machines
-
-Machine-level configurations are in `machines/`.
-
-To set one up,
-```
-sudo ln -vfisr machines/<MACHINE>/*.nix /etc/nixos/
-```
-
 ### Hetzner (`inari`)
 
 First, ensure you have an identity and upload the public key.

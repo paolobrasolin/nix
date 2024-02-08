@@ -1,0 +1,23 @@
+init:
+	hcloud server create \
+			--location nbg1 \
+			--image ubuntu-22.04 \
+			--type cx11 \
+			--ssh-key paolo@kitsune \
+			--firewall firewall-inari \
+			--name inari
+	nix run github:nix-community/nixos-anywhere -- \
+			--build-on-remote \
+			--flake .#inari \
+			root@$$(hcloud server ip inari)
+	ssh-keygen -R $$(hcloud server ip inari)
+
+snix:
+	nixos-rebuild switch \
+			--flake .#inari \
+			--build-host root@$$(hcloud server ip inari) \
+			--target-host root@$$(hcloud server ip inari)
+
+kill:
+	hcloud server delete inari
+

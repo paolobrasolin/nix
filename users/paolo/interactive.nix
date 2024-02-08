@@ -4,6 +4,8 @@
     hcloud
     alejandra
     # ripgrep fzf fd zoxide
+    timetrap
+    gnumake
   ];
 
   # TODO: experiment with these
@@ -24,6 +26,7 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "Paolo Brasolin";
     userEmail = "paolo.brasolin@gmail.com";
     delta.enable = true;

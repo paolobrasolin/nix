@@ -25,6 +25,7 @@
   # System-level packages
   environment.systemPackages = with pkgs; [
     git
+    docker-compose
   ];
 
   # Networking basics

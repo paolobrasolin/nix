@@ -6,6 +6,8 @@
     # ripgrep fzf fd zoxide
     timetrap
     gnumake
+    zip unzip
+    gdown
   ];
 
   # TODO: experiment with these

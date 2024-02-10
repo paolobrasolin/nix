@@ -9,6 +9,7 @@
     zip unzip
     gdown
     htop
+    sshuttle
   ];
 
   # TODO: experiment with these
@@ -53,6 +54,10 @@
     shellAliases = {
       vim = "lvim";
       snix = "sudo nixos-rebuild switch";
+      # NOTE: the path of the requisite is the same on both machines, you don't need to ssh to get the value of --python; cool!
+      # TODO: find a nix way to get --python
+      # TODO: this should only be on kitsune tbh
+      tonneru = "sshuttle --python=\"$(nix-store --query $(which sshuttle) --requisites | grep -m1 'python3-.*-env')/bin/python\" -r paolo@inari $(hcloud server ip inari)";
     };
   };
 

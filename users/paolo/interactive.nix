@@ -4,7 +4,7 @@
     hcloud
     alejandra
     # ripgrep fzf fd zoxide
-    timetrap
+    timetrap sqlite
     gnumake
     zip unzip
     gdown

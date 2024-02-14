@@ -8,6 +8,7 @@
     pasystray
     zathura
     feh
+    libreoffice-qt
   ];
 
   home.file.".config/i3/config".source = ./files/i3_config.txt;

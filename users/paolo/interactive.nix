@@ -10,6 +10,7 @@
     gdown
     htop
     sshuttle
+    sshfs
   ];
 
   # TODO: experiment with these

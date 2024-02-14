@@ -6,6 +6,8 @@
     alacritty
     xclip
     pasystray
+    zathura
+    feh
   ];
 
   home.file.".config/i3/config".source = ./files/i3_config.txt;

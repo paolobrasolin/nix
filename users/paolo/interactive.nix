@@ -28,6 +28,7 @@
   # direnv.enableZshIntegration = true;
   # direnv.nix-direnv.enable = true;
 
+  programs.lazygit.enable = true;
   programs.git = {
     enable = true;
     lfs.enable = true;

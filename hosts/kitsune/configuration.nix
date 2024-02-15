@@ -46,7 +46,19 @@
     enable = true;
     displayManager = {
       defaultSession = "xfce+i3";
-      lightdm.enable = true;
+      lightdm = {
+        enable = true;
+        greeters = {
+          mini = {
+            enable = true;
+            user = "paolo";
+            extraConfig = ''
+              [greeter]
+              show-password-label = false
+            '';
+          };
+        };
+      };
     };
     desktopManager.xfce = {
       enable = true;

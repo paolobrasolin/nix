@@ -74,7 +74,13 @@
     };
   };
 
-  programs.tmux.enable = true;
+  programs.tmux = {
+    enable = true;
+    extraConfig = ''
+      # This fixes true color in tmux/alacritty/neovim; for reference see https://unix.stackexchange.com/a/568263 and https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
+      set -ag terminal-overrides ",alacritty:RGB"
+    '';
+  };
 
   home.file.".editorconfig".source = ./files/editor_config.ini;
   home.file.".config/lvim/config.lua".source = ./files/lvim_config.lua;

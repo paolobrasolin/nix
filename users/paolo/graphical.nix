@@ -21,6 +21,11 @@
       startup = [
         { command = "--no-startup-id nm-applet"; }
       ];
+      window = {
+        border = 1;
+        hideEdgeBorders = "smart";
+      };
+      workspaceAutoBackAndForth = true;
       keybindings = let
         pactl = "exec --no-startup-id pactl";
       in lib.mkOptionDefault {

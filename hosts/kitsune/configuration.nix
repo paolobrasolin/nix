@@ -55,6 +55,13 @@
             extraConfig = ''
               [greeter]
               show-password-label = false
+              password-alignment = center
+              password-input-width = 32
+
+              [greeter-theme]
+              window-color = "#1B1D1E"
+              border-width = 0px
+              password-border-width = 0px
             '';
           };
         };

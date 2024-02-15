@@ -11,6 +11,7 @@
     htop
     sshuttle
     sshfs
+    jq
   ];
 
   # TODO: experiment with these

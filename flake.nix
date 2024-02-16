@@ -27,6 +27,7 @@
                 ./users/paolo/base.nix
                 ./users/paolo/interactive.nix
                 ./users/paolo/graphical.nix
+                # ./users/paolo/vscode-client.nix
               ];
               programs.ssh.matchBlocks."inari" = {
                 host = "inari";
@@ -48,6 +49,7 @@
             home-manager.users."paolo".imports = [
               ./users/paolo/base.nix
               ./users/paolo/interactive.nix
+              # ./users/paolo/vscode-server.nix
             ];
           }
         ];

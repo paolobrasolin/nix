@@ -96,12 +96,23 @@ lvim.builtin.treesitter.auto_install = true
 -- }
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
--- lvim.plugins = {
---     {
---       "folke/trouble.nvim",
---       cmd = "TroubleToggle",
---     },
--- }
+lvim.plugins = {
+  {
+    "Exafunction/codeium.vim",
+    event = "BufEnter",
+    config = function()
+      -- I'm able to manually pathc the ELF, following
+      -- https://nguyenhuythanh.com/posts/workaround-binary-issues-nixos/
+      -- https://unix.stackexchange.com/a/522823
+      -- but i still get no output. Using pkgs.codeium works fine though.
+      -- TODO: get the binary path via nix
+      vim.g.codeium_bin = "/run/current-system/sw/bin/codeium_language_server"
+      vim.g.codeium_enabled = true
+      vim.g.codeium_manual = false
+    end
+  }
+}
+
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
 -- vim.api.nvim_create_autocmd("FileType", {

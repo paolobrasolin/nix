@@ -26,6 +26,7 @@
   environment.systemPackages = with pkgs; [
     git
     docker-compose
+    codeium
   ];
 
   # Networking basics

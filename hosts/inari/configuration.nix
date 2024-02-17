@@ -7,6 +7,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
+    ./ssh-server.nix
     ./virtualisation.nix
   ];
 
@@ -56,19 +57,7 @@
     defaultEditor = true;
   };
 
-  # SSH connection
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-  };
-
-  programs.ssh.startAgent = true;
-
-  # root user
   security.sudo.wheelNeedsPassword = false;
-  users.users.root.openssh.authorizedKeys.keys = [
-    (builtins.readFile ../../keys/id_ed25519.pub)
-  ];
 
   users.users.paolo = {
     isNormalUser = true;
@@ -76,9 +65,6 @@
     extraGroups = ["wheel"];
     shell = pkgs.zsh;
     # packages = with pkgs; [];
-    openssh.authorizedKeys.keys = [
-      (builtins.readFile ../../keys/id_ed25519.pub)
-    ];
   };
 
   system.stateVersion = "23.11";

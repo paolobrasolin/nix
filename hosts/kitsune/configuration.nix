@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./hardware-configuration.nix
+    ./ssh-client.nix
   ];
 
   # Bootloader
@@ -24,7 +25,6 @@
   # Networking basics
   networking.hostName = "kitsune";
   networking.networkmanager.enable = true;
-  programs.ssh.startAgent = true;
 
   # Timezone and locale
   time.timeZone = "Europe/Rome";

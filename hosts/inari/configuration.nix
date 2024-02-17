@@ -7,6 +7,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
+    ./virtualisation.nix
   ];
 
   # Boot loader
@@ -25,7 +26,6 @@
   # System-level packages
   environment.systemPackages = with pkgs; [
     git
-    docker-compose
     codeium
   ];
 
@@ -64,13 +64,6 @@
 
   programs.ssh.startAgent = true;
 
-  # Docker
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    autoPrune.enable = true;
-  };
-
   # root user
   security.sudo.wheelNeedsPassword = false;
   users.users.root.openssh.authorizedKeys.keys = [
@@ -80,7 +73,7 @@
   users.users.paolo = {
     isNormalUser = true;
     description = "Paolo Brasolin";
-    extraGroups = ["wheel" "docker"];
+    extraGroups = ["wheel"];
     shell = pkgs.zsh;
     # packages = with pkgs; [];
     openssh.authorizedKeys.keys = [

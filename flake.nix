@@ -41,6 +41,7 @@
       "inari" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # "aarch64-linux";
         modules = [
+          { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
           home-manager.nixosModules.home-manager {

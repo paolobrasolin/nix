@@ -2,9 +2,10 @@ init:
 	hcloud server create \
 			--location nbg1 \
 			--image ubuntu-22.04 \
-			--type cx11 \
+			--type cpx11 \
 			--ssh-key paolo@kitsune \
-			--firewall firewall-inari \
+			--firewall inari-firewall \
+			--primary-ipv4 inari-ip \
 			--name inari
 	nix run github:nix-community/nixos-anywhere -- \
 			--build-on-remote \

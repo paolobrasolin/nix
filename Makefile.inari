@@ -5,7 +5,7 @@ init:
 			--type cpx11 \
 			--ssh-key paolo@kitsune \
 			--firewall inari-firewall \
-			--primary-ipv4 inari-ip \
+			--primary-ipv4 inari-ipv4 \
 			--name inari
 	nix run github:nix-community/nixos-anywhere -- \
 			--build-on-remote \

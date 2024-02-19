@@ -19,6 +19,10 @@ hcloud ssh-key create --public-key-from-file ~/.ssh/id_ed25519.pub --name "$(who
 
 Then, use `Makefile`.
 
+### IPv6
+
+Welp, apparently my ISP does IPv4 only; see http://test-ipv6.com/
+
 ## References
 
 * https://github.com/iwilare/nix/tree/main

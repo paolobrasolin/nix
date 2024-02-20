@@ -18,6 +18,11 @@
     efiInstallAsRemovable = true;
   };
 
+  # This should increase the size of the tmpfs at /run/user/1000 for nix shells
+  services.logind.extraConfig = "RuntimeDirectorySize=80%";
+  # boot.tmp = { useTmpfs = true; tmpfsSize = "80%"; };
+  # TODO: we'll need a swap partition sooner or later
+
   # Enable flakes
   nix.settings.experimental-features = ["nix-command" "flakes"];
 

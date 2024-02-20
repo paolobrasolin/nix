@@ -19,6 +19,16 @@ snix:
 			--build-host root@$$(hcloud server ip inari) \
 			--target-host root@$$(hcloud server ip inari)
 
+slow:
+	hcloud server shutdown inari
+	hcloud server change-type --keep-disk inari cx21
+	hcloud server poweron inari
+
+fast:
+	hcloud server shutdown inari
+	hcloud server change-type --keep-disk inari cpx51
+	hcloud server poweron inari
+
 kill:
 	hcloud server delete inari
 

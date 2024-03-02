@@ -17,6 +17,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/kitsune/configuration.nix
+          ./hosts/kitsune/printing.nix
           # NOTE: inari's IP is only semi-static
           { networking.hosts."142.132.166.85" = ["inari"]; }
           home-manager.nixosModules.home-manager {

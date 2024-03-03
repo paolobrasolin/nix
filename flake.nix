@@ -40,6 +40,7 @@
           { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
+          ./hosts/inari/virtualisation.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

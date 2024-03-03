@@ -8,7 +8,6 @@
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
     ./ssh-server.nix
-    ./virtualisation.nix
   ];
 
   # Boot loader

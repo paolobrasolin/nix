@@ -28,12 +28,8 @@
                 ./users/paolo/interactive.nix
                 ./users/paolo/graphical.nix
                 # ./users/paolo/vscode-client.nix
+                ./users/paolo/ssh-client.nix
               ];
-              programs.ssh.matchBlocks."inari" = {
-                host = "inari";
-                forwardAgent = true;
-                identityFile = "~/.ssh/id_ed25519";
-              };
             };
           }
         ];

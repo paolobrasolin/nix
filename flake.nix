@@ -18,8 +18,7 @@
         modules = [
           ./hosts/kitsune/configuration.nix
           ./hosts/kitsune/printing.nix
-          # NOTE: inari's IP is only semi-static
-          { networking.hosts."142.132.166.85" = ["inari"]; }
+          ./hosts/kitsune/ssh-client.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

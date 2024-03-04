@@ -30,6 +30,7 @@
                 # ./users/paolo/vscode-client.nix
                 ./users/paolo/ssh-client.nix
                 ./users/paolo/gpg-client.nix
+                ./users/paolo/git-secret.nix
               ];
             };
           }
@@ -52,6 +53,7 @@
               ./users/paolo/interactive.nix
               # ./users/paolo/vscode-server.nix
               ./users/paolo/gpg-server.nix
+              ./users/paolo/git-secret.nix
             ];
           }
         ];

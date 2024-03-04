@@ -41,6 +41,7 @@
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
           ./hosts/inari/virtualisation.nix
+          ./hosts/inari/ssh-server.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

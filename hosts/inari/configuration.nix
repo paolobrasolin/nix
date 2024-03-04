@@ -7,7 +7,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disk-configuration.nix
-    ./ssh-server.nix
   ];
 
   # Boot loader

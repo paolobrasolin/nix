@@ -29,6 +29,7 @@
                 ./users/paolo/graphical.nix
                 # ./users/paolo/vscode-client.nix
                 ./users/paolo/ssh-client.nix
+                ./users/paolo/gpg-client.nix
               ];
             };
           }
@@ -42,6 +43,7 @@
           ./hosts/inari/configuration.nix
           ./hosts/inari/virtualisation.nix
           ./hosts/inari/ssh-server.nix
+          ./hosts/inari/gpg-server.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -49,6 +51,7 @@
               ./users/paolo/base.nix
               ./users/paolo/interactive.nix
               # ./users/paolo/vscode-server.nix
+              ./users/paolo/gpg-server.nix
             ];
           }
         ];

@@ -7,7 +7,7 @@ Let's have fun.
 - [ ] handle secrets for inari -- see https://github.com/nix-community/nixos-anywhere/blob/main/docs/howtos/secrets.md
 - [ ] handle IP of inari in a way smarter than hardcoding
 
-## Nix~~OS~~ in cloud
+## NixOS in cloud
 
 First, ensure you have an identity and upload the public key.
 
@@ -23,7 +23,7 @@ Then, use `Makefile`.
 
 Welp, apparently my ISP does IPv4 only; see http://test-ipv6.com/
 
-## NixOS on mobile
+## Nix~~OS~~ on mobile
 
 It's definitely doable on an Android phone thanks to [Nix-on-Droid](https://github.com/nix-community/nix-on-droid):
 

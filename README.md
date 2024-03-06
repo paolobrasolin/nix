@@ -7,7 +7,7 @@ Let's have fun.
 - [ ] handle secrets for inari -- see https://github.com/nix-community/nixos-anywhere/blob/main/docs/howtos/secrets.md
 - [ ] handle IP of inari in a way smarter than hardcoding
 
-### Hetzner (`inari`)
+## NixOS in cloud
 
 First, ensure you have an identity and upload the public key.
 

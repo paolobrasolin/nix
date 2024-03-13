@@ -1,9 +1,12 @@
+SHELL := /usr/bin/env zsh
+
 .DEFAULT_GOAL := help
 .PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 init: ## create server
+	@read -q "?Are you sure? [y/N] "
 	hcloud server create \
 			--location nbg1 \
 			--image ubuntu-22.04 \
@@ -25,16 +28,19 @@ snix: ## rebuild nixos
 			--target-host root@$$(hcloud server ip inari)
 
 slow: ## scale down to a cx21 (2vCPU, 4GB RAM)
+	@read -q "?Are you sure? [y/N] "
 	hcloud server shutdown inari
 	hcloud server change-type --keep-disk inari cx21
 	hcloud server poweron inari
 
 fast: ## scale up to a cpx51 (16vCPU, 32GB RAM)
+	@read -q "?Are you sure? [y/N] "
 	hcloud server shutdown inari
 	hcloud server change-type --keep-disk inari cpx51
 	hcloud server poweron inari
 
 kill: ## delete server
+	@read -q "?Are you sure? [y/N] "
 	hcloud server delete inari
 
 open := hcloud firewall    add-rule inari-firewall --direction in --protocol tcp --source-ips 0.0.0.0/0 --source-ips ::/0

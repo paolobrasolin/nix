@@ -1,4 +1,9 @@
-init:
+.DEFAULT_GOAL := help
+.PHONY: help
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+init: ## create server
 	hcloud server create \
 			--location nbg1 \
 			--image ubuntu-22.04 \
@@ -13,22 +18,22 @@ init:
 			root@$$(hcloud server ip inari)
 	ssh-keygen -R $$(hcloud server ip inari)
 
-snix:
+snix: ## rebuild nixos
 	nixos-rebuild switch \
 			--flake .#inari \
 			--build-host root@$$(hcloud server ip inari) \
 			--target-host root@$$(hcloud server ip inari)
 
-slow:
+slow: ## scale down to a cx21 (2vCPU, 4GB RAM)
 	hcloud server shutdown inari
 	hcloud server change-type --keep-disk inari cx21
 	hcloud server poweron inari
 
-fast:
+fast: ## scale up to a cpx51 (16vCPU, 32GB RAM)
 	hcloud server shutdown inari
 	hcloud server change-type --keep-disk inari cpx51
 	hcloud server poweron inari
 
-kill:
+kill: ## delete server
 	hcloud server delete inari
 

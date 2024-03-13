@@ -72,6 +72,7 @@
     historySubstringSearch.enable = true;
     shellAliases = {
       vim = "lvim";
+      inari = "make -f ~/nix/Makefile.inari";
       snix = "sudo nixos-rebuild switch";
       # NOTE: the path of the requisite is the same on both machines, you don't need to ssh to get the value of --python; cool!
       # TODO: find a nix way to get --python

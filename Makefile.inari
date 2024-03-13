@@ -37,3 +37,20 @@ fast: ## scale up to a cpx51 (16vCPU, 32GB RAM)
 kill: ## delete server
 	hcloud server delete inari
 
+open := hcloud firewall    add-rule inari-firewall --direction in --protocol tcp --source-ips 0.0.0.0/0 --source-ips ::/0
+shut := hcloud firewall delete-rule inari-firewall --direction in --protocol tcp --source-ips 0.0.0.0/0 --source-ips ::/0
+
+open-ssh: ## open port 22 for SSH
+	 $(open) --port 22 --description SSH
+open-http: ## open port 80 for HTTP
+	 $(open) --port 80 --description HTTP
+open-https: ## oprn port 443 for HTTPS
+	 $(open) --port 443 --description HTTPS
+
+shut-ssh: ## shut port 22 for SSH
+	 $(shut) --port 22 --description SSH
+shut-http: ## shut port 80 for HTTP
+	 $(shut) --port 80 --description HTTP
+shut-https: ## shut port 443 for HTTPS
+	 $(shut) --port 443 --description HTTPS
+

@@ -79,6 +79,10 @@
       # TODO: this should only be on kitsune tbh
       tonneru = "sshuttle --python=\"$(nix-store --query $(which sshuttle) --requisites | grep -m1 'python3-.*-env')/bin/python\" -r paolo@inari $(hcloud server ip inari)";
     };
+    initExtra = ''
+      # Usage: ssh-L [user@]host ports...
+      ssh-L () { ssh -vN $(printf ' -L %1$s:localhost:%s' ''${@:2}) $1 }
+    '';
   };
 
   programs.starship = {

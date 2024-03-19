@@ -93,6 +93,7 @@
       memory_usage.disabled = false;
       status.disabled = false;
       sudo.disabled = false;
+      docker_context.only_with_files = false;
       custom.hcloud_context = {
         command = "hcloud context active";
         when = true; # "command -v hcloud";

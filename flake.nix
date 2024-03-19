@@ -17,6 +17,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/kitsune/configuration.nix
+          ./hosts/kitsune/swap.nix
           ./hosts/kitsune/printing.nix
           ./hosts/kitsune/ssh-client.nix
           home-manager.nixosModules.home-manager {

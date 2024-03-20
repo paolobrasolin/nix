@@ -43,6 +43,7 @@
           { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
+          ./hosts/kitsune/swap.nix
           ./hosts/inari/virtualisation.nix
           ./hosts/inari/ssh-server.nix
           ./hosts/inari/gpg-server.nix

@@ -14,6 +14,7 @@
     jq
     go-task
     lazydocker
+    mkcert
   ];
 
   # TODO: experiment with these

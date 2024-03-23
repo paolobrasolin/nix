@@ -77,7 +77,12 @@
           }
           {
             block = "memory";
-            format = " $icon $mem_used_percents.eng(w:2) $mem_used.eng(prefix:Mi,force_prefix:true) ";
+            format = " $icon $mem_used_percents.eng(w:2) $mem_used.eng(prefix:Gi,force_prefix:true) ";
+            interval = 2;
+          }
+          {
+            block = "memory";
+            format = " $icon $swap_used_percents.eng(w:2) $swap_used.eng(prefix:Gi,force_prefix:true) ";
             interval = 2;
           }
           {

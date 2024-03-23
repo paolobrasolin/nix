@@ -12,6 +12,7 @@
     sshuttle
     sshfs
     jq
+    go-task
   ];
 
   # TODO: experiment with these

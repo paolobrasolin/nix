@@ -43,20 +43,36 @@ kill: ## delete server
 	@read -q "?Are you sure? [y/N] "
 	hcloud server delete inari
 
-open := hcloud firewall    add-rule inari-firewall --direction in --protocol tcp --source-ips 0.0.0.0/0 --source-ips ::/0
-shut := hcloud firewall delete-rule inari-firewall --direction in --protocol tcp --source-ips 0.0.0.0/0 --source-ips ::/0
+open := hcloud firewall    add-rule inari-firewall --direction in --protocol tcp
+shut := hcloud firewall delete-rule inari-firewall --direction in --protocol tcp
+src_pub := --source-ips 0.0.0.0/0 --source-ips ::/0
+src_pvt := --source-ips $$(curl --silent https://api.ipify.org)/32
 
-open-ssh: ## open port 22 for SSH
-	 $(open) --port 22 --description SSH
-open-http: ## open port 80 for HTTP
-	 $(open) --port 80 --description HTTP
-open-https: ## oprn port 443 for HTTPS
-	 $(open) --port 443 --description HTTPS
+open-ssh-pub:
+	 $(open) $(src_pub) --port 22 --description SSH
+open-http-pub:
+	 $(open) $(src_pub) --port 80 --description HTTP
+open-https-pub:
+	 $(open) $(src_pub) --port 443 --description HTTPS
 
-shut-ssh: ## shut port 22 for SSH
-	 $(shut) --port 22 --description SSH
-shut-http: ## shut port 80 for HTTP
-	 $(shut) --port 80 --description HTTP
-shut-https: ## shut port 443 for HTTPS
-	 $(shut) --port 443 --description HTTPS
+shut-ssh-pub:
+	 $(shut) $(src_pub) --port 22 --description SSH
+shut-http-pub:
+	 $(shut) $(src_pub) --port 80 --description HTTP
+shut-https-pub:
+	 $(shut) $(src_pub) --port 443 --description HTTPS
+
+open-ssh-pvt:
+	 $(open) $(src_pvt) --port 22 --description SSH
+open-http-pvt:
+	 $(open) $(src_pvt) --port 80 --description HTTP
+open-https-pvt:
+	 $(open) $(src_pvt) --port 443 --description HTTPS
+
+shut-ssh-pvt:
+	 $(shut) $(src_pvt) --port 22 --description SSH
+shut-http-pvt:
+	 $(shut) $(src_pvt) --port 80 --description HTTP
+shut-https-pvt:
+	 $(shut) $(src_pvt) --port 443 --description HTTPS
 

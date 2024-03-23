@@ -81,6 +81,7 @@
       # TODO: find a nix way to get --python
       # TODO: this should only be on kitsune tbh
       tonneru = "sshuttle --python=\"$(nix-store --query $(which sshuttle) --requisites | grep -m1 'python3-.*-env')/bin/python\" -r paolo@inari $(hcloud server ip inari)";
+      tunnelCodeium = "ssh -N -L 43867:127.0.0.1:43867 -L 42377:127.0.0.1:42377 -L 34567:127.0.0.1:34567 inari";
     };
     initExtra = ''
       # Usage: ssh-L [user@]host ports...

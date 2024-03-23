@@ -71,6 +71,7 @@
     history.ignoreDups = true;
     historySubstringSearch.enable = true;
     shellAliases = {
+      t = "timew";
       vim = "lvim";
       inari = "make -f ~/nix/Makefile.inari";
       snix = "sudo nixos-rebuild switch";

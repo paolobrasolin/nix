@@ -13,6 +13,7 @@
     sshfs
     jq
     go-task
+    lazydocker
   ];
 
   # TODO: experiment with these

@@ -5,6 +5,7 @@
 
   virtualisation.docker = {
     enable = true;
+    liveRestore = false; # to enable swarm mode
     enableOnBoot = true;
     autoPrune.enable = true;
   };

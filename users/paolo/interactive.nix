@@ -101,6 +101,20 @@
         style = "bold red";
         symbol = " ";
       };
+      custom.timewarrior = {
+        command = let
+          jq_script = ''
+            .tags |= sort_by(length) |
+            {
+              tags: .tags | join("/"),
+              duration: (now - (.start | strptime("%Y%m%dT%H%M%SZ") | mktime)) | strftime("%H:%M")
+            } |
+            "\(.tags) \(.duration)"
+          '';
+        in "timew get dom.active.json | jq -r '${jq_script}'";
+        when = "timew";
+        symbol = " ";
+      };
     };
   };
 

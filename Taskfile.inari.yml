@@ -1,0 +1,110 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list-all
+    silent: true
+
+  init:
+    desc: Create server
+    prompt: Are you sure?
+    cmds:
+      - >
+        hcloud server create
+        --location nbg1
+        --image ubuntu-22.04
+        --type cpx11
+        --ssh-key paolo@kitsune
+        --firewall inari-firewall
+        --primary-ipv4 inari-ipv4
+        --name inari
+      - >
+        nix run github:nix-community/nixos-anywhere --
+        --build-on-remote
+        --flake .#inari
+        root@$(hcloud server ip inari)
+      - ssh-keygen -R $(hcloud server ip inari)
+
+  snix:
+    desc: NixOS rebuild and switch
+    cmd: >
+      nixos-rebuild switch
+      --flake .#inari
+      --build-host root@$(hcloud server ip inari)
+      --target-host root@$(hcloud server ip inari)
+
+  slow:
+    desc: Scale down to a cx21 (2vCPU, 4GB RAM)
+    prompt: Are you sure?
+    cmds:
+      - hcloud server shutdown inari
+      - hcloud server change-type --keep-disk inari cx21
+      - hcloud server poweron inari
+
+  fast:
+    desc: Scale up to a cpx51 (16vCPU, 32GB RAM)
+    prompt: Are you sure?
+    cmds:
+      - hcloud server shutdown inari
+      - hcloud server change-type --keep-disk inari cpx51
+      - hcloud server poweron inari
+
+  kill:
+    desc: Delete server
+    prompt: Are you sure?
+    cmd: hcloud server delete inari
+
+
+  fw-cmd:
+    internal: true
+    requires: { vars: [CMD, SOURCES, PORT, NAME] }
+    cmd: hcloud firewall {{ .CMD }} inari-firewall --direction in --protocol tcp {{ .SOURCES }} --port {{ .PORT }} --description {{ .NAME }}
+
+  firewall:open-pub:
+    desc: Open ports 22, 80 and 443 for the public
+    vars: { CMD: add-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
+    deps: &fw-deps
+      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 22, NAME: SSH } }
+      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 80, NAME: HTTP } }
+      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 443, NAME: HTTPS } }
+
+  firewall:shut-pub:
+    desc: Shut ports 22, 80 and 443 for the public
+    vars: { CMD: delete-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
+    deps: *fw-deps
+
+  firewall:open-pvt:
+    desc: Open ports 22, 80 and 443 for current host
+    vars: { CMD: add-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
+    deps: *fw-deps
+
+  firewall:shut-pvt:
+    desc: Shut ports 22, 80 and 443 for current host
+    vars: { CMD: delete-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
+    deps: *fw-deps
+
+  sshuttle:
+    desc: Forward all ports
+    cmd: >
+      sshuttle
+      --python="$(ssh inari 'nix-store --query $(which sshuttle) --requisites' | grep -m1 'python3-.*-env')/bin/python"
+      --remote paolo@inari $(hcloud server ip inari)
+
+  codeium-chat:
+    preconditions:
+      - ssh inari "netstat -tlp 2>/dev/null | grep codeium_lan"
+    vars:
+      API_KEY:
+        sh: ssh inari jq -r '.apiKey' ~/.codeium/config.json
+      HTTP_PORT:
+        sh: ssh inari "netstat -tlp 2>/dev/null | grep codeium_lan | tr -s ' ' | cut -d' ' -f4 | cut -d':' -f2 | xargs -i sh -c 'curl -s 127.0.0.1:{} | grep -q html && echo {} || true'"
+      API_PORT:
+        sh: ssh inari "netstat -tlp 2>/dev/null | grep codeium_lan | tr -s ' ' | cut -d' ' -f4 | cut -d':' -f2 | xargs -i sh -c 'curl -s 127.0.0.1:{} | grep -q \"404 page not found\" && echo {} || true'"
+      WS_PORT:
+        sh: ssh inari "netstat -tlp 2>/dev/null | grep codeium_lan | tr -s ' ' | cut -d' ' -f4 | cut -d':' -f2 | xargs -i sh -c 'curl -s 127.0.0.1:{} | grep -q Healthy && echo {} || true'"
+    cmds:
+      - xdg-open "http://127.0.0.1:{{ .HTTP_PORT }}/?api_key={{ .API_KEY }}&ide_name=neovim&ide_version=0.9.4&extension_name=vim&extension_version=1.8.10&web_server_url=ws://127.0.0.1:{{ .WS_PORT }}&app_name=Vim&locale=en&ide_telemetry_enabled=true&has_index_service=true"
+      - ssh -v -N -L {{ .HTTP_PORT }}:127.0.0.1:{{ .HTTP_PORT }} -L {{ .API_PORT }}:127.0.0.1:{{ .API_PORT }} -L {{ .WS_PORT }}:127.0.0.1:{{ .WS_PORT }} inari
+

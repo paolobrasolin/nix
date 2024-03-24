@@ -76,13 +76,8 @@
     shellAliases = {
       t = "timew";
       vim = "lvim";
-      inari = "make -f ~/nix/Makefile.inari";
+      inari = "task -t ~/nix/Taskfile.inari.yml";
       snix = "sudo nixos-rebuild switch";
-      # NOTE: the path of the requisite is the same on both machines, you don't need to ssh to get the value of --python; cool!
-      # TODO: find a nix way to get --python
-      # TODO: this should only be on kitsune tbh
-      tonneru = "sshuttle --python=\"$(nix-store --query $(which sshuttle) --requisites | grep -m1 'python3-.*-env')/bin/python\" -r paolo@inari $(hcloud server ip inari)";
-      tunnelCodeium = "ssh -N -L 43867:127.0.0.1:43867 -L 42377:127.0.0.1:42377 -L 34567:127.0.0.1:34567 inari";
     };
     initExtra = ''
       # Usage: ssh-L [user@]host ports...

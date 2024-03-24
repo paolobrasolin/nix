@@ -76,7 +76,7 @@
     shellAliases = {
       t = "timew";
       vim = "lvim";
-      inari = "task -t ~/nix/Taskfile.inari.yml";
+      inari = "task -d ~/nix/tasks/inari";
       snix = "sudo nixos-rebuild switch";
     };
     initExtra = ''

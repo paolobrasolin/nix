@@ -4,7 +4,7 @@ tasks:
   default:
     desc: List all available tasks
     cmds:
-      - task -t Taskfile.inari.yml --list-all
+      - task --list-all
     silent: true
 
   init:
@@ -93,6 +93,7 @@ tasks:
       --remote paolo@inari $(hcloud server ip inari)
 
   codeium-chat:
+    desc: Open Codeium chat in context
     preconditions:
       - ssh inari "netstat -tlp 2>/dev/null | grep codeium_lan"
     vars:

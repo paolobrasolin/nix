@@ -65,7 +65,7 @@ tasks:
   firewall:open-pub:
     desc: Open ports 22, 80 and 443 for the public
     vars: { CMD: add-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
-    deps: &fw-deps
+    cmds: &fw-cmds
       - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 22, NAME: SSH } }
       - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 80, NAME: HTTP } }
       - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 443, NAME: HTTPS } }
@@ -73,17 +73,17 @@ tasks:
   firewall:shut-pub:
     desc: Shut ports 22, 80 and 443 for the public
     vars: { CMD: delete-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
-    deps: *fw-deps
+    cmds: *fw-cmds
 
   firewall:open-pvt:
     desc: Open ports 22, 80 and 443 for current host
     vars: { CMD: add-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
-    deps: *fw-deps
+    cmds: *fw-cmds
 
   firewall:shut-pvt:
     desc: Shut ports 22, 80 and 443 for current host
     vars: { CMD: delete-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
-    deps: *fw-deps
+    cmds: *fw-cmds
 
   sshuttle:
     desc: Forward all ports

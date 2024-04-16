@@ -57,33 +57,83 @@ tasks:
     cmd: hcloud server delete inari
 
 
-  fw-cmd:
-    internal: true
-    requires: { vars: [CMD, SOURCES, PORT, NAME] }
-    cmd: hcloud firewall {{ .CMD }} inari-firewall --direction in --protocol tcp {{ .SOURCES }} --port {{ .PORT }} --description {{ .NAME }}
+  # fw-cmd:
+  #   internal: true
+  #   requires: { vars: [CMD, SOURCES, PORT, NAME] }
+  #   cmd: hcloud firewall {{ .CMD }} inari-firewall --direction in --protocol tcp {{ .SOURCES }} --port {{ .PORT }} --description {{ .NAME }}
 
-  firewall:open-pub:
-    desc: Open ports 22, 80 and 443 for the public
-    vars: { CMD: add-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
-    cmds: &fw-cmds
-      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 22, NAME: SSH } }
-      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 80, NAME: HTTP } }
-      - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 443, NAME: HTTPS } }
+  # firewall:open-pub:
+  #   desc: Open ports 22, 80 and 443 for the public
+  #   vars: { CMD: add-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
+  #   cmds: &fw-cmds
+  #     - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 22, NAME: SSH } }
+  #     - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 80, NAME: HTTP } }
+  #     - { task: fw-cmd, vars: { CMD: "{{ .CMD }}", SOURCES: "{{ .SOURCES }}", PORT: 443, NAME: HTTPS } }
 
-  firewall:shut-pub:
-    desc: Shut ports 22, 80 and 443 for the public
-    vars: { CMD: delete-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
-    cmds: *fw-cmds
+  # firewall:shut-pub:
+  #   desc: Shut ports 22, 80 and 443 for the public
+  #   vars: { CMD: delete-rule, SOURCES: --source-ips 0.0.0.0/0 --source-ips ::/0 }
+  #   cmds: *fw-cmds
 
-  firewall:open-pvt:
+  # firewall:open-pvt:
+  #   desc: Open ports 22, 80 and 443 for current host
+  #   vars: { CMD: add-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
+  #   cmds: *fw-cmds
+
+  # firewall:shut-pvt:
+  #   desc: Shut ports 22, 80 and 443 for current host
+  #   vars: { CMD: delete-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
+  #   cmds: *fw-cmds
+
+  firewall:open:
     desc: Open ports 22, 80 and 443 for current host
-    vars: { CMD: add-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
-    cmds: *fw-cmds
+    vars:
+      HOST_IP: { sh: curl --silent https://api.ipify.org }
+      # NOTE: to have public access you'd use ["0.0.0.0/0", "::/0"] as source_ips
+      RULESET: >-
+        [
+          {
+            "description": "SSH",
+            "direction": "in",
+            "port": "22",
+            "protocol": "tcp",
+            "source_ips": [
+              "{{ .HOST_IP }}/32"
+            ]
+          },
+          {
+            "description": "HTTP",
+            "direction": "in",
+            "port": "80",
+            "protocol": "tcp",
+            "source_ips": [
+              "{{ .HOST_IP }}/32"
+            ]
+          },
+          {
+            "description": "HTTPS",
+            "direction": "in",
+            "port": "443",
+            "protocol": "tcp",
+            "source_ips": [
+              "{{ .HOST_IP }}/32"
+            ]
+          }
+        ]
+    cmd: |
+      hcloud firewall replace-rules inari-firewall --rules-file - << EOF
+      {{ .RULESET }}
+      EOF
 
-  firewall:shut-pvt:
-    desc: Shut ports 22, 80 and 443 for current host
-    vars: { CMD: delete-rule, SOURCES: { sh: echo --source-ips $(curl --silent https://api.ipify.org)/32 } }
-    cmds: *fw-cmds
+  firewall:shut:
+    desc: Shut all ports for everyone
+    vars:
+      HOST_IP: { sh: curl --silent https://api.ipify.org }
+      RULESET: "[]"
+    cmd: |
+      hcloud firewall replace-rules inari-firewall --rules-file - << EOF
+      {{ .RULESET }}
+      EOF
 
   sshuttle:
     desc: Forward all ports

@@ -2,7 +2,6 @@
   home.packages = with pkgs; [
     lunarvim
     hcloud
-    alejandra
     # ripgrep fzf fd zoxide
     timewarrior
     gnumake

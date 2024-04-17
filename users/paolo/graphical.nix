@@ -1,6 +1,6 @@
 { pkgs, lib, ... }: {
   home.packages = with pkgs; [
-    google-chrome
+    unstable.google-chrome
     telegram-desktop
     dmenu
     xclip

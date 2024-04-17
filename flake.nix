@@ -12,11 +12,29 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, nixpkgs-unstable, home-manager, disko, ... }: {
+  outputs = {
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager,
+    disko,
+    ...
+  }: let
+    nixpkgsUnstableOverlay = _: {
+      nixpkgs.overlays = [
+        (final: _prev: {
+          unstable = import nixpkgs-unstable {
+            inherit (final) system;
+            config.allowUnfree = true;
+          };
+        })
+      ];
+    };
+  in {
     nixosConfigurations = {
       "kitsune" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          nixpkgsUnstableOverlay
           ./hosts/kitsune/configuration.nix
           ./hosts/kitsune/swap.nix
           ./hosts/kitsune/printing.nix
@@ -43,15 +61,7 @@
       "inari" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # "aarch64-linux";
         modules = [
-          { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
-          ({ pkgs, ... }: { nixpkgs.overlays = [
-            (final: prev: {
-              unstable = import nixpkgs-unstable {
-                system = final.system;
-                config.allowUnfree = true;
-              };
-            })
-          ]; })
+          nixpkgsUnstableOverlay
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
           ./hosts/kitsune/swap.nix

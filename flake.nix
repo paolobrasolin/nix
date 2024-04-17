@@ -40,20 +40,23 @@
           ./hosts/kitsune/printing.nix
           ./hosts/kitsune/ssh-client.nix
           ./hosts/kitsune/nixbuild.nix
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users."paolo" = {
-              imports = [
-                ./users/paolo/base.nix
-                ./users/paolo/interactive.nix
-                ./users/paolo/dev-server-lite.nix
-                ./users/paolo/graphical.nix
-                # ./users/paolo/vscode-client.nix
-                ./users/paolo/ssh-client.nix
-                ./users/paolo/gpg-client.nix
-                ./users/paolo/git-secret.nix
-              ];
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users."paolo" = {
+                imports = [
+                  ./users/paolo/base.nix
+                  ./users/paolo/interactive.nix
+                  ./users/paolo/dev-server-lite.nix
+                  ./users/paolo/graphical.nix
+                  # ./users/paolo/vscode-client.nix
+                  ./users/paolo/ssh-client.nix
+                  ./users/paolo/gpg-client.nix
+                  ./users/paolo/git-secret.nix
+                ];
+              };
             };
           }
         ];
@@ -70,18 +73,21 @@
           ./hosts/inari/ssh-server.nix
           ./hosts/inari/gpg-server.nix
           ./hosts/kitsune/nixbuild.nix # TODO: clean this up
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users."paolo".imports = [
-              ./users/paolo/base.nix
-              ./users/paolo/interactive.nix
-              ./users/paolo/dev-server-lite.nix
-              ./users/paolo/dev-server-mule.nix
-              # ./users/paolo/vscode-server.nix
-              ./users/paolo/gpg-server.nix
-              ./users/paolo/git-secret.nix
-            ];
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users."paolo".imports = [
+                ./users/paolo/base.nix
+                ./users/paolo/interactive.nix
+                ./users/paolo/dev-server-lite.nix
+                ./users/paolo/dev-server-mule.nix
+                # ./users/paolo/vscode-server.nix
+                ./users/paolo/gpg-server.nix
+                ./users/paolo/git-secret.nix
+              ];
+            };
           }
         ];
       };

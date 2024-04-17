@@ -61,10 +61,10 @@ lvim.lsp.installer.setup.automatic_installation = false
 require("lvim.lsp.manager").setup("nil", {})
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. IMPORTANT: Requires `:LvimCacheReset` to take effect
--- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
--- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
---   return server ~= "emmet_ls"
--- end, lvim.lsp.automatic_configuration.skipped_servers)
+---`:LvimInfo` lists which server(s) are skipped for the current filetype
+lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+  return server ~= "marksman"
+end, lvim.lsp.automatic_configuration.skipped_servers)
 
 -- -- you can set a custom on_attach function that will be used for all the language servers
 -- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
@@ -79,25 +79,19 @@ require("lvim.lsp.manager").setup("nil", {})
 -- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
+  { name = "stylua" },
   { name = "alejandra" },
+  { name = "shfmt" },
+  { name = "black" },
+  { name = "rufo" },
 }
--- formatters.setup {
---   { command = "stylua" },
---   {
---     command = "prettier",
---     extra_args = { "--print-width", "100" },
---     filetypes = { "typescript", "typescriptreact" },
---   },
--- }
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
+  { name = "selene" },
   { name = "deadnix" },
   { name = "statix" },
-  --   { command = "flake8", filetypes = { "python" } },
-  --   {
-  --     command = "shellcheck",
-  --     args = { "--severity", "warning" },
-  --   },
+  { name = "shellcheck" },
+  { name = "ruff" },
 }
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>

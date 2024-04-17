@@ -29,6 +29,7 @@
               imports = [
                 ./users/paolo/base.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/dev-server-lite.nix
                 ./users/paolo/graphical.nix
                 # ./users/paolo/vscode-client.nix
                 ./users/paolo/ssh-client.nix
@@ -64,7 +65,8 @@
             home-manager.users."paolo".imports = [
               ./users/paolo/base.nix
               ./users/paolo/interactive.nix
-              ./users/paolo/dev-server.nix
+              ./users/paolo/dev-server-lite.nix
+              ./users/paolo/dev-server-mule.nix
               # ./users/paolo/vscode-server.nix
               ./users/paolo/gpg-server.nix
               ./users/paolo/git-secret.nix

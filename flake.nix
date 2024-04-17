@@ -64,6 +64,7 @@
             home-manager.users."paolo".imports = [
               ./users/paolo/base.nix
               ./users/paolo/interactive.nix
+              ./users/paolo/dev-server.nix
               # ./users/paolo/vscode-server.nix
               ./users/paolo/gpg-server.nix
               ./users/paolo/git-secret.nix

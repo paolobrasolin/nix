@@ -14,7 +14,7 @@ vim.opt.clipboard = { 'unnamed', 'unnamedplus' }
 lvim.log.level = "info"
 lvim.format_on_save = {
   enabled = true,
-  pattern = "*.lua",
+  pattern = { "*.lua", "*.nix" },
   timeout = 1000,
 }
 -- to disable icons and use a minimalist setup, uncomment the following
@@ -58,6 +58,7 @@ lvim.lsp.installer.setup.automatic_installation = false
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
 -- require("lvim.lsp.manager").setup("pyright", opts)
+require("lvim.lsp.manager").setup("nil", {})
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. IMPORTANT: Requires `:LvimCacheReset` to take effect
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
@@ -76,7 +77,10 @@ lvim.lsp.installer.setup.automatic_installation = false
 -- end
 
 -- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
--- local formatters = require "lvim.lsp.null-ls.formatters"
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  { name = "alejandra" },
+}
 -- formatters.setup {
 --   { command = "stylua" },
 --   {
@@ -85,14 +89,16 @@ lvim.lsp.installer.setup.automatic_installation = false
 --     filetypes = { "typescript", "typescriptreact" },
 --   },
 -- }
--- local linters = require "lvim.lsp.null-ls.linters"
--- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     command = "shellcheck",
---     args = { "--severity", "warning" },
---   },
--- }
+local linters = require "lvim.lsp.null-ls.linters"
+linters.setup {
+  { name = "deadnix" },
+  { name = "statix" },
+  --   { command = "flake8", filetypes = { "python" } },
+  --   {
+  --     command = "shellcheck",
+  --     args = { "--severity", "warning" },
+  --   },
+}
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
 lvim.plugins = {

@@ -1,6 +1,5 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
-    lunarvim
     hcloud
     # ripgrep fzf fd zoxide
     timewarrior
@@ -80,7 +79,6 @@
     historySubstringSearch.enable = true;
     shellAliases = {
       t = "timew";
-      vim = "lvim";
       inari = "task -d ~/nix/tasks/inari";
       snix = "sudo nixos-rebuild switch";
     };
@@ -146,5 +144,4 @@
   };
 
   home.file.".editorconfig".source = ./files/editor_config.ini;
-  home.file.".config/lvim/config.lua".source = ./files/lvim_config.lua;
 }

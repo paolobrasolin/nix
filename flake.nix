@@ -49,6 +49,7 @@
                 imports = [
                   ./users/paolo/base.nix
                   ./users/paolo/interactive.nix
+                  ./users/paolo/lunarvim.nix
                   ./users/paolo/dev-server-lite.nix
                   ./users/paolo/graphical.nix
                   # ./users/paolo/vscode-client.nix
@@ -81,6 +82,7 @@
               users."paolo".imports = [
                 ./users/paolo/base.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/lunarvim.nix
                 ./users/paolo/dev-server-lite.nix
                 ./users/paolo/dev-server-mule.nix
                 # ./users/paolo/vscode-server.nix

@@ -10,7 +10,7 @@ return {
 				docker_compose_language_service = {},
 				dockerls = {},
 				html = {},
-				jsonl = {},
+				jsonls = {},
 				lua_ls = {},
 				marksman = {},
 				nil_ls = {},

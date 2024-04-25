@@ -2,7 +2,9 @@
   home.packages = with pkgs; [
     fd
     ripgrep
-    gcc # just to compile treesitter parsers
+    fzf
+    gcc # required for :TSInstall
+    tree-sitter # required for :TSInstallFromGrammar
   ];
 
   programs.neovim = {
@@ -11,7 +13,7 @@
     vimAlias = true;
     # plugins = [];
     # extraPackages = [];
-    withNodeJs = false;
+    withNodeJs = true; # required for :TSInstallFromGrammar
     withRuby = false;
     withPython3 = false;
   };

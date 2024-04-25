@@ -9,6 +9,10 @@
     efi.canTouchEfiVariables = true;
   };
 
+  services.journald.extraConfig = ''
+    SystemMaxUse=512M
+  '';
+
   # Enable flakes
   nix.settings.experimental-features = ["nix-command" "flakes"];
 

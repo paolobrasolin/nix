@@ -9,6 +9,10 @@
     ./disk-configuration.nix
   ];
 
+  services.journald.extraConfig = ''
+    SystemMaxUse=512M
+  '';
+
   # Boot loader
   boot.loader.grub = {
     # devices = [ ]; # NOTE: disko will add to the list all devices with an EF02 partition

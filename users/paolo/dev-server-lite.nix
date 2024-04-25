@@ -1,19 +1,22 @@
-{ test, pkgs, ... }: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
+    # LSPs
+    lua-language-server # lua
+    marksman # markdown
+    nil # nix
+    nodePackages.bash-language-server # shell
+    vscode-langservers-extracted # html, css, json
+    yaml-language-server # yaml
 
-    ## LANGUAGE         TOOL
-    /* lua              lsp              */ lua-language-server
-    /* lua              formatter        */ stylua
-    /* lua              diagnostics      */ selene
-    /* nix              lsp              */ nil
-    /* nix              formatter        */ alejandra
-    /* nix              diagnostics      */ deadnix
-    /* nix              diagnostics      */ statix
-    /* html, css, json  lsp              */ vscode-langservers-extracted
-    /* yaml             lsp              */ yaml-language-server
-    /* markdown         lsp              */ marksman
-    /* shell            lsp              */ nodePackages.bash-language-server
-    /* shell            diagnostics      */ shellcheck
-    /* shell            formatter        */ shfmt
+    # Formatters
+    alejandra # nix
+    shfmt # shell
+    stylua # lua
+
+    # Diagnostics and linters
+    deadnix # nix
+    selene # lua
+    shellcheck # shell
+    statix # nix
   ];
 }

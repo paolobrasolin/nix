@@ -1,10 +1,11 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     hcloud
     # ripgrep fzf fd zoxide
     timewarrior
     gnumake
-    zip unzip
+    zip
+    unzip
     gdown
     htop
     sshuttle

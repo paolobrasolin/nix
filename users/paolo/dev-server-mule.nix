@@ -1,4 +1,8 @@
-{ test, pkgs, ... }: {
+{
+  test,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
     # texlive.combined.scheme-full
 

@@ -36,6 +36,7 @@
         modules = [
           nixpkgsUnstableOverlay
           ./hosts/kitsune/configuration.nix
+          ./hosts/shared/nix.nix
           ./hosts/shared/locale.nix
           ./hosts/kitsune/swap.nix
           ./hosts/kitsune/printing.nix
@@ -76,6 +77,7 @@
           nixpkgsUnstableOverlay
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
+          ./hosts/shared/nix.nix
           ./hosts/shared/locale.nix
           ./hosts/inari/swap.nix
           ./hosts/inari/virtualisation.nix

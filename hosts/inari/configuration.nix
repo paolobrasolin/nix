@@ -25,9 +25,6 @@
   # boot.tmp = { useTmpfs = true; tmpfsSize = "80%"; };
   # TODO: we'll need a swap partition sooner or later
 
-  # Enable flakes
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

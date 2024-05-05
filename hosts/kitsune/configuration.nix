@@ -13,9 +13,6 @@
     SystemMaxUse=512M
   '';
 
-  # Enable flakes
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

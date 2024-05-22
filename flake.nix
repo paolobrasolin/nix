@@ -10,6 +10,9 @@
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    cornelis.url = "github:isovector/cornelis";
+    cornelis.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -17,10 +20,12 @@
     nixpkgs-unstable,
     home-manager,
     disko,
+    cornelis,
     ...
   }: let
     nixpkgsUnstableOverlay = _: {
       nixpkgs.overlays = [
+        cornelis.overlays.cornelis
         (final: _prev: {
           unstable = import nixpkgs-unstable {
             inherit (final) system;
@@ -92,6 +97,7 @@
               users."paolo".imports = [
                 ./users/paolo/base.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/agda.nix
                 # ./users/paolo/lunarvim.nix
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix

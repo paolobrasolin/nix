@@ -15,6 +15,7 @@ return {
 		end,
 		config = function()
 			vim.g.cornelis_use_global_binary = 1
+			vim.g.cornelis_no_agda_input = 1 -- NOTE: agda-input is just too slow; we user nvim-cmp with cmp-agda-symbols instead
 
 			local keymaps = {
 				{ "<leader>al", "<cmd>CornelisLoad<cr>", "Load and type-check" },

@@ -12,13 +12,14 @@
     sshfs
     jq
     go-task
+    docker-client # TODO: maybe skip this on inari?
     lazydocker
     mkcert
   ];
 
   # TODO: experiment with these
-  # nix-index.enable = true;
-  # nix-index.enableZshIntegration = true;
+  # programs.nix-index.enable = true;
+  # programs.nix-index.enableZshIntegration = true;
   # nix-index-database.comma.enable = true;
   # fzf.enable = true;
   # fzf.enableZshIntegration = true;

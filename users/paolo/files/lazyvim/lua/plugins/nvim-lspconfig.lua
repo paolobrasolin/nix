@@ -31,6 +31,7 @@ return {
 					},
 				},
 				texlab = {},
+				terraformls = {},
 				tsserver = {},
 				yamlls = {},
 			},

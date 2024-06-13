@@ -47,11 +47,11 @@
           ./hosts/kitsune/printing.nix
           ./hosts/kitsune/ssh-client.nix
           ./hosts/kitsune/nixbuild.nix
-          # {
-          #   nixpkgs.config.permittedInsecurePackages = [
-          #     "electron-25.9.0" # Required by obsidian
-          #   ];
-          # }
+          {
+            nixpkgs.config.permittedInsecurePackages = [
+              "electron-25.9.0" # Required by obsidian
+            ];
+          }
           home-manager.nixosModules.home-manager
           {
             home-manager = {

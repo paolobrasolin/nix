@@ -8,7 +8,7 @@
     zathura
     feh
     libreoffice-qt
-    # obsidian
+    obsidian
   ];
 
   programs.alacritty.enable = true;

@@ -8,6 +8,7 @@
     unzip
     gdown
     htop
+    btop
     sshuttle
     sshfs
     jq

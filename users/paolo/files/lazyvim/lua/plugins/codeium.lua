@@ -1,6 +1,10 @@
 return {
 	{
 		"Exafunction/codeium.vim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"hrsh7th/nvim-cmp",
+		},
 		config = function()
 			-- TODO: get the binary path via nix
 			vim.g.codeium_bin = "/run/current-system/sw/bin/codeium_language_server"

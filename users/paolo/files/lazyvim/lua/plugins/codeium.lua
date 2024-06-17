@@ -10,6 +10,8 @@ return {
 			vim.g.codeium_bin = "/run/current-system/sw/bin/codeium_language_server"
 			vim.g.codeium_enabled = true
 			vim.g.codeium_manual = false
+			-- NOTE: some default bindings are a bit absurd (e.g. <Right> to accept) so I just turn them off.
+			vim.g.codeium_disable_bindings = true
 			vim.keymap.set("i", "<M-Enter>", function()
 				return vim.fn["codeium#Accept"]()
 			end, { expr = true, silent = true })

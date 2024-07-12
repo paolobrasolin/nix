@@ -1,5 +1,5 @@
 {
-  description = "Paolo's NixOS Flake";
+  description = "Paolo's Nix Flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
@@ -16,30 +16,69 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
-    nixpkgs-unstable,
     home-manager,
     disko,
-    cornelis,
     ...
-  }: let
-    nixpkgsUnstableOverlay = _: {
-      nixpkgs.overlays = [
-        cornelis.overlays.cornelis
-        (final: _prev: {
-          unstable = import nixpkgs-unstable {
-            inherit (final) system;
-            config.allowUnfree = true;
-          };
-        })
-      ];
-    };
+  } @ inputs: let
+    inherit (self) outputs;
   in {
+    overlays = import ./overlays {inherit inputs;};
+
+    homeConfigurations = {
+      "paolo@ebisu" = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs = {inherit inputs outputs;};
+        pkgs = nixpkgs.legacyPackages.aarch64-darwin; # TODO: is this ok for an M2?
+        modules = [
+          ./users/paolo/base.nix
+          ./users/paolo/interactive.nix
+          ./users/paolo/lazyvim.nix
+        ];
+      };
+
+      "paolo@kitsune" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ({
+            inputs,
+            outputs,
+            ...
+          }: {
+            # TODO: this module is inlined becaue keeping it in base.nix would upset paolo@inari. Refactor this to be neater.
+            nixpkgs = {
+              config = {
+                allowUnfree = true;
+                permittedInsecurePackages = [
+                  "electron-25.9.0" # Required by obsidian
+                ];
+              };
+              overlays = [
+                outputs.overlays.unstable-packages
+                inputs.cornelis.overlays.cornelis
+              ];
+            };
+          })
+          ./users/paolo/base.nix
+          ./users/paolo/interactive.nix
+          # ./users/paolo/lunarvim.nix
+          ./users/paolo/lazyvim.nix
+          ./users/paolo/dev-server-lite.nix
+          ./users/paolo/graphical.nix
+          # ./users/paolo/vscode-client.nix
+          ./users/paolo/ssh-client.nix
+          ./users/paolo/gpg-client.nix
+          ./users/paolo/git-secret.nix
+        ];
+      };
+    };
+
     nixosConfigurations = {
       "kitsune" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = {inherit inputs outputs;};
         modules = [
-          nixpkgsUnstableOverlay
           ./hosts/kitsune/configuration.nix
           ./hosts/shared/nix.nix
           ./hosts/shared/locale.nix
@@ -47,39 +86,22 @@
           ./hosts/kitsune/printing.nix
           ./hosts/kitsune/ssh-client.nix
           ./hosts/kitsune/nixbuild.nix
-          {
-            nixpkgs.config.permittedInsecurePackages = [
-              "electron-25.9.0" # Required by obsidian
-            ];
-          }
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users."paolo" = {
-                imports = [
-                  ./users/paolo/base.nix
-                  ./users/paolo/interactive.nix
-                  # ./users/paolo/lunarvim.nix
-                  ./users/paolo/lazyvim.nix
-                  ./users/paolo/dev-server-lite.nix
-                  ./users/paolo/graphical.nix
-                  # ./users/paolo/vscode-client.nix
-                  ./users/paolo/ssh-client.nix
-                  ./users/paolo/gpg-client.nix
-                  ./users/paolo/git-secret.nix
-                ];
-              };
-            };
-          }
         ];
       };
+
       "inari" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # "aarch64-linux";
+        specialArgs = {inherit inputs outputs;};
         modules = [
-          {nix.nixPath = ["nixpkgs=${nixpkgs}"];}
-          nixpkgsUnstableOverlay
+          {nix.nixPath = ["nixpkgs=${nixpkgs}"];} # TODO: why did i need this again?
+          ({inputs, ...}: {
+            nixpkgs = {
+              overlays = [
+                outputs.overlays.unstable-packages
+                inputs.cornelis.overlays.cornelis
+              ];
+            };
+          })
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix
           ./hosts/shared/nix.nix
@@ -92,6 +114,7 @@
           home-manager.nixosModules.home-manager
           {
             home-manager = {
+              extraSpecialArgs = {inherit inputs outputs;};
               useGlobalPkgs = true;
               useUserPackages = true;
               users."paolo".imports = [

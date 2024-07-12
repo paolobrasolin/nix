@@ -31,7 +31,7 @@
   # System-level packages
   environment.systemPackages = with pkgs; [
     git
-    unstable.codeium
+    pkgs.unstable.codeium
   ];
 
   # Networking basics

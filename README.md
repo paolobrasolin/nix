@@ -78,6 +78,7 @@ Boom, you're in.
 
 ## References
 
+* https://github.com/Misterio77/nix-starter-configs
 * https://github.com/iwilare/nix/tree/main
 * https://github.com/mikidep/dotfiles
 * https://www.youtube.com/watch?v=wr22CyoyRo4

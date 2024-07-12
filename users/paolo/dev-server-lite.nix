@@ -8,6 +8,8 @@
     vscode-langservers-extracted # html, css, json
     yaml-language-server # yaml
 
+    texlab
+
     # Formatters
     alejandra # nix
     shfmt # shell

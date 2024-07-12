@@ -70,6 +70,7 @@
           ./users/paolo/ssh-client.nix
           ./users/paolo/gpg-client.nix
           ./users/paolo/git-secret.nix
+          ./users/paolo/texlive.nix
         ];
       };
     };

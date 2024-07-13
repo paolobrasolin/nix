@@ -48,6 +48,23 @@
       side-by-side = true;
       navigate = true;
     };
+    includes = [
+      {
+        condition = "gitdir:~/pb/";
+        contents = {
+          user = {email = "paolo.brasolin@gmail.com";};
+          # TODO: enable signing
+          # user = {signingKey = "729313FB8E6164F8";};
+          # commit = {gpgSign = true;};
+        };
+      }
+      {
+        condition = "gitdir:~/dq/";
+        contents = {
+          user = {email = "paolo.brasolin@donq.io";};
+        };
+      }
+    ];
     extraConfig = {
       # Automatically handle !fixup and !squash commits -- see https://thoughtbot.com/blog/autosquashing-git-commits
       rebase.autosquash = "true";

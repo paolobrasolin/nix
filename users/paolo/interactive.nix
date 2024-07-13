@@ -100,7 +100,8 @@
     shellAliases = {
       t = "timew";
       inari = "task -d ~/nix/tasks/inari";
-      snix = "sudo nixos-rebuild switch";
+      snix-os = "sudo nixos-rebuild switch";
+      snix-hm = "home-manager --flake ~/nix#paolo@kitsune switch";
     };
     initExtra = ''
       # Usage: ssh-L [user@]host ports...

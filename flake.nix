@@ -13,6 +13,9 @@
 
     cornelis.url = "github:isovector/cornelis";
     cornelis.inputs.nixpkgs.follows = "nixpkgs";
+
+    # aider-chat.url = "path:./pkgs/aider-chat";
+    # aider-chat.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -23,8 +26,20 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
+    # # Supported systems for your flake packages, shell, etc.
+    # systems = [
+    #   "aarch64-linux"
+    #   "i686-linux"
+    #   "x86_64-linux"
+    #   "aarch64-darwin"
+    #   "x86_64-darwin"
+    # ];
+    # # This is a function that generates an attribute by calling a function you
+    # # pass to it, with each system as an argument
+    # forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     overlays = import ./overlays {inherit inputs;};
+    # packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
     homeConfigurations = {
       "paolo@ebisu" = home-manager.lib.homeManagerConfiguration {
@@ -99,7 +114,9 @@
             nixpkgs = {
               overlays = [
                 outputs.overlays.unstable-packages
+                # outputs.overlays.additions
                 inputs.cornelis.overlays.cornelis
+                # (_: _: {aider-chat = inputs.aider-chat.packages.x86_64-linux.default;})
               ];
             };
           })
@@ -130,6 +147,16 @@
                 ./users/paolo/gpg-server.nix
                 ./users/paolo/git-secret.nix
                 {home.packages = [(builtins.getFlake "path:./pkgs/aider-chat?lastModified=1721069693&narHash=sha256-H275mfKiSnk%2BbM/WSpRGR7HYWAtLiydw%2BcCbvKJlRjI%3D").packages.x86_64-linux.default];} # NOTE: you can update the lock with `nix flake prefetch path:./pkgs/aider-chat`
+                # ({inputs, ...}: {
+                #   home.packages = [
+                #     # Downloaded 'path:/home/paolo/nix/pkgs/aider-chat?lastModified=1721068517&narHash=sha256-H275mfKiSnk%2BbM/WSpRGR7HYWAtLiydw%2BcCbvKJlRjI%3D' to '/nix/store/4l2pw3hn62xw7klxkph5dpdqqvhabmr6-source' (hash 'sha256-H275mfKiSnk+bM/WSpRGR7HYWAtLiydw+cCbvKJlRjI=').
+                #     # nixCopybuiltins.getFlake "git+file:///absolute/path/to/your/local/flake?rev=abcdef1234567890abcdef1234567890abcdef12"
+                #     #
+                #
+                #     # (builtins.getFlake "path:/home/paolo/nix/pkgs/aider-chat").packages.x86_64-linux.default
+                #     # inputs.aider-chat.packages.x86_64-linux.default
+                #   ];
+                # })
               ];
             };
           }

@@ -129,6 +129,7 @@
                 # ./users/paolo/vscode-server.nix
                 ./users/paolo/gpg-server.nix
                 ./users/paolo/git-secret.nix
+                {home.packages = [(builtins.getFlake "path:./pkgs/aider-chat?lastModified=1721069693&narHash=sha256-H275mfKiSnk%2BbM/WSpRGR7HYWAtLiydw%2BcCbvKJlRjI%3D").packages.x86_64-linux.default];} # NOTE: you can update the lock with `nix flake prefetch path:./pkgs/aider-chat`
               ];
             };
           }

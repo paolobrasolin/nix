@@ -26,4 +26,15 @@ nixpkgs.hostPlatform = "aarch64-darwin";
 
 security.pam.enableSudoTouchIdAuth = true;
 
+networking.hostName = "ebisu";
+networking.localHostName = "ebisu";
+
+system.defaults.dock.mineffect = null;
+system.defaults.dock.autohide = true;
+system.defaults.dock.autohide-delay = 0.1;
+system.defaults.dock.autohide-time-modifier = 0.1;
+
+environment.shellAliases = {
+  snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
+};
 }

@@ -37,4 +37,9 @@ system.defaults.dock.autohide-time-modifier = 0.1;
 environment.shellAliases = {
   snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
 };
+
+# NOTE: this is the default in the DeterminateSystems conf and repairs nix-shell
+nix.extraOptions = ''
+extra-nix-path = nixpkgs=flake:nixpkgs
+'';
 }

@@ -2,10 +2,10 @@
   description = "Paolo's Nix Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     disko.url = "github:nix-community/disko";
@@ -13,6 +13,9 @@
 
     cornelis.url = "github:isovector/cornelis";
     cornelis.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -20,6 +23,7 @@
     nixpkgs,
     home-manager,
     disko,
+    nix-darwin,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -71,6 +75,15 @@
           ./users/paolo/gpg-client.nix
           ./users/paolo/git-secret.nix
           ./users/paolo/texlive.nix
+        ];
+      };
+    };
+
+    darwinConfigurations = {
+      "ebisu" = nix-darwin.lib.darwinSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          ./hosts/ebisu/configuration.nix
         ];
       };
     };

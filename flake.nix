@@ -99,6 +99,7 @@
       "ebisu" = nix-darwin.lib.darwinSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
+          {nixpkgs.hostPlatform = "aarch64-darwin";}
           ./hosts/ebisu/configuration.nix
           nix-homebrew.darwinModules.nix-homebrew
           ./hosts/ebisu/nix-homebrew.nix

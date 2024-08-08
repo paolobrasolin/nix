@@ -111,8 +111,11 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users."Brasolin".imports = [
-                ./users/paolo/lazyvim.nix
                 ./hosts/ebisu/home.nix
+                ./users/paolo/interactive.nix
+                ./users/paolo/lazyvim.nix
+                ./users/paolo/dev-server-lite.nix
+                ./users/paolo/dev-server-mule.nix
               ];
             };
           }

@@ -47,16 +47,6 @@
     overlays = import ./overlays {inherit inputs;};
 
     homeConfigurations = {
-      "paolo@ebisu" = home-manager.lib.homeManagerConfiguration {
-        extraSpecialArgs = {inherit inputs outputs;};
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin; # TODO: is this ok for an M2?
-        modules = [
-          ./users/paolo/base.nix
-          ./users/paolo/interactive.nix
-          ./users/paolo/lazyvim.nix
-        ];
-      };
-
       "paolo@kitsune" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};

@@ -40,6 +40,8 @@ environment.shellAliases = {
   snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
 };
 
+fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["Hack"];})];
+
 users.users."Brasolin".home = /Users/Brasolin;
 users.users."Brasolin" = {
 shell = pkgs.zsh;

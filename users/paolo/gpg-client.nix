@@ -1,10 +1,10 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   programs.gpg.enable = true;
   services.gpg-agent.enable = true;
 
   programs.gpg.publicKeys = [
     {
-      text = (builtins.readFile ../../keys/pgp.pub);
+      text = builtins.readFile ../../keys/pgp.pub;
       trust = "ultimate";
     }
   ];
@@ -22,4 +22,3 @@
     ];
   };
 }
-

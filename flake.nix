@@ -31,7 +31,6 @@
       url = "github:homebrew/homebrew-bundle";
       flake = false;
     };
-
   };
 
   outputs = {

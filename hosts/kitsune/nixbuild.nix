@@ -5,7 +5,7 @@
       PubkeyAcceptedKeyTypes ssh-ed25519
       ServerAliveInterval 60
       IPQoS throughput
-      IdentityFile /home/paolo/.ssh/id_ed25519
+      IdentityFile /home/paolo/.ssh/paolo_at_kitsune
   '';
 
   programs.ssh.knownHosts = {

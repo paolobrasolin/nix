@@ -51,24 +51,23 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
+          {
+            nixpkgs.config = {
+              allowUnfree = true;
+              permittedInsecurePackages = [
+                "electron-25.9.0" # Required by obsidian
+              ];
+            };
+          }
           ({
             inputs,
             outputs,
             ...
           }: {
-            # TODO: this module is inlined becaue keeping it in base.nix would upset paolo@inari. Refactor this to be neater.
-            nixpkgs = {
-              config = {
-                allowUnfree = true;
-                permittedInsecurePackages = [
-                  "electron-25.9.0" # Required by obsidian
-                ];
-              };
-              overlays = [
-                outputs.overlays.unstable-packages
-                inputs.cornelis.overlays.cornelis
-              ];
-            };
+            nixpkgs.overlays = [
+              outputs.overlays.unstable-packages
+              inputs.cornelis.overlays.cornelis
+            ];
           })
           ./users/paolo/base.nix
           ./users/paolo/interactive.nix
@@ -133,13 +132,15 @@
         specialArgs = {inherit inputs outputs;};
         modules = [
           {nix.nixPath = ["nixpkgs=${nixpkgs}"];} # TODO: why did i need this again?
-          ({inputs, ...}: {
-            nixpkgs = {
-              overlays = [
-                outputs.overlays.unstable-packages
-                inputs.cornelis.overlays.cornelis
-              ];
-            };
+          ({
+            inputs,
+            outputs,
+            ...
+          }: {
+            nixpkgs.overlays = [
+              outputs.overlays.unstable-packages
+              inputs.cornelis.overlays.cornelis
+            ];
           })
           disko.nixosModules.disko
           ./hosts/inari/configuration.nix

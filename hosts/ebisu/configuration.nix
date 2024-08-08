@@ -34,6 +34,8 @@ system.defaults.dock.autohide = true;
 system.defaults.dock.autohide-delay = 0.1;
 system.defaults.dock.autohide-time-modifier = 0.1;
 
+system.startup.chime = false;
+
 environment.shellAliases = {
   snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
 };

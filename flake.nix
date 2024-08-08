@@ -84,6 +84,18 @@
         specialArgs = {inherit inputs outputs;};
         modules = [
           ./hosts/ebisu/configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              extraSpecialArgs = {inherit inputs outputs;};
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users."Brasolin".imports = [
+                ./users/paolo/lazyvim.nix
+                ./hosts/ebisu/home.nix
+              ];
+            };
+          }
         ];
       };
     };

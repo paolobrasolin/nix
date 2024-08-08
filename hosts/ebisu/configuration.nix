@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }: {
 # List packages installed in system profile. To search by name, run:
 # $ nix-env -qaP | grep wget
-environment.systemPackages = [ pkgs.vim ];
+#environment.systemPackages = with pkgs; [ vim ];
 
 # Auto upgrade nix package and the daemon service.
 services.nix-daemon.enable = true;
@@ -36,6 +36,11 @@ system.defaults.dock.autohide-time-modifier = 0.1;
 
 environment.shellAliases = {
   snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
+};
+
+users.users."Brasolin".home = /Users/Brasolin;
+users.users."Brasolin" = {
+shell = pkgs.zsh;
 };
 
 # NOTE: this is the default in the DeterminateSystems conf and repairs nix-shell

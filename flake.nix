@@ -16,6 +16,22 @@
 
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
+
   };
 
   outputs = {
@@ -24,6 +40,7 @@
     home-manager,
     disko,
     nix-darwin,
+    nix-homebrew,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -84,6 +101,9 @@
         specialArgs = {inherit inputs outputs;};
         modules = [
           ./hosts/ebisu/configuration.nix
+          nix-homebrew.darwinModules.nix-homebrew
+          ./hosts/ebisu/nix-homebrew.nix
+          ./hosts/ebisu/homebrew.nix
           home-manager.darwinModules.home-manager
           {
             home-manager = {

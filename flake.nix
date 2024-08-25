@@ -164,7 +164,7 @@
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix
                 ./users/paolo/dev-server-mule.nix
-                # ./users/paolo/vscode-server.nix
+                ./users/paolo/vscode-server.nix
                 ./users/paolo/gpg-server.nix
                 ./users/paolo/git-secret.nix
                 # {home.packages = [(builtins.getFlake "path:./pkgs/aider-chat?lastModified=1721070396&narHash=sha256-H275mfKiSnk%2BbM/WSpRGR7HYWAtLiydw%2BcCbvKJlRjI%3D' to '/nix/store/4l2pw3hn62xw7klxkph5dpdqqvhabmr6-source' (hash 'sha256-H275mfKiSnk+bM/WSpRGR7HYWAtLiydw+cCbvKJlRjI=").packages.x86_64-linux.default];} # NOTE: you can update the lock with `nix flake prefetch path:./pkgs/aider-chat`

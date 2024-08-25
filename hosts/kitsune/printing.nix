@@ -8,7 +8,7 @@
   # NOTE: this allows auto-discovery of network printers
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
 

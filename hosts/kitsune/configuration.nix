@@ -27,10 +27,10 @@
   networking.networkmanager.enable = true;
 
   # Graphical session
+  services.displayManager.defaultSession = "xfce+i3";
   services.xserver = {
     enable = true;
     displayManager = {
-      defaultSession = "xfce+i3";
       lightdm = {
         enable = true;
         greeters = {
@@ -73,9 +73,9 @@
 
   # Keyboard layout
   console.keyMap = "it2";
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "it";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Printing with CUPS

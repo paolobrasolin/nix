@@ -71,11 +71,10 @@
           })
           ./users/paolo/base.nix
           ./users/paolo/interactive.nix
-          # ./users/paolo/lunarvim.nix
           ./users/paolo/lazyvim.nix
           ./users/paolo/dev-server-lite.nix
           ./users/paolo/graphical.nix
-          # ./users/paolo/vscode-client.nix
+          ./users/paolo/vscode-client.nix
           ./users/paolo/ssh-client.nix
           ./users/paolo/gpg-client.nix
           ./users/paolo/git-secret.nix

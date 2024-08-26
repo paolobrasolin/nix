@@ -1,6 +1,6 @@
 {...}: let
   keys = [
-    (builtins.readFile ../../keys/paolo_at_ebisu.pub)
+    (builtins.readFile ../../keys/pb-paolo_at_ebisu.pub)
     (builtins.readFile ../../keys/paolo_at_kitsune.pub)
   ];
 in {

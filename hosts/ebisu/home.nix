@@ -26,13 +26,5 @@
     includes = [
       "~/.colima/ssh_config" # NOTE: colima isn't being particularly smart about it.
     ];
-    matchBlocks."github" = {
-      host = "github.com";
-      identitiesOnly = true;
-      identityFile = [
-        "~/.ssh/pb-paolo_at_ebisu"
-        "~/.ssh/dq-paolo_at_ebisu"
-      ];
-    };
   };
 }

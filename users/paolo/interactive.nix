@@ -40,8 +40,6 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "Paolo Brasolin";
-    userEmail = "paolo.brasolin@gmail.com";
     delta.enable = true;
     delta.options = {
       line-numbers = true;
@@ -63,6 +61,7 @@
       }
     ];
     extraConfig = {
+      user.useConfigOnly = true;
       # Automatically handle !fixup and !squash commits -- see https://thoughtbot.com/blog/autosquashing-git-commits
       rebase.autosquash = "true";
       # Improve merge conflicts style showing base -- see https://ductile.systems/zdiff3/

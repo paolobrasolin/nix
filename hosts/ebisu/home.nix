@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   home.stateVersion = "24.05";
   home.username = "Brasolin";
   # home.homeDirectory = "/Users/Brasolin";
@@ -20,4 +20,19 @@
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
     colima
   ];
+
+  programs.ssh = {
+    enable = true;
+    includes = [
+      "~/.colima/ssh_config" # NOTE: colima isn't being particularly smart about it.
+    ];
+    matchBlocks."github" = {
+      host = "github.com";
+      identitiesOnly = true;
+      identityFile = [
+        "~/.ssh/pb-paolo_at_ebisu"
+        "~/.ssh/dq-paolo_at_ebisu"
+      ];
+    };
+  };
 }

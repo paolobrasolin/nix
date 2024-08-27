@@ -52,16 +52,13 @@
       {
         condition = "gitdir:~/pb/";
         contents = {
-          user = {email = "paolo.brasolin@gmail.com";};
-          # TODO: enable signing
-          # user = {signingKey = "729313FB8E6164F8";};
-          # commit = {gpgSign = true;};
+          user.email = "paolo.brasolin@gmail.com";
         };
       }
       {
         condition = "gitdir:~/dq/";
         contents = {
-          user = {email = "paolo.brasolin@donq.io";};
+          user.email = "paolo.brasolin@donq.io";
         };
       }
     ];

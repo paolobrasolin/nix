@@ -38,6 +38,15 @@
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 15; # 25;
   system.defaults.NSGlobalDomain.KeyRepeat = 2; # 6;
 
+  system.defaults.finder = {
+    AppleShowAllExtensions = true;
+    AppleShowAllFiles = true;
+    CreateDesktop = false;
+    FXPreferredViewStyle = "Nlsv";
+    QuitMenuItem = true;
+    ShowPathbar = true;
+  };
+
   system.startup.chime = false;
 
   environment.shellAliases = {

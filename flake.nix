@@ -71,6 +71,7 @@
           })
           ./users/paolo/base.nix
           ./users/paolo/interactive.nix
+          ./users/paolo/kitsune.nix
           ./users/paolo/lazyvim.nix
           ./users/paolo/dev-server-lite.nix
           ./users/paolo/graphical.nix
@@ -101,6 +102,7 @@
               users."Brasolin".imports = [
                 ./hosts/ebisu/home.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/ebisu.nix
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix
                 ./users/paolo/dev-server-mule.nix
@@ -159,6 +161,7 @@
               users."paolo".imports = [
                 ./users/paolo/base.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/inari.nix
                 ./users/paolo/agda.nix
                 # ./users/paolo/lunarvim.nix
                 ./users/paolo/lazyvim.nix

@@ -46,20 +46,6 @@
       side-by-side = true;
       navigate = true;
     };
-    includes = [
-      {
-        condition = "gitdir:~/pb/";
-        contents = {
-          user.email = "paolo.brasolin@gmail.com";
-        };
-      }
-      {
-        condition = "gitdir:~/dq/";
-        contents = {
-          user.email = "paolo.brasolin@donq.io";
-        };
-      }
-    ];
     extraConfig = {
       user.useConfigOnly = true;
       # Automatically handle !fixup and !squash commits -- see https://thoughtbot.com/blog/autosquashing-git-commits

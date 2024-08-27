@@ -35,6 +35,9 @@
   system.defaults.dock.autohide-delay = 0.1;
   system.defaults.dock.autohide-time-modifier = 0.1;
 
+  system.defaults.NSGlobalDomain.InitialKeyRepeat = 15; # 25;
+  system.defaults.NSGlobalDomain.KeyRepeat = 2; # 6;
+
   system.startup.chime = false;
 
   environment.shellAliases = {

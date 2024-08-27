@@ -30,13 +30,19 @@
   networking.hostName = "ebisu";
   networking.localHostName = "ebisu";
 
-  system.defaults.dock.mineffect = null;
-  system.defaults.dock.autohide = true;
-  system.defaults.dock.autohide-delay = 0.1;
-  system.defaults.dock.autohide-time-modifier = 0.1;
-
-  system.defaults.NSGlobalDomain.InitialKeyRepeat = 15; # 25;
-  system.defaults.NSGlobalDomain.KeyRepeat = 2; # 6;
+  system.defaults.NSGlobalDomain = {
+    InitialKeyRepeat = 15; # 25;
+    KeyRepeat = 2; # 6;
+    AppleScrollerPagingBehavior = true;
+    AppleShowAllExtensions = true;
+    AppleShowAllFiles = true;
+    AppleShowScrollBars = "Always";
+    NSAutomaticCapitalizationEnabled = false;
+    NSAutomaticDashSubstitutionEnabled = false;
+    NSAutomaticInlinePredictionEnabled = false;
+    NSAutomaticQuoteSubstitutionEnabled = false;
+    NSAutomaticSpellingCorrectionEnabled = false;
+  };
 
   system.defaults.finder = {
     AppleShowAllExtensions = true;
@@ -45,6 +51,17 @@
     FXPreferredViewStyle = "Nlsv";
     QuitMenuItem = true;
     ShowPathbar = true;
+  };
+
+  system.defaults.dock = {
+    mineffect = null;
+    autohide = true;
+    autohide-delay = 0.1;
+    autohide-time-modifier = 0.1;
+    static-only = true;
+    showhidden = true;
+    tilesize = 32;
+    show-recents = false;
   };
 
   system.startup.chime = false;

@@ -12,4 +12,12 @@
       size = 16.0
     '';
   };
+  home.packages = with pkgs; [
+    # NOTE: we use colima instead of Docker Desktop as a runtime
+    # Ref: https://www.tyler-wright.com/blog/using-colima-on-an-m1-m2-mac/
+    # First startup:
+    # * `softwareupdate --install-rosetta --agree-to-license`
+    # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
+    colima
+  ];
 }

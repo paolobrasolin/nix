@@ -1,25 +1,23 @@
 {
-  programs.git.includes = [
-    {
-      condition = "gitdir:~/pb/";
-      contents = {
-        user.name = "Paolo Brasolin";
-        user.email = "paolo.brasolin@gmail.com";
-        core.sshCommand = "ssh -F /dev/null -i ~/.ssh/pb-paolo_at_ebisu";
-        #url."paolobrasolin_at_github.com".insteadOf = "git@github.com";
-      };
-    }
+  programs.git.includes = (map (ns: {
+    condition = "gitdir:~/${ns}/";
+    contents = {
+      user.name = "Paolo Brasolin";
+      user.email = "paolo.brasolin@gmail.com";
+      core.sshCommand = "ssh -F /dev/null -i ~/.ssh/pb-paolo_at_ebisu";
+    };
+  }) ["nix" "pb" "vp" "bi" "ef" "bs"]) ++ [
     {
       condition = "gitdir:~/dq/";
       contents = {
-        user.name = "Paolo Brasolin";
         user.email = "paolo.brasolin@donq.io";
         core.sshCommand = "ssh -F /dev/null -i ~/.ssh/dq-paolo_at_ebisu";
-        # url."pbrasolin-DQ_at_github.com".insteadOf = "git@github.com";
       };
     }
   ];
-  # NOTE:these are to be paired with the commented `url`s above as an alternative to `sshCommand` but tbh I find the whole thing quite cursed.
+  # NOTE:these are to be paired with some `includes.*.contents.url`s as an alternative to `sshCommand` but tbh I find the whole thing quite cursed:
+  # # url."paolobrasolin_at_github.com".insteadOf = "git@github.com";
+  # # url."pbrasolin-DQ_at_github.com".insteadOf = "git@github.com";
   # programs.ssh = {
   #   matchBlocks."paolobrasolin_at_github.com" = {
   #     # host = "github.com";

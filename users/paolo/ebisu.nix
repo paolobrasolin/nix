@@ -10,6 +10,7 @@
     {
       condition = "gitdir:~/dq/";
       contents = {
+        user.name = "Paolo Brasolin";
         user.email = "paolo.brasolin@donq.io";
         core.sshCommand = "ssh -F /dev/null -i ~/.ssh/dq-paolo_at_ebisu";
       };

@@ -11,6 +11,13 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    nix-secrets = {
+      url = "git+ssh://git@github.com/paolobrasolin/nix-secrets.git?shallow=1";
+      flake = false;
+    };
+
     cornelis.url = "github:isovector/cornelis";
     cornelis.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -100,7 +107,9 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users."Brasolin".imports = [
+                inputs.sops-nix.homeManagerModules.sops
                 ./hosts/ebisu/home.nix
+                ./hosts/ebisu/sops.nix
                 ./users/paolo/interactive.nix
                 ./users/paolo/ebisu.nix
                 ./users/paolo/lazyvim.nix

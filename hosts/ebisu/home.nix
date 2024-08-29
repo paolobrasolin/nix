@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, inputs, ...}: {
   home.stateVersion = "24.05";
   home.username = "Brasolin";
   # home.homeDirectory = "/Users/Brasolin";
@@ -19,6 +19,7 @@
     # * `softwareupdate --install-rosetta --agree-to-license`
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
     colima
+    age sops ssh-to-age
   ];
 
   programs.ssh = {

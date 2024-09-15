@@ -35,7 +35,7 @@
         enable = true;
         greeters = {
           mini = {
-            enable = true;
+            enable = false;
             user = "paolo";
             extraConfig = ''
               [greeter]
@@ -48,6 +48,9 @@
               border-width = 0px
               password-border-width = 0px
             '';
+          };
+          slick = {
+            enable = true;
           };
         };
       };
@@ -114,6 +117,14 @@
     description = "Paolo Brasolin";
     extraGroups = ["networkmanager" "wheel"];
     shell = pkgs.zsh;
+    # packages = with pkgs; [];
+  };
+
+  users.users.elena = {
+    isNormalUser = true;
+    description = "Elena Ferrato";
+    extraGroups = ["networkmanager"];
+    # shell = pkgs.zsh;
     # packages = with pkgs; [];
   };
 

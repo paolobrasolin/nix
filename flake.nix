@@ -47,6 +47,27 @@
     overlays = import ./overlays {inherit inputs;};
 
     homeConfigurations = {
+      "elena@kitsune" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          {
+            nixpkgs.config = {
+              allowUnfree = true;
+            };
+          }
+          ({
+            inputs,
+            outputs,
+            ...
+          }: {
+            nixpkgs.overlays = [
+              outputs.overlays.unstable-packages
+            ];
+          })
+          ./users/elena/default.nix
+        ];
+      };
       "paolo@kitsune" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};

@@ -4,6 +4,7 @@
     casks = [
       "alacritty"
       "google-chrome"
+      "firefox"
     ];
   };
 }

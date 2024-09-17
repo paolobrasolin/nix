@@ -77,6 +77,10 @@
     shell = pkgs.zsh;
   };
 
+  environment.variables = {
+    EDITOR = "vim";
+  };
+
   # NOTE: this is the default in the DeterminateSystems conf and repairs nix-shell
   nix.extraOptions = ''
     extra-nix-path = nixpkgs=flake:nixpkgs

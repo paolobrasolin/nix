@@ -67,7 +67,7 @@
   system.startup.chime = false;
 
   environment.shellAliases = {
-    snix = "darwin-rebuild switch --flake ~/nix/flake.nix#ebisu";
+    snix = "darwin-rebuild switch --flake ~/pb/nix/flake.nix#ebisu";
   };
 
   fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["Hack"];})];

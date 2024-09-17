@@ -10,6 +10,7 @@ return {
 				python = { "black" },
 				ruby = { "rufo" },
 				sh = { "shfmt" },
+        sql = { "sqlfluff" }
 			},
 		},
 	},

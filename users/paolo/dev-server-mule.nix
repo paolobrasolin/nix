@@ -13,6 +13,7 @@
     # nodePackages.prettier # ALOT # TODO: switch to biome
     black # python
     rufo # ruby
+    sqlfluff # sql
 
     # Diagnostics and linters
     ruff # python

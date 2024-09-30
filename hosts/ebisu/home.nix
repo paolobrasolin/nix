@@ -19,6 +19,9 @@
     # * `softwareupdate --install-rosetta --agree-to-license`
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
     colima
+    zathura
+    texliveFull
+    texlab
   ];
 
   programs.ssh = {

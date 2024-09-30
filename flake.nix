@@ -114,6 +114,11 @@
           nix-homebrew.darwinModules.nix-homebrew
           ./hosts/ebisu/nix-homebrew.nix
           ./hosts/ebisu/homebrew.nix
+          ({outputs, ...}: {
+            nixpkgs.overlays = [
+              outputs.overlays.unstable-packages
+            ];
+          })
           home-manager.darwinModules.home-manager
           {
             home-manager = {

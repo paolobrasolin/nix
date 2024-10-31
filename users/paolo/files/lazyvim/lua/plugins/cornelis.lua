@@ -38,9 +38,10 @@ return {
 				{ "<leader>ad", "<cmd>CornelisTypeInfer Normalised<cr>", "Infer type" },
 				-- { "<leader>ao", "", "Module contents" },
 				-- { "<leader>az", "", "Search Definitions in Scope" },
-				{ "<leader>an", "<cmd>CornelisNormalize Normalised<cr>", "Compute normal form" },
-				-- { "<leader>aun", "<cmd>CornelisNormalize ?<cr>", "Compute normal form ignoring abstract" },
-				-- { "<leader>auun", "<cmd>CornelisNormalize ?<cr>", "Show normal form of expression" },
+				{ "<leader>an", "<cmd>CornelisNormalize DefaultCompute<cr>", "Compute normal form" },
+				{ "<leader>aun", "<cmd>CornelisNormalize IgnoreAbstract<cr>", "Compute normal form ignoring abstract" },
+				{ "<leader>auun", "<cmd>CornelisNormalize UseShowInstance<cr>", "Compute normal form of show <expr>" },
+				{ "<leader>auuun", "<cmd>CornelisNormalize HeadCompute<cr>", "Compute weak head normal form" },
 				-- { "<leader>ax;", "", "Comment/uncomment rest of buffer" },
 				-- { "<leader>axs", "", "Switch Agda version" }
 
@@ -66,9 +67,10 @@ return {
 				},
 				-- { "<leader>a;", "", "Goal type, context and checked term" },
 				-- { "<leader>ao", "", "Module contents" },
-				-- { "<leader>an", "<cmd>CornelisNormalize Normalised<cr>", "Compute normal form" },
-				-- { "<leader>aun", "<cmd>CornelisNormalize ?<cr>", "Compute normal form ignoring abstract" },
-				-- { "<leader>auun", "<cmd>CornelisNormalize ?<cr>", "Show normal form of expression" },
+				-- { "<leader>an", "<cmd>CornelisNormalize DefaultCompute<cr>", "Compute normal form" },
+				-- { "<leader>aun", "<cmd>CornelisNormalize IgnoreAbstract<cr>", "Compute normal form ignoring abstract" },
+				-- { "<leader>auun", "<cmd>CornelisNormalize UseShowInstance<cr>", "Compute normal form of show <expr>" },
+				-- { "<leader>auuun", "<cmd>CornelisNormalize HeadCompute<cr>", "Compute weak head normal form" },
 				{ "<leader>aw", "<cmd>CornelisWhyInScope<cr>", "Show why given name is in scope" },
 
 				-- Other commands

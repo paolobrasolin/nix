@@ -5,6 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    donq.url = "github:donq-io/donq_nix-workstations?ref=alt";
+
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -40,6 +42,7 @@
     disko,
     nix-darwin,
     nix-homebrew,
+    donq,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -119,6 +122,7 @@
               outputs.overlays.unstable-packages
             ];
           })
+          donq.darwinModules."aarch64-darwin".default
           home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -126,6 +130,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users."Brasolin".imports = [
+                donq.homeManagerModules."aarch64-darwin".default
                 ./hosts/ebisu/home.nix
                 ./users/paolo/interactive.nix
                 ./users/paolo/ebisu.nix

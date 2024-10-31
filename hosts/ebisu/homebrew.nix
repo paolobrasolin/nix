@@ -5,6 +5,7 @@
       "alacritty"
       "google-chrome"
       "firefox"
+      "telegram"
     ];
   };
 }

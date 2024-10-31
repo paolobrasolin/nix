@@ -132,6 +132,7 @@
               users."Brasolin".imports = [
                 donq.homeManagerModules."aarch64-darwin".default
                 ./hosts/ebisu/home.nix
+                ./users/paolo/agda.nix
                 ./users/paolo/interactive.nix
                 ./users/paolo/ebisu.nix
                 ./users/paolo/lazyvim.nix

@@ -31,20 +31,21 @@ return {
 				{ "<leader>ac", "<cmd>CornelisMakeCase<cr>", "Case split" },
 
 				{ "<leader>a ", "<cmd>CornelisGive<cr>", "Fill goal with hole contents" },
-				{ "<leader>am", "<cmd>CornelisElaborate<cr>", "Fill goal with normalized hole contents	" },
 				{ "<leader>aa", "<cmd>CornelisAuto<cr>", "Automatic proof search" },
 
-				{ "<leader>a,", "<cmd>CornelisTypeContext<cr>", "Show goal type and context" },
-				{ "<leader>ad", "<cmd>CornelisTypeInfer<cr>", "Show inferred type of hole contents" },
+				{ "<leader>am", "<cmd>CornelisElaborate Normalised<cr>", "Fill goal with normalized hole contents	" },
+				{ "<leader>a,", "<cmd>CornelisTypeContext Normalised<cr>", "Show goal type and context" },
+				{ "<leader>ad", "<cmd>CornelisTypeInfer Normalised<cr>", "Show inferred type of hole contents" },
 				{
 					"<leader>a.",
-					"<cmd>CornelisTypeContextInfer<cr>",
+					"<cmd>CornelisTypeContextInfer Normalised<cr>",
 					"Show goal type, context, and inferred type of hole contents",
 				},
+				{ "<leader>ah", "<cmd>CornelisHelperFunc Normalised<cr>", 'Copy inferred type to register "' },
 
 				{ "<leader>an", "<cmd>CornelisNormalize<cr>", "Compute normal of hole contents" },
+
 				{ "<leader>aw", "<cmd>CornelisWhyInScope<cr>", "Show why given name is in scope" },
-				{ "<leader>ah", "<cmd>CornelisHelperFunc<cr>", 'Copy inferred type to register "' },
 
 				{ "<leader>aj", "<cmd>CornelisGoToDefinition<cr>", "Jump to definition" },
 				{ "<leader>a+", "<cmd>CornelisQuestionToMeta<cr>", "Expand hole" },

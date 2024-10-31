@@ -20,38 +20,66 @@ return {
 			vim.g.cornelis_max_size = 10
 
 			local keymaps = {
+				-- Global commands
+				-- Ref: https://agda.readthedocs.io/en/latest/tools/emacs-mode.html#global-commands
 				{ "<leader>al", "<cmd>CornelisLoad<cr>", "Load and type-check" },
-				{ "<leader>axq", "<cmd>CornelisRestart<cr>", "Kill and restart Agda" },
+				-- { "<leader>axc", "", "Compile file" },
+				-- { "<leader>axq", "", "Quit Agda process" },
+				{ "<leader>axr", "<cmd>CornelisRestart<cr>", "Kill and restart Agda" },
 				{ "<leader>axa", "<cmd>CornelisAbort<cr>", "Abort command" },
-				{ "<leader>as", "<cmd>CornelisSolve<cr>", "Solve constraints" },
+				-- { "<leader>axd", "", "Remove goals and highlighting" },
+				-- { "<leader>axh", "", "Toggle hidden arguments" },
+				-- { "<leader>axi", "", "Toggle irrelevant arguments" },
+				-- { "<leader>a=", "", "Show constraints" },
+				{ "<leader>as", "<cmd>CornelisSolve Normalised<cr>", "Solve constraints" },
 				{ "<leader>a?", "<cmd>CornelisGoals<cr>", "Show all goals" },
 				{ "<leader>af", "<cmd>CornelisNextGoal<cr>", "Jump to next goal" },
 				{ "<leader>ab", "<cmd>CornelisPrevGoal<cr>", "Jump to prev goal" },
-				{ "<leader>ar", "<cmd>CornelisRefine<cr>", "Refine goal" },
-				{ "<leader>ac", "<cmd>CornelisMakeCase<cr>", "Case split" },
+				{ "<leader>ad", "<cmd>CornelisTypeInfer Normalised<cr>", "Infer type" },
+				-- { "<leader>ao", "", "Module contents" },
+				-- { "<leader>az", "", "Search Definitions in Scope" },
+				{ "<leader>an", "<cmd>CornelisNormalize Normalised<cr>", "Compute normal form" },
+				-- { "<leader>aun", "<cmd>CornelisNormalize ?<cr>", "Compute normal form ignoring abstract" },
+				-- { "<leader>auun", "<cmd>CornelisNormalize ?<cr>", "Show normal form of expression" },
+				-- { "<leader>ax;", "", "Comment/uncomment rest of buffer" },
+				-- { "<leader>axs", "", "Switch Agda version" }
 
+				-- Commands in context of a goal
+				-- Ref: https://agda.readthedocs.io/en/latest/tools/emacs-mode.html#commands-in-context-of-a-goal
+				--------------------------------------------------------------------------------
 				{ "<leader>a ", "<cmd>CornelisGive<cr>", "Fill goal with hole contents" },
+				{ "<leader>ar", "<cmd>CornelisRefine<cr>", "Refine goal" },
+				{ "<leader>am", "<cmd>CornelisElaborate Normalised<cr>", "Fill goal with normalized hole contents" },
+				-- { "<leader>aum", "<cmd>CornelisElaborate ?<cr>", "" },
+				-- { "<leader>auum", "<cmd>CornelisElaborate ?<cr>", "" },
 				{ "<leader>aa", "<cmd>CornelisAuto<cr>", "Automatic proof search" },
-
-				{ "<leader>am", "<cmd>CornelisElaborate Normalised<cr>", "Fill goal with normalized hole contents	" },
-				{ "<leader>a,", "<cmd>CornelisTypeContext Normalised<cr>", "Show goal type and context" },
-				{ "<leader>ad", "<cmd>CornelisTypeInfer Normalised<cr>", "Show inferred type of hole contents" },
+				{ "<leader>ac", "<cmd>CornelisMakeCase<cr>", "Case split" },
+				{ "<leader>ah", "<cmd>CornelisHelperFunc Normalised<cr>", 'Copy inferred type to register "' },
+				-- { "<leader>at", "", "Goal type" },
+				-- { "<leader>ae", "", "Context (environment)" },
+				-- { "<leader>ad", "<cmd>CornelisTypeInfer Normalised<cr>", "Infer type" },
+				{ "<leader>a,", "<cmd>CornelisTypeContext Normalised<cr>", "Goal type and context" },
 				{
 					"<leader>a.",
 					"<cmd>CornelisTypeContextInfer Normalised<cr>",
-					"Show goal type, context, and inferred type of hole contents",
+					"Goal type, context and inferred type",
 				},
-				{ "<leader>ah", "<cmd>CornelisHelperFunc Normalised<cr>", 'Copy inferred type to register "' },
-
-				{ "<leader>an", "<cmd>CornelisNormalize<cr>", "Compute normal of hole contents" },
-
+				-- { "<leader>a;", "", "Goal type, context and checked term" },
+				-- { "<leader>ao", "", "Module contents" },
+				-- { "<leader>an", "<cmd>CornelisNormalize Normalised<cr>", "Compute normal form" },
+				-- { "<leader>aun", "<cmd>CornelisNormalize ?<cr>", "Compute normal form ignoring abstract" },
+				-- { "<leader>auun", "<cmd>CornelisNormalize ?<cr>", "Show normal form of expression" },
 				{ "<leader>aw", "<cmd>CornelisWhyInScope<cr>", "Show why given name is in scope" },
 
+				-- Other commands
+				-- Ref: https://agda.readthedocs.io/en/latest/tools/emacs-mode.html#other-commands
 				{ "<leader>aj", "<cmd>CornelisGoToDefinition<cr>", "Jump to definition" },
+
+				-- Cornelis specific commands
 				{ "<leader>a+", "<cmd>CornelisQuestionToMeta<cr>", "Expand hole" },
-				{ "<leader>axi", "<cmd>CornelisCloseInfoWindows<cr>", "Close info windows" },
 				-- { "<leader>a", "<cmd>CornelisInc<cr>", "Increase" },
 				-- { "<leader>a", "<cmd>CornelisDec<cr>", "Decrease" },
+				{ "<leader>axi", "<cmd>CornelisCloseInfoWindows<cr>", "Close info windows" },
 			}
 
 			vim.api.nvim_create_autocmd("FileType", {

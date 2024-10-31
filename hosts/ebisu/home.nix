@@ -9,7 +9,7 @@
     text = ''
       [font]
       normal = { family = "Hack Nerd Font" }
-      size = 16.0
+      size = 20.0
     '';
   };
   home.packages = with pkgs; [

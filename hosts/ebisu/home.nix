@@ -22,6 +22,7 @@
     zathura
     texliveFull
     texlab
+    tmate
   ];
 
   programs.ssh = {

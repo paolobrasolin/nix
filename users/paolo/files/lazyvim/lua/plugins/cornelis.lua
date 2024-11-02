@@ -89,6 +89,13 @@ return {
 				{ "<leader>axi", "<cmd>CornelisCloseInfoWindows<cr>", "Close info windows" },
 			}
 
+			vim.keymap.set(
+				"v",
+				"<leader>a;",
+				":<C-u>'<,'>s/ \\({ \\|; \\|}$\\)/\\r  \\1/g<cr>",
+				{ desc = "Format record", buffer = true }
+			)
+
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "agda",
 				callback = function()

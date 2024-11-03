@@ -96,6 +96,8 @@ return {
 				{ desc = "Format record", buffer = true }
 			)
 
+			-- vim.keymap.set("n", "<leader>aH", "VypVgH", { desc = "Humanize", buffer = true })
+
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "agda",
 				callback = function()

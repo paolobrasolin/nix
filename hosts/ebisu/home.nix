@@ -20,7 +20,6 @@
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
     colima
     zathura
-    texliveFull
     texlab
     tmate
   ];

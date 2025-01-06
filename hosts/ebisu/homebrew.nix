@@ -6,6 +6,7 @@
       "google-chrome"
       "firefox"
       "telegram"
+      "dbeaver-community"
     ];
   };
 }

@@ -138,7 +138,7 @@
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix
                 ./users/paolo/dev-server-mule.nix
-                {home.packages = [(builtins.getFlake "path:./pkgs/aider-chat?lastModified=1727734726&narHash=sha256-avglUKgZFd4Nb%2BlBUeOcyFGVf%2BIEuDChNlhtQI7uepo%3D' to '/nix/store/1xm1c45x2pl895kjrrbscanjjrh12nfx-source' (hash 'sha256-avglUKgZFd4Nb+lBUeOcyFGVf+IEuDChNlhtQI7uepo=").packages.aarch64-darwin.default];} # NOTE: you can update the lock with `nix flake prefetch path:./pkgs/aider-chat`
+                # {home.packages = [(builtins.getFlake "path:./pkgs/aider-chat?lastModified=1727734726&narHash=sha256-avglUKgZFd4Nb%2BlBUeOcyFGVf%2BIEuDChNlhtQI7uepo%3D' to '/nix/store/1xm1c45x2pl895kjrrbscanjjrh12nfx-source' (hash 'sha256-avglUKgZFd4Nb+lBUeOcyFGVf+IEuDChNlhtQI7uepo=").packages.aarch64-darwin.default];} # NOTE: you can update the lock with `nix flake prefetch path:./pkgs/aider-chat`
               ];
             };
           }

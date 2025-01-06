@@ -22,6 +22,7 @@
     zathura
     texlab
     tmate
+    unstable.devenv
   ];
 
   programs.ssh = {

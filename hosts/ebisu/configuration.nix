@@ -11,8 +11,32 @@
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
-  # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
+  nix = {
+    # Necessary for using flakes on this system.
+    settings = {
+      experimental-features = "nix-command flakes";
+      trusted-users = ["Brasolin" "@admin"];
+      extra-trusted-users = ["Brasolin" "@admin"];
+    };
+    # Necessary to do linux builds on this system (i.e. ELF instead of Mach-O).
+    # Ref: https://nixcademy.com/posts/macos-linux-builder/
+    linux-builder = {
+      enable = true;
+      ephemeral = true;
+      maxJobs = 4;
+      config = {
+        virtualisation = {
+          darwin-builder = {
+            diskSize = 40 * 1024;
+            memorySize = 8 * 1024;
+          };
+          cores = 6;
+        };
+        nix.settings.sandbox = false;
+        services.openssh.enable = true;
+      };
+    };
+  };
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true; # default shell on catalina

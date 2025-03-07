@@ -24,6 +24,7 @@
     tmate
     unstable.devenv
     nodejs
+    age
   ];
 
   home.sessionPath = [

@@ -23,6 +23,11 @@
     texlab
     tmate
     unstable.devenv
+    nodejs
+  ];
+
+  home.sessionPath = [
+    "$HOME/mutable_node_modules/bin" # npm config set prefix '~/mutable_node_modules'
   ];
 
   programs.ssh = {

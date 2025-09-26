@@ -3,7 +3,7 @@
     # LSPs
     dockerfile-language-server-nodejs # dockerfile
     lemminx # xml
-    nodePackages.pyright # python # TODO: switch to pylyzer
+    pyright # python # TODO: switch to pylyzer
     nodePackages.typescript-language-server # typescript
     rubyPackages.solargraph # ruby # TODO: switch to ruby-lsp
     tailwindcss-language-server # tailwind  # FIXME: vim on slim files

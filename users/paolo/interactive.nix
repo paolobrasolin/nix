@@ -85,7 +85,7 @@
       snix-os = "sudo nixos-rebuild switch";
       snix-hm = "home-manager --flake ~/nix#paolo@kitsune switch";
     };
-    initExtra = ''
+    initContent = ''
       # Usage: ssh-L [user@]host ports...
       ssh-L () { ssh -vN $(printf ' -L %1$s:localhost:%s' ''${@:2}) $1 }
     '';

@@ -100,7 +100,7 @@
   hardware.bluetooth.enable = true;
 
   # Fonts
-  fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["Hack"];})];
+  fonts.packages = with pkgs; [nerd-fonts.hack];
   fonts.fontconfig = {defaultFonts = {monospace = ["Hack Nerd Font"];};};
 
   # Basic terminal QOL

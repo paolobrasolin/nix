@@ -8,7 +8,6 @@
   #environment.systemPackages = with pkgs; [ vim ];
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
   nix = {
@@ -42,6 +41,8 @@
   programs.zsh.enable = true; # default shell on catalina
   # programs.fish.enable = true;
 
+  system.primaryUser = "Brasolin";
+
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
@@ -49,7 +50,7 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   networking.hostName = "ebisu";
   networking.localHostName = "ebisu";
@@ -94,7 +95,7 @@
     snix = "darwin-rebuild switch --flake ~/pb/nix/flake.nix#ebisu";
   };
 
-  fonts.packages = with pkgs; [(nerdfonts.override {fonts = ["Hack"];})];
+  fonts.packages = with pkgs; [nerd-fonts.hack];
 
   users.users."Brasolin".home = /Users/Brasolin;
   users.users."Brasolin" = {

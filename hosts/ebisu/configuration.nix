@@ -92,7 +92,7 @@
   system.startup.chime = false;
 
   environment.shellAliases = {
-    snix = "darwin-rebuild switch --flake ~/pb/nix/flake.nix#ebisu";
+    snix = "sudo darwin-rebuild switch --flake ~/pb/nix/flake.nix#ebisu";
   };
 
   fonts.packages = with pkgs; [nerd-fonts.hack];

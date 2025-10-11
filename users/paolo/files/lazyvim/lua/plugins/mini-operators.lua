@@ -1,6 +1,6 @@
 return {
 	{
-		"echasnovski/mini.operators",
+		"nvim-mini/mini.operators",
 		opts = {
 			evaluate = {
 				prefix = "gH",

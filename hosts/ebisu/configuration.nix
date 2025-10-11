@@ -10,6 +10,11 @@
   # Auto upgrade nix package and the daemon service.
   # nix.package = pkgs.nix;
 
+  # nixpkgs.config.allowUnfreePredicate = pkg:
+  #   builtins.elem (pkgs.lib.getName pkg) [
+  #     "postman"
+  #   ];
+
   nix = {
     # Necessary for using flakes on this system.
     settings = {

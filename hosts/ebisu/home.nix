@@ -25,6 +25,10 @@
     unstable.devenv
     nodejs
     age
+    # unstable.uv
+    # postman
+    bfg-repo-cleaner
+    git-secret
   ];
 
   home.sessionPath = [

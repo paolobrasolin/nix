@@ -9,8 +9,10 @@ return {
 				nix = { "alejandra" },
 				python = { "black" },
 				ruby = { "rufo" },
+				rust = { "rustfmt" },
 				sh = { "shfmt" },
-        sql = { "sqlfluff" }
+				sql = { "sqlfluff" },
+				-- typescript = { "deno_fmt" },
 			},
 		},
 	},

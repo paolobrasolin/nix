@@ -7,7 +7,7 @@
         user.email = "paolo.brasolin@gmail.com";
         core.sshCommand = "ssh -F /dev/null -i ~/.ssh/pb-paolo_at_ebisu";
       };
-    }) ["pb" "vp" "bi" "ef" "uc"])
+    }) ["pb" "vp" "bi" "ef" "uc" "ag"])
     ++ [
       {
         condition = "gitdir:~/dq/";

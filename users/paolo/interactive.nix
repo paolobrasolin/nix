@@ -37,16 +37,20 @@
   # TODO: consider gitui, which should be faster
   programs.lazygit.enable = true;
 
-  programs.git = {
+  programs.delta = {
     enable = true;
-    lfs.enable = true;
-    delta.enable = true;
-    delta.options = {
+    enableGitIntegration = true;
+    options = {
       line-numbers = true;
       side-by-side = true;
       navigate = true;
     };
-    extraConfig = {
+  };
+
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+    settings = {
       user.useConfigOnly = true;
       # Automatically handle !fixup and !squash commits -- see https://thoughtbot.com/blog/autosquashing-git-commits
       rebase.autosquash = "true";

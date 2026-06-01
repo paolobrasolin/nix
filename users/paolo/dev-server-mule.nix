@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     # LSPs
-    dockerfile-language-server-nodejs # dockerfile
+    dockerfile-language-server # dockerfile
     lemminx # xml
     pyright # python # TODO: switch to pylyzer
     nodePackages.typescript-language-server # typescript

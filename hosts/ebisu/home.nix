@@ -21,7 +21,7 @@
     # First startup:
     # * `softwareupdate --install-rosetta --agree-to-license`
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
-    colima
+    # colima # NOTE: disabled — lima 1.2.2 is marked insecure/EOL in nixpkgs 25.11
     zathura
     texlab
     tmate

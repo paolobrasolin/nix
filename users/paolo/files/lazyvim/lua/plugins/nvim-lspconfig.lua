@@ -10,11 +10,6 @@ return {
 				bashls = {},
 				biome = {},
 				cssls = {},
-				denols = {
-					workspace_required = true,
-					single_file_support = false,
-					root_dir = util.root_pattern("deno.json"),
-				},
 				docker_compose_language_service = {},
 				dockerls = {},
 				html = {},
@@ -41,16 +36,10 @@ return {
 				},
 				texlab = {},
 				terraformls = {},
-				tsserver = {
-					workspace_required = true,
-					single_file_support = false,
-					root_dir = function(fname)
-						if util.root_pattern("deno.json")(fname) then
-							return nil -- disable tsserver in deno projects
-						end
-						return util.root_pattern("package.json")(fname)
-					end,
+				denols = {
+					enabled = false,
 				},
+				ts_ls = {},
 				yamlls = {},
 			},
 		},

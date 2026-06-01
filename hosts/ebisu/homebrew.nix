@@ -15,6 +15,14 @@
       "stats"
       "qgis"
       "cloudflare-warp"
+      "switchhosts"
+      "devpod"
+      "orbstack"
+      "obsidian"
+      "claude-code@latest"
+      "background-music"
+      # "blackhole-2ch"
+      "cyberduck"
     ];
     brews = [
       "mysql-client"
@@ -23,6 +31,10 @@
       "zeromq" # for R stuff
       "git" # for ComfyUI
       "harfbuzz" # libremap
+      "djvulibre"
+      "djview4"
+      # "opencode"
+      "tor"
     ];
   };
 }

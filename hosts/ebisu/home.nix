@@ -10,6 +10,9 @@
       [font]
       normal = { family = "Hack Nerd Font" }
       size = 20.0
+
+      [bell]
+      command = { program = "afplay", args = ["/System/Library/Sounds/Tink.aiff"] }
     '';
   };
   home.packages = with pkgs; [

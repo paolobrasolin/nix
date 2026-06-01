@@ -32,6 +32,8 @@
     # postman
     bfg-repo-cleaner
     git-secret
+    uv
+    tree
   ];
 
   home.sessionPath = [
@@ -40,6 +42,7 @@
 
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     includes = [
       "~/.colima/ssh_config" # NOTE: colima isn't being particularly smart about it.
     ];

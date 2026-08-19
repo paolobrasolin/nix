@@ -98,8 +98,8 @@
 
   environment.shellAliases = {
     snix = "sudo darwin-rebuild switch --flake ~/pb/nix/flake.nix#ebisu";
-    claude-ag = "CLAUDE_CONFIG_DIR=~/.claude-ag command claude";
-    claude-dq = "CLAUDE_CONFIG_DIR=~/.claude-dq command claude";
+    claude-ag = "CLAUDE_CONFIG_DIR=~/.ag/.claude command claude";
+    claude-dq = "CLAUDE_CONFIG_DIR=~/.dq/.claude command claude";
   };
 
   fonts.packages = with pkgs; [nerd-fonts.hack];

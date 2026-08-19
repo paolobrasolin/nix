@@ -20,7 +20,6 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
@@ -32,6 +31,11 @@
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
       flake = false;
+    };
+
+    donq-productive-cli = {
+      url = "git+file:///Users/Brasolin/dq/donq_productive-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -124,6 +128,7 @@
           })
           donq.darwinModules."aarch64-darwin".default
           home-manager.darwinModules.home-manager
+
           {
             home-manager = {
               extraSpecialArgs = {inherit inputs outputs;};
@@ -135,6 +140,13 @@
                 ./users/paolo/agda.nix
                 ./users/paolo/interactive.nix
                 ./users/paolo/ebisu.nix
+                ({
+                  pkgs,
+                  inputs,
+                  ...
+                }: {
+                  home.packages = [inputs.donq-productive-cli.packages.${pkgs.system}.default];
+                })
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix
                 ./users/paolo/dev-server-mule.nix

@@ -4,7 +4,7 @@
     casks = [
       "alacritty"
       "google-chrome"
-      "firefox"
+      # "firefox"
       "telegram"
       "dbeaver-community"
       "zotero"
@@ -26,7 +26,7 @@
     ];
     brews = [
       "mysql-client"
-      "libpq"
+      # "libpq"
       "udunits" # for R stuff
       "zeromq" # for R stuff
       "git" # for ComfyUI

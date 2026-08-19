@@ -5,7 +5,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    donq.url = "github:donq-io/donq_nix-workstations?ref=alt";
+    # Dogfooding the redesign (see its docs/2026-08-18-design-review.md).
+    # Granular modules only: do NOT import donq.darwinModules.core here — this
+    # machine is not on Determinate Nix (nix-darwin manages nix.settings and
+    # linux-builder itself), and core sets nix.enable = false.
+    # Once pushed, this can become "github:donq-io/donq_nix-workstations?ref=refactor".
+    donq.url = "git+file:///Users/Brasolin/dq/donq_nix-workstations?ref=refactor";
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -108,7 +113,12 @@
       "ebisu" = nix-darwin.lib.darwinSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
-          {nixpkgs.hostPlatform = "aarch64-darwin";}
+          {
+            nixpkgs.hostPlatform = "aarch64-darwin";
+            # Previously supplied by donq's monolithic darwin module; needed
+            # for the unfree packages in donq's dev-tools (terraform, ...).
+            nixpkgs.config.allowUnfree = true;
+          }
           ./hosts/ebisu/configuration.nix
           nix-homebrew.darwinModules.nix-homebrew
           ./hosts/ebisu/nix-homebrew.nix
@@ -118,7 +128,6 @@
               outputs.overlays.unstable-packages
             ];
           })
-          donq.darwinModules."aarch64-darwin".default
           home-manager.darwinModules.home-manager
 
           {
@@ -127,7 +136,9 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               users."Brasolin".imports = [
-                donq.homeManagerModules."aarch64-darwin".default
+                # Org toolchain sync only; git/shell/dotfiles stay personal.
+                # pkgs.unstable comes from outputs.overlays.unstable-packages above.
+                donq.homeManagerModules.dev-tools
                 ./hosts/ebisu/home.nix
                 ./users/paolo/agda.nix
                 ./users/paolo/interactive.nix

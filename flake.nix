@@ -5,12 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Dogfooding the redesign (see its docs/2026-08-18-design-review.md).
     # Granular modules only: do NOT import donq.darwinModules.core here — this
     # machine is not on Determinate Nix (nix-darwin manages nix.settings and
     # linux-builder itself), and core sets nix.enable = false.
-    # Once pushed, this can become "github:donq-io/donq_nix-workstations?ref=refactor".
-    donq.url = "git+file:///Users/Brasolin/dq/donq_nix-workstations?ref=refactor";
+    donq.url = "github:donq-io/donq_nix-workstations";
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

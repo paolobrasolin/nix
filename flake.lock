@@ -3,11 +3,11 @@
     "brew-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1787146131,
-        "narHash": "sha256-PycufRtH96Yd7/u9HLzTBhenp48MSUW0LYfp2tDQmkU=",
+        "lastModified": 1787258880,
+        "narHash": "sha256-mfmAHD8YxjimRruvJoXphMmf6/TYhQNk/35gds2N4yw=",
         "owner": "Homebrew",
         "repo": "brew",
-        "rev": "009a5949e5f4a6c3d804872484559d6822437e7f",
+        "rev": "ac9e7acf4eb0eccb55a850258a9fadf1551d17ec",
         "type": "github"
       },
       "original": {
@@ -87,18 +87,17 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1787154636,
-        "narHash": "sha256-tfoDPbC4VWwLXWiXOzl02aOVSMua2Xn9uKtvMVAbFbc=",
-        "ref": "refactor",
-        "rev": "ed252a2e9ec301deaf2875564d011bae91ee9aad",
-        "revCount": 397,
-        "type": "git",
-        "url": "file:///Users/Brasolin/dq/donq_nix-workstations"
+        "lastModified": 1787294497,
+        "narHash": "sha256-Dg2ushXKj3S0xrQZ9PVBSJBajlPjc6dQ6AajHNrvWGw=",
+        "owner": "donq-io",
+        "repo": "donq_nix-workstations",
+        "rev": "eeac65d70b74651317463d6a61f34605cc4ae808",
+        "type": "github"
       },
       "original": {
-        "ref": "refactor",
-        "type": "git",
-        "url": "file:///Users/Brasolin/dq/donq_nix-workstations"
+        "owner": "donq-io",
+        "repo": "donq_nix-workstations",
+        "type": "github"
       }
     },
     "donq-productive-cli": {

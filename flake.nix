@@ -32,6 +32,14 @@
       url = "git+file:///Users/Brasolin/dq/donq_productive-cli";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # `fh`, la CLI di finance-hub (pacchetto `packages.fh`). A differenza di
+    # productive-cli NON fa `follows` sul nostro nixpkgs: la derivazione usa
+    # `fetchPnpmDeps` con `fetcherVersion = 4`, che né `nixpkgs` né
+    # `nixpkgs-unstable` di questo flake supportano ancora (si fermano a 3) —
+    # forzarli fallisce in EVAL. Si tiene il nixpkgs pinnato dal suo flake.lock,
+    # che è anche quello contro cui l'hash di `pnpmDeps` è stato calcolato.
+    donq-finance-hub.url = "git+file:///Users/Brasolin/dq/donq_finance-hub";
   };
 
   outputs = {
@@ -146,7 +154,10 @@
                   inputs,
                   ...
                 }: {
-                  home.packages = [inputs.donq-productive-cli.packages.${pkgs.system}.default];
+                  home.packages = [
+                    inputs.donq-productive-cli.packages.${pkgs.system}.default
+                    inputs.donq-finance-hub.packages.${pkgs.system}.fh
+                  ];
                 })
                 ./users/paolo/lazyvim.nix
                 ./users/paolo/dev-server-lite.nix

@@ -3,11 +3,11 @@
     "brew-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1787258880,
-        "narHash": "sha256-mfmAHD8YxjimRruvJoXphMmf6/TYhQNk/35gds2N4yw=",
+        "lastModified": 1788143965,
+        "narHash": "sha256-0hjyEaE9xOSk0GVSmvwemQ1WJwFy3Eq65LqJGjyKPv4=",
         "owner": "Homebrew",
         "repo": "brew",
-        "rev": "ac9e7acf4eb0eccb55a850258a9fadf1551d17ec",
+        "rev": "6bf9a47106220bc907579a9aa7c47faac070ea40",
         "type": "github"
       },
       "original": {
@@ -84,14 +84,16 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "productive-cli": "productive-cli",
+        "zammad-cli": "zammad-cli"
       },
       "locked": {
-        "lastModified": 1787294497,
-        "narHash": "sha256-Dg2ushXKj3S0xrQZ9PVBSJBajlPjc6dQ6AajHNrvWGw=",
+        "lastModified": 1788191566,
+        "narHash": "sha256-0UljEawQFnv8kOW/bg3fhvwSbGeFXTudY+3MEx7cit4=",
         "owner": "donq-io",
         "repo": "donq_nix-workstations",
-        "rev": "eeac65d70b74651317463d6a61f34605cc4ae808",
+        "rev": "0936845416af0500c2ffd3d2a53c31e284c05361",
         "type": "github"
       },
       "original": {
@@ -117,27 +119,6 @@
       "original": {
         "type": "git",
         "url": "file:///Users/Brasolin/dq/donq_finance-hub"
-      }
-    },
-    "donq-productive-cli": {
-      "inputs": {
-        "flake-utils": "flake-utils_4",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1784144899,
-        "narHash": "sha256-dIymQjq8T2cTy+g1gPIFf8fOvhMK5G/sXQspSMgfHtw=",
-        "ref": "refs/heads/main",
-        "rev": "662e1667340ced3b5427fcc4be03f52bc9d242e8",
-        "revCount": 98,
-        "type": "git",
-        "url": "file:///Users/Brasolin/dq/donq_productive-cli"
-      },
-      "original": {
-        "type": "git",
-        "url": "file:///Users/Brasolin/dq/donq_productive-cli"
       }
     },
     "flake-compat": {
@@ -195,24 +176,6 @@
     "flake-utils_3": {
       "inputs": {
         "systems": "systems_3"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_4": {
-      "inputs": {
-        "systems": "systems_4"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -354,11 +317,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786686423,
-        "narHash": "sha256-8q3WdB8o3VUI7rOz1OXfioXIaaWbFTAxRJAkWLlfc0s=",
+        "lastModified": 1787330919,
+        "narHash": "sha256-LslMncqN7uOOH5S88WZtO/EVt2HwD8ltUnfyANk+mC0=",
         "owner": "zhaofengli",
         "repo": "nix-homebrew",
-        "rev": "ccabf79a6b9845eb72b51ea1d9c7ce3446350df3",
+        "rev": "b00218e4aec0e5bf07d61a0bb13f842faa582d7b",
         "type": "github"
       },
       "original": {
@@ -465,13 +428,37 @@
         "type": "github"
       }
     },
+    "productive-cli": {
+      "inputs": {
+        "flake-utils": [
+          "donq",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784382842,
+        "narHash": "sha256-WE2g/QLMP53pESCrwX5W9hduSY7TQZ0hL5ZCcqpGYt8=",
+        "owner": "donq-io",
+        "repo": "donq_productive-cli",
+        "rev": "c433d24bf56425d8b898a5d982ce871dcb95c3e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_productive-cli",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "cornelis": "cornelis",
         "disko": "disko",
         "donq": "donq",
         "donq-finance-hub": "donq-finance-hub",
-        "donq-productive-cli": "donq-productive-cli",
         "home-manager": "home-manager_2",
         "homebrew-bundle": "homebrew-bundle_2",
         "nix-darwin": "nix-darwin_2",
@@ -525,18 +512,28 @@
         "type": "github"
       }
     },
-    "systems_4": {
+    "zammad-cli": {
+      "inputs": {
+        "flake-utils": [
+          "donq",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "lastModified": 1785858759,
+        "narHash": "sha256-l14k8QwF6GShD4lLT1Auc49JMdFBuHxww10BKdet2eo=",
+        "owner": "donq-io",
+        "repo": "donq_zammad-cli",
+        "rev": "34c9f03d4d09576b2ca2dbf67ae9a64aeceb17d2",
         "type": "github"
       },
       "original": {
-        "owner": "nix-systems",
-        "repo": "default",
+        "owner": "donq-io",
+        "repo": "donq_zammad-cli",
         "type": "github"
       }
     }

@@ -5,7 +5,7 @@
       contents = {
         user.name = "Paolo Brasolin";
         user.email = "paolo.brasolin@gmail.com";
-        core.sshCommand = "ssh -F /dev/null -i ~/.ssh/pb-paolo_at_ebisu";
+        core.sshCommand = "ssh -F /dev/null -o IdentitiesOnly=yes -i ~/.ssh/pb-paolo_at_ebisu";
       };
     }) ["pb" "vp" "bi" "ef" "uc" "ag"])
     ++ [
@@ -14,7 +14,7 @@
         contents = {
           user.name = "Paolo Brasolin";
           user.email = "paolo.brasolin@donq.io";
-          core.sshCommand = "ssh -F /dev/null -i ~/.ssh/dq-paolo_at_ebisu";
+          core.sshCommand = "ssh -F /dev/null -o IdentitiesOnly=yes -i ~/.ssh/dq-paolo_at_ebisu";
         };
       }
       {
@@ -22,7 +22,7 @@
         contents = {
           user.name = "Paolo Brasolin";
           user.email = "paolo.brasolin@donq.io";
-          core.sshCommand = "ssh -F /dev/null -i ~/.ssh/dq-paolo_at_ebisu";
+          core.sshCommand = "ssh -F /dev/null -o IdentitiesOnly=yes -i ~/.ssh/dq-paolo_at_ebisu";
         };
       }
     ];

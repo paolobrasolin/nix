@@ -149,6 +149,10 @@
       bind-key -n M-7 select-window -t 7
       bind-key -n M-8 select-window -t 8
       bind-key -n M-9 select-window -t 9
+      # Status bar color by project folder: orange in ~/dq, purple in ~/pb, red in ~/ag, default green elsewhere.
+      # status-style is format-expanded, so this follows the active pane's cwd on every redraw.
+      set -g status-style 'fg=black,bg=#{?#{m:#{HOME}/dq/*,#{pane_current_path}/},orange,#{?#{m:#{HOME}/pb/*,#{pane_current_path}/},purple,#{?#{m:#{HOME}/ag/*,#{pane_current_path}/},red,green}}}'
+      set -g status-interval 2
     '';
   };
 

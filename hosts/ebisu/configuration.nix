@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   inputs,
   ...
@@ -116,5 +117,18 @@
   # NOTE: this is the default in the DeterminateSystems conf and repairs nix-shell
   nix.extraOptions = ''
     extra-nix-path = nixpkgs=flake:nixpkgs
+    !include /etc/nix/mosyle-token.conf
+  '';
+
+  # NOTE: Mosyle keeps dropping /etc/nix/nix.custom.conf with the fleet's GitHub
+  # token (needed for private donq-io inputs). nix-darwin aborts activation on any
+  # non-stock nix.custom.conf, so before that check we move the latest copy to a
+  # file of our own, included above; token rotations land on the next rebuild.
+  # Group admin so non-sudo nix commands can read it too.
+  system.activationScripts.checks.text = lib.mkBefore ''
+    if [[ -e /etc/nix/nix.custom.conf ]]; then
+      install -m 640 -o root -g admin /etc/nix/nix.custom.conf /etc/nix/mosyle-token.conf
+      rm /etc/nix/nix.custom.conf
+    fi
   '';
 }

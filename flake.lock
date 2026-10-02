@@ -3,11 +3,11 @@
     "brew-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1788143965,
-        "narHash": "sha256-0hjyEaE9xOSk0GVSmvwemQ1WJwFy3Eq65LqJGjyKPv4=",
+        "lastModified": 1790926038,
+        "narHash": "sha256-lEoez2LdfEqgQtZjndNWwjmACjR2a+Vq+mpz7jRaNJI=",
         "owner": "Homebrew",
         "repo": "brew",
-        "rev": "6bf9a47106220bc907579a9aa7c47faac070ea40",
+        "rev": "7f74c7bdd0969153a18bfa6fc9eb6518c113a035",
         "type": "github"
       },
       "original": {
@@ -19,17 +19,42 @@
     "brew-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1786348930,
-        "narHash": "sha256-bCQJkbgsAMDp5HQystZLCq11UHiyEuoWbxKulAPYrh8=",
+        "lastModified": 1786945682,
+        "narHash": "sha256-VBESSoJccikdhxh3vp3SQeG7cZXTOulMvVkoSqNDEhs=",
         "owner": "Homebrew",
         "repo": "brew",
-        "rev": "3ecc9eff23feebf1bc73846d74e14a122c93b66f",
+        "rev": "5b90e281d4e0c8fbd6ca4d8358276fb305b8d0bd",
         "type": "github"
       },
       "original": {
         "owner": "Homebrew",
-        "ref": "6.0.16",
+        "ref": "6.0.18",
         "repo": "brew",
+        "type": "github"
+      }
+    },
+    "bw-broker": {
+      "inputs": {
+        "flake-utils": [
+          "donq",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790098692,
+        "narHash": "sha256-/HFOHFSGWaDnpE71BKcwlOcBPLHlJVAD16okv5J5k8g=",
+        "owner": "donq-io",
+        "repo": "donq_bw-broker",
+        "rev": "55478b72d523186ebc6231006d7444940a091f27",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_bw-broker",
         "type": "github"
       }
     },
@@ -78,9 +103,12 @@
     "donq": {
       "inputs": {
         "brew-src": "brew-src",
+        "bw-broker": "bw-broker",
+        "donq-skills": "donq-skills",
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
         "homebrew-bundle": "homebrew-bundle",
+        "kb-cli": "kb-cli",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
@@ -89,11 +117,11 @@
         "zammad-cli": "zammad-cli"
       },
       "locked": {
-        "lastModified": 1788191566,
-        "narHash": "sha256-0UljEawQFnv8kOW/bg3fhvwSbGeFXTudY+3MEx7cit4=",
+        "lastModified": 1790954805,
+        "narHash": "sha256-1Nty5lz2XyzqpxYjd82YVS2aAuFTFa0XwWU3r8gx1Xo=",
         "owner": "donq-io",
         "repo": "donq_nix-workstations",
-        "rev": "0936845416af0500c2ffd3d2a53c31e284c05361",
+        "rev": "2c45e87580b3dba88b3b09b553ff065f2b1fc021",
         "type": "github"
       },
       "original": {
@@ -119,6 +147,50 @@
       "original": {
         "type": "git",
         "url": "file:///Users/Brasolin/dq/donq_finance-hub"
+      }
+    },
+    "donq-nix-skills": {
+      "inputs": {
+        "nixpkgs": [
+          "donq",
+          "donq-skills",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790953622,
+        "narHash": "sha256-UQJ8NCyBhIxe8HQp5wo6dj8Le/ISO/CbYGtmu4H0V8U=",
+        "owner": "donq-io",
+        "repo": "donq_nix-skills",
+        "rev": "bdf12c13dcccfab409af9b383a8344b1137cb86a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_nix-skills",
+        "type": "github"
+      }
+    },
+    "donq-skills": {
+      "inputs": {
+        "donq-nix-skills": "donq-nix-skills",
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790953635,
+        "narHash": "sha256-RD+1kJgE8r3XcHI+9S1GgIMQnkx396FxLpK+Ms1L4qY=",
+        "owner": "donq-io",
+        "repo": "donq_skills",
+        "rev": "2a3e22e145ca22c23cb1df9e6fbbdc58ccb4b817",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_skills",
+        "type": "github"
       }
     },
     "flake-compat": {
@@ -266,6 +338,31 @@
         "type": "github"
       }
     },
+    "kb-cli": {
+      "inputs": {
+        "flake-utils": [
+          "donq",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790953709,
+        "narHash": "sha256-90GVMQ8kacww+R3y2ZaFBsK7VmP83vXwILEv4V1Vtn8=",
+        "owner": "donq-io",
+        "repo": "donq_kb",
+        "rev": "3c52a20cd6e12591fc206bc7f7bce98e236a84e8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_kb",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -317,11 +414,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787330919,
-        "narHash": "sha256-LslMncqN7uOOH5S88WZtO/EVt2HwD8ltUnfyANk+mC0=",
+        "lastModified": 1789928041,
+        "narHash": "sha256-iV37ieTcE4ZLOYEe0VznW6dWMBe4lEL8AbK1vblyZGM=",
         "owner": "zhaofengli",
         "repo": "nix-homebrew",
-        "rev": "b00218e4aec0e5bf07d61a0bb13f842faa582d7b",
+        "rev": "c11cccfdd36dd69b5323d70d354b2853379c2426",
         "type": "github"
       },
       "original": {
@@ -335,11 +432,11 @@
         "brew-src": "brew-src_2"
       },
       "locked": {
-        "lastModified": 1786686423,
-        "narHash": "sha256-8q3WdB8o3VUI7rOz1OXfioXIaaWbFTAxRJAkWLlfc0s=",
+        "lastModified": 1787330919,
+        "narHash": "sha256-LslMncqN7uOOH5S88WZtO/EVt2HwD8ltUnfyANk+mC0=",
         "owner": "zhaofengli",
         "repo": "nix-homebrew",
-        "rev": "ccabf79a6b9845eb72b51ea1d9c7ce3446350df3",
+        "rev": "b00218e4aec0e5bf07d61a0bb13f842faa582d7b",
         "type": "github"
       },
       "original": {
@@ -440,11 +537,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784382842,
-        "narHash": "sha256-WE2g/QLMP53pESCrwX5W9hduSY7TQZ0hL5ZCcqpGYt8=",
+        "lastModified": 1790927111,
+        "narHash": "sha256-U4GgAgdar5beuxZUvjLLgDVi7rRpWjkgdspNR98/Fhc=",
         "owner": "donq-io",
         "repo": "donq_productive-cli",
-        "rev": "c433d24bf56425d8b898a5d982ce871dcb95c3e6",
+        "rev": "c447ed1f2c1599639f4c3b266c43d92486183c8f",
         "type": "github"
       },
       "original": {

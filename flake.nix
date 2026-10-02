@@ -133,6 +133,9 @@
             ];
           })
           home-manager.darwinModules.home-manager
+          # DonQ's agent skills, as on the fleet; see the file for the overrides.
+          donq.darwinModules.agent-skills
+          ./hosts/ebisu/agent-skills.nix
 
           {
             home-manager = {

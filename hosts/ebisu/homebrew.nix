@@ -20,6 +20,7 @@
       "devpod"
       "orbstack"
       "obsidian"
+      "claude"
       "claude-code@latest"
       "background-music"
       # "blackhole-2ch"

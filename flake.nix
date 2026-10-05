@@ -132,6 +132,10 @@
           # DonQ's agent skills, as on the fleet; see the file for the overrides.
           donq.darwinModules.agent-skills
           ./hosts/ebisu/agent-skills.nix
+          # Reminder to update when donq's main moves ahead, as on the fleet;
+          # ebisu's snix only rebuilds, so the button relocks donq first.
+          donq.darwinModules.update-reminder
+          {programs.donq-update-reminder.command = "nix flake update donq --flake ~/pb/nix && snix";}
 
           {
             home-manager = {

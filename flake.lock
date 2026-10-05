@@ -117,11 +117,11 @@
         "zammad-cli": "zammad-cli"
       },
       "locked": {
-        "lastModified": 1791221346,
-        "narHash": "sha256-OB72Fqkrd6HQYop+GNP3HwcUjZUGP6VVg9OvyQPr4jg=",
+        "lastModified": 1791221981,
+        "narHash": "sha256-TKtnn1c77RcmcYGUXY8fENtaSq0lNUXiOFO9DE0vJyA=",
         "owner": "donq-io",
         "repo": "donq_nix-workstations",
-        "rev": "51b5eab2e3495d324d299e9de60e90f21b393b1e",
+        "rev": "7f594da738be55de9d73fc5699d6cd9fddcc3ab5",
         "type": "github"
       },
       "original": {

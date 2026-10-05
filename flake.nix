@@ -23,10 +23,6 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
 
     # `fh`, la CLI di finance-hub (pacchetto `packages.fh`). NON fa `follows`
     # sul nostro nixpkgs: la derivazione usa `fetchPnpmDeps` con

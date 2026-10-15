@@ -153,6 +153,23 @@
 
   programs.tmux = {
     enable = true;
+    # Unstable bumped to the latest tag until nixpkgs catches up; the override
+    # retires itself once pkgs.unstable ships 3.8 or newer.
+    package = let
+      version = "3.8";
+    in
+      if lib.versionOlder pkgs.unstable.tmux.version version
+      then
+        pkgs.unstable.tmux.overrideAttrs {
+          inherit version;
+          src = pkgs.fetchFromGitHub {
+            owner = "tmux";
+            repo = "tmux";
+            tag = version;
+            hash = "sha256-pv2wlr3coo+E0pfpb58giJJQn9PGgMFqtVA6nk+9JdE=";
+          };
+        }
+      else pkgs.unstable.tmux;
     baseIndex = 1;
     escapeTime = 0; # NOTE: this would be very annoying when using vim
     keyMode = "vi";

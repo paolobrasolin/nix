@@ -123,7 +123,7 @@
           ({outputs, ...}: {
             nixpkgs.overlays = [
               outputs.overlays.unstable-packages
-              # pkgs.donq.{pd,zm}, needed by donq's dev-tools: the org CLIs
+              # pkgs.donq.*, needed by donq's tool-profiles: the org CLIs
               # arrive pinned by donq's lock, in lockstep with the toolchain.
               donq.overlays.donq-cli-tools
             ];
@@ -132,6 +132,14 @@
           # DonQ's agent skills, as on the fleet; see the file for the overrides.
           donq.darwinModules.agent-skills
           ./hosts/ebisu/agent-skills.nix
+          # The org CLIs (pd, zm, kb, ...) and which skills, by profile,
+          # picked from the menu bar's "Tools and profiles…" as on the fleet:
+          # it writes ./donq.json in this checkout, then updates.
+          donq.darwinModules.tool-profiles
+          {
+            donq.tools.selectionFile = ./donq.json;
+            donq.tools.flake = "~/pb/nix";
+          }
           # Reminder to update when donq's main moves ahead, as on the fleet;
           # ebisu's snix only rebuilds, so the button relocks donq first.
           donq.darwinModules.update-reminder

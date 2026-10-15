@@ -46,11 +46,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791990200,
-        "narHash": "sha256-sNBSFKiBkJ9nNjo74Gc2VaAPJfwgpIcUQ96t1aHAQAQ=",
+        "lastModified": 1792006459,
+        "narHash": "sha256-XKAcrdsKq5EfNvUJlFhDLZhJovueCmLolesm0txopfc=",
         "owner": "donq-io",
         "repo": "donq_bw-broker",
-        "rev": "24924c7c0d99be8b0b333820bbc151e313e7df38",
+        "rev": "06feb63153685c36533d7ea3678b678801ea52af",
         "type": "github"
       },
       "original": {
@@ -114,14 +114,15 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "productive-cli": "productive-cli",
+        "revolut-cli": "revolut-cli",
         "zammad-cli": "zammad-cli"
       },
       "locked": {
-        "lastModified": 1791991095,
-        "narHash": "sha256-k1yq2OxVyjeZqy5YRGk1oouOsUoLtTY3xVtMDLPJ/Vs=",
+        "lastModified": 1792088420,
+        "narHash": "sha256-ZYYRLSZ1juNrGpLD1nu9Xc1uARMujLPOVmTr0XXCs5A=",
         "owner": "donq-io",
         "repo": "donq_nix-workstations",
-        "rev": "db6aa553d2b54a20d828556c03a2aa1d83d89389",
+        "rev": "a1949d1eda66485c4a70a6b51e8ae2bd87131e6b",
         "type": "github"
       },
       "original": {
@@ -182,11 +183,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791990681,
-        "narHash": "sha256-KrsX32OeNYkH7hNhvnPRFhmJyItcvjcmm0mVWN6p6o0=",
+        "lastModified": 1792065525,
+        "narHash": "sha256-JlaY0R94lj0cuvExKrIGBvaEQp/u4H6YFz53ekTKSHI=",
         "owner": "donq-io",
         "repo": "donq_skills",
-        "rev": "887c3b194e2010cffe4598b055a2a22a4021de69",
+        "rev": "aa5de440d77600b06d2630226258ea0b66b085d0",
         "type": "github"
       },
       "original": {
@@ -514,6 +515,31 @@
       "original": {
         "owner": "donq-io",
         "repo": "donq_productive-cli",
+        "type": "github"
+      }
+    },
+    "revolut-cli": {
+      "inputs": {
+        "flake-utils": [
+          "donq",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "donq",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792065486,
+        "narHash": "sha256-KrmA5skR2yuu9zHaGKAVkEGc6VXMgT2GGmPjnYHfPfU=",
+        "owner": "donq-io",
+        "repo": "donq_revolut-cli",
+        "rev": "40123b9116da9eafc0b3c3787672302fa299c7fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "donq-io",
+        "repo": "donq_revolut-cli",
         "type": "github"
       }
     },

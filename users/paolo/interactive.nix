@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
     hcloud
     # ripgrep fzf fd zoxide
@@ -35,7 +39,26 @@
   # direnv.nix-direnv.enable = true;
 
   # TODO: consider gitui, which should be faster
-  programs.lazygit.enable = true;
+  programs.lazygit = {
+    enable = true;
+    # Unstable bumped to the latest tag until nixpkgs catches up; the override
+    # retires itself once pkgs.unstable ships 0.66.1 or newer.
+    package = let
+      version = "0.66.1";
+    in
+      if lib.versionOlder pkgs.unstable.lazygit.version version
+      then
+        pkgs.unstable.lazygit.overrideAttrs {
+          inherit version;
+          src = pkgs.fetchFromGitHub {
+            owner = "jesseduffield";
+            repo = "lazygit";
+            tag = "v${version}";
+            hash = "sha256-87OrUGi7xhQhAzV6S3r5evlLWt/1anheCd58v6GW42g=";
+          };
+        }
+      else pkgs.unstable.lazygit;
+  };
 
   programs.delta = {
     enable = true;

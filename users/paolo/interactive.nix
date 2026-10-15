@@ -153,6 +153,9 @@
       # status-style is format-expanded, so this follows the active pane's cwd on every redraw.
       set -g status-style 'fg=black,bg=#{?#{m:#{HOME}/dq/*,#{pane_current_path}/},orange,#{?#{m:#{HOME}/pb/*,#{pane_current_path}/},purple,#{?#{m:#{HOME}/ag/*,#{pane_current_path}/},red,green}}}'
       set -g status-interval 2
+      # Window title is the session's project folder, so Mission Control labels fullscreen Alacritty windows by project.
+      set -g set-titles on
+      set -g set-titles-string '#{b:session_path}'
     '';
   };
 

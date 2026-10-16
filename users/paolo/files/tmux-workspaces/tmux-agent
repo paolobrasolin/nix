@@ -7,6 +7,7 @@
 #   tmux-agent ws <n> [client]                    switch to the n-th workspace, in the order opened
 #   tmux-agent state working|waiting|done|clear   called from agent hooks
 #   tmux-agent next [pane-id] [client]            jump to the agent that has waited longest
+#   tmux-agent back [pane-id] [client]            back to before a run of `next` jumps (again: to the agent)
 #   tmux-agent new [-e] [branch] [agent cmd...]   git worktree + tab + agent (+ nvim with -e);
 #                                                 asks for the branch when not given
 #   tmux-agent demo                               fake agent in a background tab, to test notifications
@@ -166,7 +167,30 @@ cmd_next() {
   if [ -z "$target" ]; then
     tmux display-message ${client:+-c "$client"} 'no agents waiting on you'
   else
-    tmux switch-client ${client:+-c "$client"} -t "$target"
+    # Still on the agent the last jump landed on: keep the pane before the
+    # first jump, so `back` skips the agents you went through.
+    opt=$(back_opt "$client")
+    [ "$cur" = "$(tmux show -gqv "$opt-jump")" ] || tmux set -g "$opt" "$cur"
+    tmux set -g "$opt-jump" "$target" \; switch-client ${client:+-c "$client"} -t "$target"
+  fi
+}
+
+# Where `back` goes, one per client so each terminal window has its own
+# (client names are tty paths like /dev/ttys003, not usable in option names).
+back_opt() { printf '@agent-back%s' "$(printf %s "${1:-}" | tr -c 'A-Za-z0-9' _)"; }
+
+# Back to the pane you were on before a run of `next` jumps, in any workspace,
+# remembering this one, so pressing it again returns to the agent.
+cmd_back() {
+  cur=${1:-$(tmux display -p '#{pane_id}')}
+  client=${2:-}
+  opt=$(back_opt "$client")
+  target=$(tmux show -gqv "$opt")
+  # display -p succeeds even when the pane is gone, so compare what it prints
+  if [ -z "$target" ] || [ "$(tmux display -p -t "$target" '#{pane_id}' 2>/dev/null)" != "$target" ]; then
+    tmux display-message ${client:+-c "$client"} 'nowhere to go back to'
+  else
+    tmux set -g "$opt" "$cur" \; switch-client ${client:+-c "$client"} -t "$target"
   fi
 }
 
@@ -260,8 +284,9 @@ case ${1:-} in
   ws)    shift; cmd_ws "$@" ;;
   state) shift; cmd_state "$@" ;;
   next)  shift; cmd_next "$@" ;;
+  back)  shift; cmd_back "$@" ;;
   new)   shift; cmd_new "$@" ;;
   demo)  cmd_demo ;;
   timew) cmd_timew ;;
-  *) sed -n '5,14p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  *) sed -n '5,15p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

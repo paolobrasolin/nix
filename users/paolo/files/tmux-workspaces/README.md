@@ -103,9 +103,13 @@ Why it looks and works this way, and what bit us while building it.
   no terminal code for Ctrl+digit and its letters belong to the shell, Claude
   Code and nvim; Fn never reaches a terminal. On the Italian – Pro layout
   Shift+digit types `! " £ $ % & / ( ) =`, which is what the Alt+Shift+digit
-  bindings match. Left out of the original kit: split keys, an nvim split,
-  Alt+h/j/k/l pane moves (and the nvim navigator plugin), a sidebar, a reload
-  key, a lazygit popup.
+  bindings match. `C-b b` goes back from Alt+a's jumps because tmux's own
+  `C-b L` and `C-b l` each cover only one case (the agent in another
+  workspace, or in the same one); it returns to where you were before the
+  first of several jumps, not to the agent you just answered, and a second
+  press goes back to the agent. Left out of the original kit: split keys, an
+  nvim split, Alt+h/j/k/l pane moves (and the nvim navigator plugin), a
+  sidebar, a reload key, a lazygit popup.
 - **Look.** Backgrounds get lighter towards the content; agent state is a
   thick edge plus the name's colour, at a fixed width so tabs never shift
   (markers after the name made them move). Explicit hex colours, because

@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SessionStart":     [{ "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state clear" }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state working" }] }],
+    "PostToolUse":      [{ "matcher": "*", "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state working" }] }],
+    "Notification":     [{ "matcher": "permission_prompt|elicitation_dialog", "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state waiting" }] }],
+    "Stop":             [{ "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state done" }] }],
+    "SessionEnd":       [{ "hooks": [{ "type": "command", "command": "$HOME/.config/tmux/bin/tmux-agent state clear" }] }]
+  }
+}

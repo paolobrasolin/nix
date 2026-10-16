@@ -1,0 +1,267 @@
+#!/bin/sh
+# tmux-agent: glue between tmux workspaces (one session per project folder),
+# coding agents and git worktrees.
+#
+#   tmux-agent open [dir]                         open or switch to the workspace for a folder
+#                                                 (no dir: fzf picker, or a path prompt)
+#   tmux-agent ws <n> [client]                    switch to the n-th workspace, in the order opened
+#   tmux-agent state working|waiting|done|clear   called from agent hooks
+#   tmux-agent next [pane-id] [client]            jump to the agent that has waited longest
+#   tmux-agent new [-e] [branch] [agent cmd...]   git worktree + tab + agent (+ nvim with -e);
+#                                                 asks for the branch when not given
+#   tmux-agent demo                               fake agent in a background tab, to test notifications
+#   tmux-agent timew                              status-bar snippet: what timewarrior is tracking
+#
+# Env: TMUX_AGENT_CMD   agent command (default: claude-dq under ~/dq, claude-ag under ~/ag, else ask)
+#      TMUX_AGENT_ROOTS where the picker looks for git repos (default: ~/dq ~/pb ~/ag)
+
+set -u
+AGENT_CMD=${TMUX_AGENT_CMD:-}
+
+msg() {
+  if [ -n "${TMUX:-}" ]; then tmux display-message -d 4000 "tmux-agent: $*"
+  else echo "tmux-agent: $*" >&2; fi
+}
+die() { msg "$*"; exit 1; }
+
+# ---------------------------------------------------------------- workspaces
+pick_dir() {
+  if command -v fzf >/dev/null 2>&1; then
+    {
+      tmux list-sessions -F '#{session_path}' 2>/dev/null
+      command -v zoxide >/dev/null 2>&1 && zoxide query -l 2>/dev/null
+      for r in ${TMUX_AGENT_ROOTS:-$HOME/dq $HOME/pb $HOME/ag}; do
+        [ -d "$r" ] && find "$r" -maxdepth 3 -type d -name .git -prune 2>/dev/null | sed 's#/\.git$##'
+      done
+    } | awk 'NF && !seen[$0]++' | fzf --prompt='workspace> ' --height=100% --reverse
+  else
+    bash -c 'read -e -p "workspace folder: " d && printf %s "$d"'   # tab-completes paths
+  fi
+}
+
+cmd_open() {
+  dir=${1:-}
+  [ -n "$dir" ] || dir=$(pick_dir) || exit 0
+  [ -n "$dir" ] || exit 0
+  case $dir in "~") dir=$HOME ;; "~/"*) dir=$HOME/${dir#"~/"} ;; esac
+  [ -d "$dir" ] || die "no such folder: $dir"
+  dir=$(cd "$dir" && pwd)
+
+  name=$(basename "$dir" | tr '.:' '__')
+  have=$(tmux display -p -t "=$name:" '#{session_path}' 2>/dev/null)
+  if [ -n "$have" ] && [ "$have" != "$dir" ]; then        # same folder name elsewhere
+    name=$(basename "$(dirname "$dir")" | tr '.:' '__')-$name
+    have=$(tmux display -p -t "=$name:" '#{session_path}' 2>/dev/null)
+  fi
+  if [ -z "$have" ]; then
+    # Starting the server makes it copy this shell's environment for good, and
+    # every tab, popup and run-shell starts from that copy. If a project's
+    # direnv is loaded here (e.g. ~/dq's tokens), start it through
+    # `direnv exec /`, which unloads that first: tabs load their own folder's
+    # .envrc anyway, but popups and run-shell commands never run the hook.
+    start=
+    if [ -n "${DIRENV_DIR:-}" ] && command -v direnv >/dev/null 2>&1 &&
+      ! tmux list-sessions >/dev/null 2>&1; then
+      start="direnv exec /"
+    fi
+    $start tmux new-session -d -s "$name" -c "$dir" || die "could not create $name"
+  fi
+
+  if [ -n "${TMUX:-}" ]; then
+    tmux switch-client -t "=$name"
+  else
+    exec tmux attach -t "=$name"
+  fi
+}
+
+# n-th workspace in the order opened: the same order (and numbers) as row 1 of
+# the status bar, which loops with #{S/i:}
+cmd_ws() {
+  name=$(tmux list-sessions -O index -F '#{session_name}' | sed -n "${1:-0}p")
+  [ -n "$name" ] || exit 0
+  tmux switch-client ${2:+-c "$2"} -t "=$name"
+}
+
+# ---------------------------------------------------------------- agent state
+# True if this process descends from pid $1. Guards against hooks from agents
+# that are not running in that pane (e.g. background sessions that inherited
+# a stale $TMUX_PANE).
+descends_from() {
+  p=$$
+  while [ -n "$p" ] && [ "$p" -gt 1 ] 2>/dev/null; do
+    [ "$p" = "$1" ] && return 0
+    p=$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ')
+  done
+  return 1
+}
+
+# setting a user option doesn't redraw the status line by itself
+refresh_bars() {
+  tmux list-clients -F '#{client_name}' | while read -r c; do tmux refresh-client -S -t "$c"; done
+}
+
+notify() {   # $1 = waiting|done
+  case $1 in waiting) what='needs you' ;; *) what='is done' ;; esac
+  text="$(tmux display -p -t "$TMUX_PANE" '#{session_name} › #{window_name}'): agent $what"
+
+  # tmux toast on every client that isn't already looking at this pane
+  tmux list-clients -F '#{client_name}|#{pane_id}' | while IFS='|' read -r c p; do
+    [ "$p" = "$TMUX_PANE" ] || tmux display-message -l -c "$c" "$text"
+  done
+
+  # desktop notification only when no tmux client has focus (you're in another app)
+  tmux list-clients -F '#{client_flags}' | grep -q focused && return 0
+  text=$(printf '%s' "$text" | tr -d '"\\')
+  if command -v osascript >/dev/null 2>&1; then
+    osascript -e "display notification \"$text\" with title \"tmux\""
+  elif command -v notify-send >/dev/null 2>&1; then
+    notify-send tmux "$text"
+  fi
+}
+
+cmd_state() {
+  new=${1:-}
+  exec >/dev/null 2>&1   # hooks must stay silent (UserPromptSubmit stdout becomes model context)
+  [ -n "${TMUX_PANE:-}" ] || exit 0
+  case $new in working|waiting|done|clear) ;; *) exit 0 ;; esac
+
+  IFS='|' read -r pid tty cur visible <<EOF
+$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}|#{?#{&&:#{pane_active},#{&&:#{window_active},#{session_attached}}},1,0}' 2>/dev/null)
+EOF
+  [ -n "${pid:-}" ] || exit 0
+  [ "$new" = "$cur" ] && exit 0            # no change: keeps PostToolUse hooks cheap
+  descends_from "$pid" || exit 0
+
+  # "done" in the pane you're already looking at isn't news; don't leave a marker
+  if [ "$new" = clear ] || { [ "$new" = done ] && [ "$visible" = 1 ]; }; then
+    tmux set -p -t "$TMUX_PANE" -u @agent
+    refresh_bars
+    exit 0
+  fi
+
+  tmux set -p -t "$TMUX_PANE" @agent "$new" \; set -p -t "$TMUX_PANE" @agent_since "$(date +%s)"
+  refresh_bars
+  case $new in
+    waiting|done)
+      [ -w "$tty" ] && printf '\a' >"$tty"   # flags the tab; your terminal hears it if this workspace is on screen
+      notify "$new" ;;
+  esac
+  exit 0
+}
+
+cmd_next() {
+  cur=${1:-$(tmux display -p '#{pane_id}')}
+  client=${2:-}
+  # waiting first, then done; oldest first; skip the current pane and panes
+  # where the agent has exited back to a shell (stale marker)
+  target=$(tmux list-panes -a -f '#{@agent}' \
+      -F '#{@agent}|#{@agent_since}|#{pane_id}|#{pane_current_command}' 2>/dev/null |
+    awk -F'|' -v cur="$cur" '
+      $3 == cur { next }
+      $4 ~ /^((ba|z|fi|da|k|tc)?sh|nu)$/ { next }
+      $1 == "waiting" { print 0, $2 + 0, $3; next }
+      $1 == "done"    { print 1, $2 + 0, $3 }' |
+    sort -k1,1n -k2,2n | head -n 1 | cut -d' ' -f3)
+
+  if [ -z "$target" ]; then
+    tmux display-message ${client:+-c "$client"} 'no agents waiting on you'
+  else
+    tmux switch-client ${client:+-c "$client"} -t "$target"
+  fi
+}
+
+# ---------------------------------------------------------------- worktrees
+# Agent command for a repo: the Claude Code profile that goes with its folder.
+# Elsewhere ask (in the C-b A popup), or use claude-dq when there's no terminal.
+agent_for() {
+  case $1/ in
+    "$HOME"/dq/*) echo claude-dq; return ;;
+    "$HOME"/ag/*) echo claude-ag; return ;;
+  esac
+  a=d
+  if [ -t 0 ]; then
+    printf 'profile: [d] claude-dq  [a] claude-ag  (Enter = d) ' >&2
+    read -r a
+  fi
+  case $a in a*) echo claude-ag ;; *) echo claude-dq ;; esac
+}
+
+cmd_new() {
+  editor=0
+  [ "${1:-}" = -e ] && { editor=1; shift; }
+
+  common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null) ||
+    die "not inside a git repo: $PWD"
+  main=$(dirname "$common")
+
+  branch=${1:-}
+  if [ -z "$branch" ]; then
+    [ -t 0 ] || die "usage: tmux-agent new [-e] [branch] [agent command...]"
+    printf 'branch: ' >&2
+    read -r branch
+    [ -n "$branch" ] || exit 0
+  else
+    shift
+  fi
+  if [ $# -gt 0 ]; then AGENT_CMD=$*
+  elif [ -z "$AGENT_CMD" ]; then AGENT_CMD=$(agent_for "$main")
+  fi
+  slug=$(printf '%s' "$branch" | tr '/ ' '--')
+  wt="${TMUX_AGENT_WORKTREES:-$main-worktrees}/$slug"
+
+  if [ ! -d "$wt" ]; then
+    if git -C "$main" show-ref --verify --quiet "refs/heads/$branch"; then
+      err=$(git -C "$main" worktree add "$wt" "$branch" 2>&1 >/dev/null)
+    else
+      err=$(git worktree add -b "$branch" "$wt" 2>&1 >/dev/null)   # branches off current HEAD
+    fi || die "git worktree add failed: $(printf '%s' "$err" | tail -n 1)"
+  fi
+
+  after=$(tmux display -p ${TMUX_PANE:+-t "$TMUX_PANE"} '#{window_id}')
+  pane=$(tmux new-window -a -t "$after" -n "$slug" -c "$wt" -P -F '#{pane_id}') ||
+    die "could not create window"
+  [ "$editor" = 1 ] && tmux split-window -h -d -l 50% -t "$pane" -c "$wt" "${EDITOR:-nvim}"
+  tmux send-keys -t "$pane" "$AGENT_CMD" Enter   # typed into a shell: quitting the agent leaves a prompt
+}
+
+# ---------------------------------------------------------------- demo
+# A fake agent in a background tab: working -> waiting -> working -> done.
+# awk is the foreground process, so tmux treats it like a real agent.
+cmd_demo() {
+  self=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
+  tmux new-window -d -n agent-demo "awk 'BEGIN {
+    a = \"$self state \"
+    print \"demo agent: working\"; fflush(); system(a \"working\"); system(\"sleep 5\")
+    print \"demo agent: waiting on you\"; fflush(); system(a \"waiting\"); system(\"sleep 10\")
+    print \"demo agent: working again\"; fflush(); system(a \"working\"); system(\"sleep 3\")
+    print \"demo agent: done (close this tab when finished)\"; fflush(); system(a \"done\"); system(\"sleep 3600\") }'" ||
+    die "could not start the demo (are you inside tmux?)"
+  echo "demo agent started in background tab 'agent-demo'. Watch its marker:"
+  echo "  yellow (working, 5s) -> red (waiting on you, 10s: try prefix a) -> yellow -> green (done)"
+}
+
+# ---------------------------------------------------------------- timewarrior
+# Same text as the starship prompt's custom.timewarrior (tags sorted by length,
+# joined with /, then elapsed H:MM) behind the same clock icon; nothing while
+# timewarrior is idle. The status bar runs this every status-interval.
+cmd_timew() {
+  [ "$(timew get dom.active 2>/dev/null)" = 1 ] || exit 0
+  timew get dom.active.json | jq -r '
+    .tags |= sort_by(length) |
+    {
+      tags: .tags | join("/"),
+      duration: (now - (.start | strptime("%Y%m%dT%H%M%SZ") | mktime)) | strftime("%H:%M")
+    } |
+    " \(.tags) \(.duration)"'
+}
+
+case ${1:-} in
+  open)  shift; cmd_open "$@" ;;
+  ws)    shift; cmd_ws "$@" ;;
+  state) shift; cmd_state "$@" ;;
+  next)  shift; cmd_next "$@" ;;
+  new)   shift; cmd_new "$@" ;;
+  demo)  cmd_demo ;;
+  timew) cmd_timew ;;
+  *) sed -n '5,14p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac

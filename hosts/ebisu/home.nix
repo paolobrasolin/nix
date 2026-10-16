@@ -13,6 +13,24 @@
 
       [bell]
       command = { program = "afplay", args = ["/System/Library/Sounds/Tink.aiff"] }
+
+      # The rest serves the tmux workspaces setup (users/paolo/tmux-workspaces.nix).
+      [window]
+      # Left Option is Alt, for tmux's Alt+digit and Alt+a keys; right Option
+      # still types the Italian layout's @ # [ ] { }.
+      option_as_alt = "OnlyLeft"
+
+      [keyboard]
+      bindings = [
+        # Shift+Enter sends Esc+Enter, which Claude Code reads as a newline even
+        # inside tmux: tmux asks the terminal for xterm's extended keys, which
+        # Alacritty doesn't implement, so a plain Shift+Enter arrives as Enter.
+        { key = "Return", mods = "Shift", chars = "\u001b\r" },
+        # Alt+Shift+3 types £, and Alacritty sends non-ASCII characters without
+        # the Esc that marks Alt; send it explicitly so tmux sees Alt+£
+        # (workspace 3). The other Alt+Shift+digits work as they are.
+        { key = "3", mods = "Alt|Shift", chars = "\u001b£" },
+      ]
     '';
   };
   home.packages = with pkgs; [

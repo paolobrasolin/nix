@@ -157,6 +157,7 @@
                 ./hosts/ebisu/home.nix
                 ./users/paolo/agda.nix
                 ./users/paolo/interactive.nix
+                ./users/paolo/tmux-workspaces.nix # after interactive.nix: overrides its tmux bar and keys
                 ./users/paolo/ebisu.nix
                 ({
                   pkgs,

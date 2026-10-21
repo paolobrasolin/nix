@@ -14,8 +14,8 @@ on you; green, it's done (clears when you look at it); a light grey edge, it's
 working. Tabs keep their width, so nothing moves when states change. Each
 workspace's edge is coloured by folder (`~/dq` orange, `~/pb` purple, `~/ag`
 cyan) unless an agent there is busy or needs you. Top right: what timewarrior
-is tracking, as in the prompt (`tmux-agent timew`). The keys are listed at the
-top of `tmux.conf`.
+is tracking, as in the prompt plus the annotation (`tmux-agent timew`). The
+keys are listed at the top of `tmux.conf`.
 
 To start, `cd` into a project and run `tmux`: it opens that folder's
 workspace, or goes back to it if it's already open. Inside tmux, `C-b W` opens

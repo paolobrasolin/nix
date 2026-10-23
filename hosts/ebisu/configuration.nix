@@ -23,6 +23,16 @@
       trusted-users = ["Brasolin" "@admin"];
       extra-trusted-users = ["Brasolin" "@admin"];
     };
+    # Weekly launchd jobs. Without them the store reached 260 GB over 510
+    # system generations. The GC runs as root: it expires the system
+    # profile's generations, not the user ones in ~/.local/state.
+    # optimise rather than auto-optimise-store, which is known to corrupt the
+    # store on darwin.
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 14d";
+    };
+    optimise.automatic = true;
     # Necessary to do linux builds on this system (i.e. ELF instead of Mach-O).
     # Ref: https://nixcademy.com/posts/macos-linux-builder/
     linux-builder = {

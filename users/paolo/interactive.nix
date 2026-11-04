@@ -116,6 +116,11 @@
     initContent = ''
       # Usage: ssh-L [user@]host ports...
       ssh-L () { ssh -vN $(printf ' -L %1$s:localhost:%s' ''${@:2}) $1 }
+
+      # Claude Code copies these options into every command its Bash tool
+      # runs, so commands behave the same whether Claude or I type them:
+      # an unquoted $var splits into words, and `#` starts a comment.
+      setopt sh_word_split interactive_comments
     '';
   };
 

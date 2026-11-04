@@ -5,17 +5,19 @@ coding agents and shells, and markers plus notifications that say which
 workspace and which tab needs you. Plain tmux 3.8, no plugins.
 
 ```
-▌1 acme_web ▎2 handbook ▌3 infra ▎4 nix                   dq/pd#123 01:42   <- workspaces
-▎1 nvim ▌2 claude ▎3 zsh                                                      <- tabs in "handbook"
+▌1 acme_web ▎2 handbook ▌3 infra ▎4 nix                                     <- workspaces
+▎1 nvim ▌2 claude ▎3 zsh                                   dq/pd#123 01:42   <- tabs in "handbook"
 ```
 
 A thick edge and a coloured name show an agent's state: pink-red, it's waiting
 on you; green, it's done (clears when you look at it); a light grey edge, it's
 working. Tabs keep their width, so nothing moves when states change. Each
 workspace's edge is coloured by folder (`~/dq` orange, `~/pb` purple, `~/ag`
-cyan) unless an agent there is busy or needs you. Top right: what timewarrior
-is tracking, as in the prompt plus the annotation (`tmux-agent timew`). The
-keys are listed at the top of `tmux.conf`.
+cyan) unless an agent there is busy or needs you. When the workspaces don't
+fit, every name is cut to the same length, the longest that fits (short names
+stay whole), so you still see each agent's state. Right of the tabs: what
+timewarrior is tracking, as in the prompt plus the annotation (`tmux-agent
+timew`). The keys are listed at the top of `tmux.conf`.
 
 To start, `cd` into a project and run `tmux`: it opens that folder's
 workspace, or goes back to it if it's already open. Inside tmux, `C-b W` opens
@@ -116,6 +118,19 @@ Why it looks and works this way, and what bit us while building it.
   Alacritty's green and yellow look like the orange folder colour; `~/ag` is
   cyan so red only means "waiting". Tried and dropped: bars at the bottom, a
   single line, pills, no edges, folder colour on names and numbers.
+- **Too many workspaces for the width.** A status line that isn't a tmux list
+  loses its right end first: with 8 or more long names, the last workspaces
+  (and their agents' states) and the timewarrior snippet, then top right,
+  disappeared. Both rows are lists now, so tmux keeps the current item and the
+  right side and scrolls the rest; the snippet moved to the tabs row, which has
+  fewer items; and names get shorter so every workspace fits. `tmux-agent fit`
+  works out one length for all names, on tmux hooks (workspaces opened, closed
+  or renamed; clients attached, detached or resized); it doesn't depend on the
+  current workspace, so switching moves nothing. Working it out in tmux formats
+  instead made each redraw 5 to 30 times slower. Tried and dropped: hiding
+  names farthest from the current workspace first (which names showed changed
+  on every switch, which was confusing), dropping vowels, dropping the client
+  prefix (`donq_`); also considered: wrapping onto a third row.
 - **Alacritty doesn't implement xterm's modifyOtherKeys,** which tmux's
   `extended-keys` asks for, so a plain Shift+Enter reaches tmux as Enter: the
   fix is Alacritty's Shift+Enter binding, not tmux.

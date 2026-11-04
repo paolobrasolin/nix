@@ -12,6 +12,7 @@
 #                                                 asks for the branch when not given
 #   tmux-agent demo                               fake agent in a background tab, to test notifications
 #   tmux-agent timew                              status-bar snippet: what timewarrior is tracking
+#   tmux-agent fit                                how wide workspace names can be in row 1 (tmux hooks run it)
 #
 # Env: TMUX_AGENT_CMD   agent command (default: claude-dq under ~/dq, claude-ag under ~/ag, else ask)
 #      TMUX_AGENT_ROOTS where the picker looks for git repos (default: ~/dq ~/pb ~/ag)
@@ -281,6 +282,32 @@ cmd_timew() {
     " \(.tags) \(.duration)" | gsub("#"; "##")'
 }
 
+# ---------------------------------------------------------------- row 1 fit
+# How wide workspace names can be in row 1 (@ws-cap, … included): the most that
+# lets every workspace fit the narrowest client, so short names stay whole and
+# only long ones are cut; 0 when nothing needs cutting, none when even 3
+# columns are too many (numbers only; if that's too long, the row scrolls).
+# It doesn't depend on the current workspace, so switching moves nothing.
+# tmux.conf runs this on hooks; doing it in tmux formats made every redraw
+# many times slower.
+cmd_fit() {
+  width=$(tmux list-clients -F '#{client_width}' 2>/dev/null | sort -n | head -n 1)
+  [ -n "$width" ] || exit 0
+  cap=$(tmux list-sessions -O index -F '#{session_name}' | awk -v width="$width" '
+    { len[NR] = length($0); if (len[NR] > max) max = len[NR]
+      fixed += NR <= 10 ? 4 : 2 }   # edge, number (1…9 and 0, then none), space
+    function row(cap,   i, t) {
+      for (i = 1; i <= NR; i++) t += len[i] < cap ? len[i] : cap
+      return fixed + t
+    }
+    END {
+      if (row(max) <= width) { print 0; exit }
+      for (cap = max - 1; cap >= 3 && row(cap) > width; cap--) ;
+      print (cap >= 3 ? cap : "none")   # "ab…" at least, else numbers only
+    }')
+  [ "$cap" = "$(tmux show -gqv @ws-cap)" ] || { tmux set -g @ws-cap "$cap"; refresh_bars; }
+}
+
 case ${1:-} in
   open)  shift; cmd_open "$@" ;;
   ws)    shift; cmd_ws "$@" ;;
@@ -290,5 +317,6 @@ case ${1:-} in
   new)   shift; cmd_new "$@" ;;
   demo)  cmd_demo ;;
   timew) cmd_timew ;;
-  *) sed -n '5,15p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  fit)   cmd_fit ;;
+  *) sed -n '5,16p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

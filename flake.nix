@@ -126,6 +126,10 @@
               # pkgs.donq.*, needed by donq's tool-profiles: the org CLIs
               # arrive pinned by donq's lock, in lockstep with the toolchain.
               donq.overlays.donq-cli-tools
+              # No DonQ Meetings: tool-profiles installs it from the locked
+              # base profile, which donq.tools.remove can't touch, and its
+              # catalog skips a tool whose package pkgs.donq lacks.
+              (final: prev: {donq = builtins.removeAttrs prev.donq ["meetings"];})
             ];
           })
           home-manager.darwinModules.home-manager

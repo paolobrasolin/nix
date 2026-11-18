@@ -165,7 +165,7 @@ cmd_seen() {
 
 cmd_state() {
   new=${1:-}
-  exec >/dev/null 2>&1   # hooks must stay silent (UserPromptSubmit stdout becomes model context)
+  exec >/dev/null 2>&1   # hooks must stay silent (some hooks' stdout reaches the model)
   [ -n "${TMUX_PANE:-}" ] || exit 0
   case $new in working|waiting|done|clear) ;; *) exit 0 ;; esac
 
@@ -182,7 +182,10 @@ cmd_state() {
 $(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{@agent}|#{@agent_notified}' 2>/dev/null)
 EOF
   [ -n "${pid:-}" ] || exit 0
-  [ "$new" = "$cur" ] && exit 0            # no change: keeps PostToolUse hooks cheap
+  # A repeated working or clear is no news. A repeated waiting or done is: with
+  # Claude, nothing sets working in between (tmux's program status shows it),
+  # so a second permission prompt finds the first one's waiting.
+  case $new in working|clear) [ "$new" = "$cur" ] && exit 0 ;; esac
   descends_from "$pid" || exit 0
 
   # the agent moved on, so what it said before is no longer news

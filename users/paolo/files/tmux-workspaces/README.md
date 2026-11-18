@@ -52,27 +52,27 @@ is macOS-only (`afplay`, `osascript`), like the module, which only ebisu imports
 the pane you're looking at (shown by a client with focus) is skipped; with the
 terminal behind another app it isn't, and coming back clears it.
 
-Which hooks set what (`claude-hooks.json`, from Claude Code's hooks reference):
+Where the state comes from: Claude Code reports its own status to the terminal
+(OSC 7501), which tmux's development branch (next-3.9, pinned in
+`tmux-workspaces.nix` until 3.9 is out) keeps as `#{pane_program_state}`. The
+markers trust it over the hooks: *working* and *blocked* (waiting) show as they
+are, *idle* shows nothing, so Esc, which fires no hook, leaves no stale marker,
+and *done* or *error* show until you visit. Alt+a reads the same state as the
+bars.
 
-- *working*: UserPromptSubmit, and after every tool call whether it worked or
-  failed (PostToolUse, PostToolUseFailure).
+The hooks (`claude-hooks.json`, from Claude Code's hooks reference) mark the
+moments that ring the bell, post a notification and order Alt+a:
+
 - *waiting*: PermissionRequest, which fires as the prompt appears (the
   permission Notification only comes after about 6 s without typing, and each
   keystroke restarts the wait), and Notification for questions.
 - *done*: Stop, or StopFailure when an API error ends the turn. A turn that
-  ends with background agents still running stays *working* (the Stop event
-  lists them in `background_tasks`): Claude picks the work up when they finish.
-- *clear*: SessionStart (not after compaction, which fires it too) and
-  SessionEnd.
+  ends with background agents still running isn't done (the Stop event lists
+  them in `background_tasks`): Claude picks the work up when they finish.
 
-Claude Code runs no hook when you interrupt it with Esc, but it also reports its
-own status to the terminal (OSC 7501), which tmux's development branch
-(next-3.9, pinned in `tmux-workspaces.nix` until 3.9 is out) keeps as
-`#{pane_program_state}`. The markers trust that over the hooks: *working* and
-*blocked* (waiting) show as they are, *idle* shows nothing, so Esc leaves no
-stale marker, and *done* or *error* show until you visit. Agents that don't
-report it keep the hooks' state; Alt+a reads the same state as the bars. The
-hooks still ring the bell, post the notifications and order Alt+a.
+Agents that don't report program status only have the state `tmux-agent state`
+is told: their hooks can call it with working, waiting, done or clear, as
+`tmux-agent demo` does.
 
 The desktop notification goes through `terminal-notifier`: its title is the
 workspace and tab, a waiting agent's says what it needs (the tool it wants, or
@@ -191,9 +191,10 @@ Why it looks and works this way, and what bit us while building it.
   plain `£`; hence the Alt+Shift+3 binding. `option_as_alt = "Both"` would
   make `@ # [ ] { }` untypeable on this layout; `"OnlyLeft"` keeps right
   Option for them.
-- **The hook script stays silent and cheap.** UserPromptSubmit output would
-  reach the model; PostToolUse fires on every tool call, so it exits early when
-  nothing changed; and it ignores processes that don't descend from the pane,
-  such as background agents with a stale `$TMUX_PANE`.
+- **The hook script stays silent and cheap.** Some hooks' output would reach
+  the model; Claude's hooks are only the rare events (no per-tool-call hook,
+  since tmux's program status shows *working*), and a repeated working or clear
+  from other agents exits early; and it ignores processes that don't descend
+  from the pane, such as background agents with a stale `$TMUX_PANE`.
 - **Don't start your tmux server from a Claude Code session's shell:** every
   tab would inherit that session's environment (`CLAUDECODE` and the like).

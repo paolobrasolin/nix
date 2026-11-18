@@ -102,6 +102,11 @@ refresh_bars() {
   tmux list-clients -F '#{client_name}' | while read -r c; do tmux refresh-client -S -t "$c"; done
 }
 
+# True if a client with focus (its terminal is the app in front) shows pane $1
+looking_at() {
+  tmux list-clients -F '#{client_flags}|#{pane_id}' | grep -q "focused[^|]*|$1\$"
+}
+
 notify() {   # $1 = waiting|done
   case $1 in waiting) what='needs you' ;; *) what='is done' ;; esac
   text="$(tmux display -p -t "$TMUX_PANE" '#{session_name} › #{window_name}'): agent $what"
@@ -127,15 +132,18 @@ cmd_state() {
   [ -n "${TMUX_PANE:-}" ] || exit 0
   case $new in working|waiting|done|clear) ;; *) exit 0 ;; esac
 
-  IFS='|' read -r pid tty cur visible <<EOF
-$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}|#{?#{&&:#{pane_active},#{&&:#{window_active},#{session_attached}}},1,0}' 2>/dev/null)
+  IFS='|' read -r pid tty cur <<EOF
+$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}' 2>/dev/null)
 EOF
   [ -n "${pid:-}" ] || exit 0
   [ "$new" = "$cur" ] && exit 0            # no change: keeps PostToolUse hooks cheap
   descends_from "$pid" || exit 0
 
-  # "done" in the pane you're already looking at isn't news; don't leave a marker
-  if [ "$new" = clear ] || { [ "$new" = done ] && [ "$visible" = 1 ]; }; then
+  # "done" in the pane you're already looking at isn't news; don't leave a marker.
+  # Looking means a focused client shows it: with the terminal behind another app
+  # it is news (marker, bell, popup), and coming back to the terminal focuses the
+  # pane, which clears the marker (pane-focus-in hook in tmux.conf).
+  if [ "$new" = clear ] || { [ "$new" = done ] && looking_at "$TMUX_PANE"; }; then
     tmux set -p -t "$TMUX_PANE" -u @agent
     refresh_bars
     exit 0

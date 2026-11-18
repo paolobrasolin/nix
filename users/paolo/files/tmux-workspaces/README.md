@@ -44,7 +44,9 @@ How a marker gets there: Claude Code runs a hook → `tmux-agent state
 working|waiting|done|clear` sets the pane option `@agent` → both status rows
 and the `C-b w` tree show it. On *waiting* and *done* the helper also rings the
 bell (flags the tab), shows a message on other tmux clients, and sends a macOS
-notification when no tmux client has focus.
+notification when no tmux client has focus. A *done* in the pane you're looking
+at (shown by a client with focus) is skipped; with the terminal behind another
+app it isn't, and coming back clears it.
 
 ## Environment and direnv
 

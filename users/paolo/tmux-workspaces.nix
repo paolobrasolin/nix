@@ -14,6 +14,14 @@
   terminal-notifier = pkgs.callPackage ../../pkgs/terminal-notifier {};
   # The icon comes from the installed Claude app, not this public repo.
   claudeIcon = "/Applications/Claude.app/Contents/Resources/electron.icns";
+  # home-manager's mkImpureConfigMerger, on its master since 2026-10 but in no
+  # release yet: just this file, pinned. It needs only lib. From home-manager
+  # 26.11 on, use lib.hm.generators.mkImpureConfigMerger and drop the fetch.
+  hmGenerators = import (builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/nix-community/home-manager/2b13c9cb3aa20653e6f8ee0b7f8331a53ea9b0a9/modules/lib/generators.nix";
+    sha256 = "1ng6x3vndjgw1rc75f5njckg7mr69rjhvhj62r1bwk80wmsr52kl";
+  }) {inherit lib;};
+  claudeProfiles = [".dq/.claude" ".ag/.claude"];
 in {
   programs.tmux = {
     # The kit goes after interactive.nix's extraConfig, so on this host it
@@ -47,28 +55,36 @@ in {
   };
 
   # Claude Code's hooks that report agent state (files/tmux-workspaces/
-  # claude-hooks.json), merged into both profiles' settings: Claude Code writes
+  # claude-hooks.json), merged into each profile's settings: Claude Code writes
   # those files itself (/config, permission answers), so they can't be links
-  # into the nix store. The merge replaces the entries that call tmux-agent and
-  # keeps everything else; the file is rewritten in place (keeping its mode) only
-  # when that changes something, and left alone if the profile has none yet.
-  # Sessions already running don't pick up hook changes.
-  home.activation.tmuxAgentClaudeHooks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    for f in "$HOME/.dq/.claude/settings.json" "$HOME/.ag/.claude/settings.json"; do
-      [ -f "$f" ] || continue
-      if ! new=$(${pkgs.jq}/bin/jq --slurpfile kit ${./files/tmux-workspaces/claude-hooks.json} '
-          .hooks = reduce ($kit[0].hooks | to_entries[]) as $e (.hooks // {};
-            .[$e.key] = [(.[$e.key] // [])[] | select(tostring | contains("tmux-agent") | not)] + $e.value)
-        ' "$f"); then
-        warnEcho "tmux-agent: couldn't read $f as JSON, so its hooks were left alone"
-        continue
+  # into the nix store. The merge takes out every entry that calls tmux-agent,
+  # in any event, adds the current ones, drops events left empty and keeps
+  # everything else. mkImpureConfigMerger writes the result atomically, keeps
+  # the file's mode, keeps the newer file if Claude Code writes it meanwhile, and
+  # fails the switch rather than touch a file that isn't valid JSON. A profile
+  # without a settings.json yet is skipped. Running sessions keep their hooks.
+  home.activation.tmuxAgentClaudeHooks = lib.hm.dag.entryAfter ["writeBoundary"] (
+    lib.concatMapStringsSep "\n" (profile: let
+      path = "${config.home.homeDirectory}/${profile}/settings.json";
+    in ''
+      if [ -f ${lib.escapeShellArg path} ]; then
+      ${hmGenerators.mkImpureConfigMerger {
+        inherit pkgs path;
+        format = "json";
+        empty = "{}";
+        staticSettings = ./files/tmux-workspaces/claude-hooks.json;
+        jqOperation = ''
+          $dynamic | .hooks = (
+            ((.hooks // {}) | map_values(map(select(tostring | contains("tmux-agent") | not)))) as $kept
+            | reduce ($static.hooks | to_entries[]) as $e ($kept; .[$e.key] = (.[$e.key] // []) + $e.value)
+            | with_entries(select(.value != []))
+          )
+        '';
+      }}
       fi
-      if [ "$new" != "$(cat "$f")" ]; then
-        run sh -c 'printf "%s\n" "$1" > "$2"' _ "$new" "$f"
-        noteEcho "tmux-agent: updated the Claude Code hooks in $f"
-      fi
-    done
-  '';
+    '')
+    claudeProfiles
+  );
 
   # The app tmux-agent posts desktop notifications with: a copy of
   # terminal-notifier with its own bundle id, named tmux-agent, with Claude's

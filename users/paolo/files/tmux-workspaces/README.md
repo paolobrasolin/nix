@@ -117,12 +117,17 @@ Starting tmux any other way (`tmux new`, …) skips this.
 Claude Code writes its own settings files (`/config`, permission answers), so
 the hooks can't be read-only links into the nix store. Instead, home-manager's
 activation (`tmuxAgentClaudeHooks` in `users/paolo/tmux-workspaces.nix`) merges
-`claude-hooks.json` into both profiles' `settings.json`: it replaces the
-entries that call `tmux-agent`, keeps everything else, and rewrites the file
-only when that changes something. A profile without a `settings.json` yet is
-skipped, and plain `claude` (`~/.claude`) doesn't get them. So after changing
-`claude-hooks.json`, `snix`; a hook Claude Code dropped from its settings comes
-back the same way.
+`claude-hooks.json` into both profiles' `settings.json`: it takes out every
+entry that calls `tmux-agent`, in any event, adds the current ones, drops
+events left empty, and keeps everything else, so a hook removed from
+`claude-hooks.json` goes too. The merge runs through home-manager's
+`mkImpureConfigMerger` (fetched from its master, pinned, until 26.11 ships it),
+which writes atomically, keeps the file's mode, keeps the newer file if Claude
+Code writes it meanwhile, and fails the switch rather than touch a
+`settings.json` that isn't valid JSON. A profile without a `settings.json` yet
+is skipped, and plain `claude` (`~/.claude`) doesn't get them. So after
+changing `claude-hooks.json`, `snix`; a hook Claude Code dropped from its
+settings comes back the same way.
 
 Claude Code reads hooks when a session starts, so sessions already running
 don't report their state, or keep the old hooks.

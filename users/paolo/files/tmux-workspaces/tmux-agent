@@ -133,24 +133,18 @@ notify() {   # $1 = waiting|done, $2 = what the agent says it needs (optional)
       -activate "${TMUX_AGENT_TERMINAL:-${__CFBundleIdentifier:-org.alacritty}}" \
       -execute "$(command -v tmux) ${TMUX:+-S ${TMUX%%,*}} switch-client -t $TMUX_PANE" &&
       tmux set -p -t "$TMUX_PANE" @agent_notified 1
-  elif command -v osascript >/dev/null 2>&1; then
-    # shows up as Script Editor's, and a click opens Script Editor
+  else
+    # without the app: shows up as Script Editor's, and a click opens Script Editor
     text=$(printf '%s' "$text" | tr -d '"\\')
     osascript -e "display notification \"$text\" with title \"tmux\""
-  elif command -v notify-send >/dev/null 2>&1; then
-    notify-send tmux "$text"
   fi
 }
 
-# The bell, heard from any workspace. A bell in the pane would only reach
+# The bell, heard from any workspace: a bell in the pane would only reach
 # clients showing its workspace, and with bell-action other not even them when
-# it's the tab on screen, so on macOS this plays the bell's sound itself.
+# it's the tab on screen, so this plays the bell's sound itself.
 ring() {
-  if command -v afplay >/dev/null 2>&1; then
-    afplay "${TMUX_AGENT_SOUND:-/System/Library/Sounds/Tink.aiff}"
-  else
-    [ -w "$tty" ] && printf '\a' >"$tty"
-  fi
+  afplay "${TMUX_AGENT_SOUND:-/System/Library/Sounds/Tink.aiff}"
 }
 
 # Take back pane $1's desktop notification: you visited the pane, or its agent
@@ -184,8 +178,8 @@ cmd_state() {
     any(.background_tasks[]?; .type == "subagent" or .type == "workflow" or .type == "teammate")
   ' && new=working
 
-  IFS='|' read -r pid tty cur notified <<EOF
-$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}|#{@agent_notified}' 2>/dev/null)
+  IFS='|' read -r pid cur notified <<EOF
+$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{@agent}|#{@agent_notified}' 2>/dev/null)
 EOF
   [ -n "${pid:-}" ] || exit 0
   [ "$new" = "$cur" ] && exit 0            # no change: keeps PostToolUse hooks cheap

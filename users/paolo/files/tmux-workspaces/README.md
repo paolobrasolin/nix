@@ -47,7 +47,8 @@ bell unless you're looking at the pane, shows a message on other tmux clients,
 and sends a macOS notification when no tmux client has focus. The bell is
 `afplay` of the sound Alacritty's bell plays (Tink), so it's heard from any
 workspace: a bell in the pane only reaches clients showing its workspace, and
-with `bell-action other` not even them when it's the tab on screen. A *done* in
+with `bell-action other` not even them when it's the tab on screen. The helper
+is macOS-only (`afplay`, `osascript`), like the module, which only ebisu imports. A *done* in
 the pane you're looking at (shown by a client with focus) is skipped; with the
 terminal behind another app it isn't, and coming back clears it.
 

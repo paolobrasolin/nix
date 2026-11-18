@@ -35,7 +35,7 @@ notes at the end record the decisions and what bit us along the way.
 | helper script | `tmux-agent` here | `~/.config/tmux/bin/tmux-agent` |
 | plain `tmux` opens the current folder's workspace | `users/paolo/tmux-workspaces.nix` | a `tmux` function in `~/.zshrc` |
 | left Option as Alt, Shift+Enter, Alt+Shift+3 | `hosts/ebisu/home.nix` | `~/.alacritty.toml` |
-| Claude Code hooks | `claude-hooks.json` here, **not installed by nix** | merged into `~/.dq/.claude/settings.json` and `~/.ag/.claude/settings.json` |
+| Claude Code hooks | `claude-hooks.json` here, merged on activation by `users/paolo/tmux-workspaces.nix` | merged into `~/.dq/.claude/settings.json` and `~/.ag/.claude/settings.json` |
 
 Only ebisu imports the module (`flake.nix`); kitsune and inari keep the plain
 tmux setup from `interactive.nix`.
@@ -91,25 +91,18 @@ Starting tmux any other way (`tmux new`, …) skips this.
 
 ## Claude Code hooks
 
-They live outside nix because Claude Code writes its own settings files
-(`/config`, permission answers), so they can't be read-only links into the nix
-store. Both profiles get them; plain `claude` (`~/.claude`) doesn't. To install
-them, or reinstall after changing `claude-hooks.json` (safe to rerun: it
-replaces its own entries and keeps everything else):
-
-```sh
-cd ~/pb/nix/users/paolo/files/tmux-workspaces
-for f in ~/.dq/.claude/settings.json ~/.ag/.claude/settings.json; do
-  cp -p "$f" "$f.bak.$(date +%Y%m%d-%H%M%S)"
-  jq --slurpfile kit claude-hooks.json '
-    .hooks = reduce ($kit[0].hooks | to_entries[]) as $e (.hooks // {};
-      .[$e.key] = [(.[$e.key] // [])[] | select(tostring | contains("tmux-agent") | not)] + $e.value)
-  ' "$f" > "$f.new" && cat "$f.new" > "$f" && rm "$f.new"
-done
-```
+Claude Code writes its own settings files (`/config`, permission answers), so
+the hooks can't be read-only links into the nix store. Instead, home-manager's
+activation (`tmuxAgentClaudeHooks` in `users/paolo/tmux-workspaces.nix`) merges
+`claude-hooks.json` into both profiles' `settings.json`: it replaces the
+entries that call `tmux-agent`, keeps everything else, and rewrites the file
+only when that changes something. A profile without a `settings.json` yet is
+skipped, and plain `claude` (`~/.claude`) doesn't get them. So after changing
+`claude-hooks.json`, `snix`; a hook Claude Code dropped from its settings comes
+back the same way.
 
 Claude Code reads hooks when a session starts, so sessions already running
-don't report their state.
+don't report their state, or keep the old hooks.
 
 ## Changing it
 

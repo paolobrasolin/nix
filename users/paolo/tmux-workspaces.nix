@@ -31,6 +31,30 @@ in {
     executable = true;
   };
 
+  # Claude Code's hooks that report agent state (files/tmux-workspaces/
+  # claude-hooks.json), merged into both profiles' settings: Claude Code writes
+  # those files itself (/config, permission answers), so they can't be links
+  # into the nix store. The merge replaces the entries that call tmux-agent and
+  # keeps everything else; the file is rewritten in place (keeping its mode) only
+  # when that changes something, and left alone if the profile has none yet.
+  # Sessions already running don't pick up hook changes.
+  home.activation.tmuxAgentClaudeHooks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    for f in "$HOME/.dq/.claude/settings.json" "$HOME/.ag/.claude/settings.json"; do
+      [ -f "$f" ] || continue
+      if ! new=$(${pkgs.jq}/bin/jq --slurpfile kit ${./files/tmux-workspaces/claude-hooks.json} '
+          .hooks = reduce ($kit[0].hooks | to_entries[]) as $e (.hooks // {};
+            .[$e.key] = [(.[$e.key] // [])[] | select(tostring | contains("tmux-agent") | not)] + $e.value)
+        ' "$f"); then
+        warnEcho "tmux-agent: couldn't read $f as JSON, so its hooks were left alone"
+        continue
+      fi
+      if [ "$new" != "$(cat "$f")" ]; then
+        run sh -c 'printf "%s\n" "$1" > "$2"' _ "$new" "$f"
+        noteEcho "tmux-agent: updated the Claude Code hooks in $f"
+      fi
+    done
+  '';
+
   # The app tmux-agent posts desktop notifications with: a copy of
   # terminal-notifier with its own bundle id, named tmux-agent, with Claude's
   # icon (a notification's icon is always its sender's). A copy, re-signed ad

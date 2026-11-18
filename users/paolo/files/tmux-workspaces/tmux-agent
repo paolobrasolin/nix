@@ -223,13 +223,12 @@ EOF
 cmd_next() {
   cur=${1:-$(tmux display -p '#{pane_id}')}
   client=${2:-}
-  # waiting first, then done; oldest first; skip the current pane and panes
-  # where the agent has exited back to a shell (stale marker)
-  target=$(tmux list-panes -a -f '#{@agent}' \
-      -F '#{@agent}|#{@agent_since}|#{pane_id}|#{pane_current_command}' 2>/dev/null |
+  # waiting first, then done; oldest first; skip the current pane. The state is
+  # the one the bars show (tmux.conf's @agent-live), so stale markers are skipped.
+  target=$(tmux list-panes -a -f '#{E:@agent-live}' \
+      -F '#{E:@agent-live}|#{@agent_since}|#{pane_id}' 2>/dev/null |
     awk -F'|' -v cur="$cur" '
       $3 == cur { next }
-      $4 ~ /^((ba|z|fi|da|k|tc)?sh|nu)$/ { next }
       $1 == "waiting" { print 0, $2 + 0, $3; next }
       $1 == "done"    { print 1, $2 + 0, $3 }' |
     sort -k1,1n -k2,2n | head -n 1 | cut -d' ' -f3)

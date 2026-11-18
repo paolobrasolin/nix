@@ -22,6 +22,21 @@ in {
     # tmux's own terminal type rather than home-manager's default "screen": it's
     # what the kit was tested with, and it supports more colours and features.
     terminal = "tmux-256color";
+    # tmux's development branch, which calls itself next-3.9, for OSC 7501
+    # program status (#{pane_program_state}), which the agent markers trust over
+    # the hooks. Here rather than in interactive.nix's release pin so it stays on
+    # this host; it retires itself once pkgs.unstable ships 3.9 or newer.
+    package = lib.mkIf (lib.versionOlder pkgs.unstable.tmux.version "3.9") (lib.mkForce (
+      pkgs.unstable.tmux.overrideAttrs {
+        version = "next-3.9";
+        src = pkgs.fetchFromGitHub {
+          owner = "tmux";
+          repo = "tmux";
+          rev = "c8def16706c8552017ad4b174ddf5b0feba6a1c5"; # master on 2026-11-18
+          hash = "sha256-eIwa9CIL/SoNTPndcGcZDDbtgDW+QcogGCmTeTN0n84=";
+        };
+      }
+    ));
   };
 
   # Helper behind the key bindings (workspace picker, jump to agent, worktree

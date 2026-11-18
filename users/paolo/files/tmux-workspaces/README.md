@@ -64,8 +64,14 @@ Which hooks set what (`claude-hooks.json`, from Claude Code's hooks reference):
 - *clear*: SessionStart (not after compaction, which fires it too) and
   SessionEnd.
 
-Claude Code runs no hook when you interrupt it with Esc, so the marker stays as
-it was until the next prompt.
+Claude Code runs no hook when you interrupt it with Esc, but it also reports its
+own status to the terminal (OSC 7501), which tmux's development branch
+(next-3.9, pinned in `tmux-workspaces.nix` until 3.9 is out) keeps as
+`#{pane_program_state}`. The markers trust that over the hooks: *working* and
+*blocked* (waiting) show as they are, *idle* shows nothing, so Esc leaves no
+stale marker, and *done* or *error* show until you visit. Agents that don't
+report it keep the hooks' state; Alt+a reads the same state as the bars. The
+hooks still ring the bell, post the notifications and order Alt+a.
 
 The desktop notification goes through `terminal-notifier`: its title is the
 workspace and tab, a waiting agent's says what it needs (the tool it wants, or

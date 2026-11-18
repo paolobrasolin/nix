@@ -3,7 +3,7 @@
 #
 # Just the app, no command: macOS lets it post notifications only from an
 # Applications folder, so it can't run from the nix store (nor from Homebrew's
-# Cellar). users/paolo/tmux-workspaces.nix copies it into ~/Applications.
+# Cellar). default.nix here copies it into ~/Applications.
 {
   lib,
   stdenvNoCC,

@@ -161,7 +161,14 @@
                 ./hosts/ebisu/home.nix
                 ./users/paolo/agda.nix
                 ./users/paolo/interactive.nix
-                ./users/paolo/tmux-workspaces.nix # after interactive.nix: overrides its tmux bar and keys
+                # tmux workspaces for coding agents; overrides interactive.nix's tmux bar and keys
+                ./modules/tmux-agent
+                {
+                  programs.tmux-agent = {
+                    enable = true;
+                    claudeProfiles = [".dq/.claude" ".ag/.claude"];
+                  };
+                }
                 ./users/paolo/ebisu.nix
                 ({
                   pkgs,

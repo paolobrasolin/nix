@@ -14,7 +14,7 @@
       [bell]
       command = { program = "afplay", args = ["/System/Library/Sounds/Tink.aiff"] }
 
-      # The rest serves the tmux workspaces setup (users/paolo/tmux-workspaces.nix).
+      # The rest serves the tmux workspaces setup (modules/tmux-agent).
       [window]
       # Left Option is Alt, for tmux's Alt+digit and Alt+a keys; right Option
       # still types the Italian layout's @ # [ ] { }.

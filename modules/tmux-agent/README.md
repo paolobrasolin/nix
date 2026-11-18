@@ -30,15 +30,22 @@ notes at the end record the decisions and what bit us along the way.
 
 | piece | defined in | ends up as |
 |---|---|---|
-| tmux config | `tmux.conf` here, added by `users/paolo/tmux-workspaces.nix` after `interactive.nix`'s tmux lines | the end of `~/.config/tmux/tmux.conf` |
-| terminal type `tmux-256color` | `users/paolo/tmux-workspaces.nix` | `default-terminal` in the same file |
-| helper script | `tmux-agent` here | `~/.config/tmux/bin/tmux-agent` |
-| plain `tmux` opens the current folder's workspace | `users/paolo/tmux-workspaces.nix` | a `tmux` function in `~/.zshrc` |
-| left Option as Alt, Shift+Enter, Alt+Shift+3 | `hosts/ebisu/home.nix` | `~/.alacritty.toml` |
-| Claude Code hooks | `claude-hooks.json` here, merged on activation by `users/paolo/tmux-workspaces.nix` | merged into `~/.dq/.claude/settings.json` and `~/.ag/.claude/settings.json` |
+Everything is in this folder. `default.nix` is the home-manager module:
+import it and set `programs.tmux-agent.enable` (ebisu does, in `flake.nix`, with
+`claudeProfiles` set to its two Claude profiles).
 
-Only ebisu imports the module (`flake.nix`); kitsune and inari keep the plain
-tmux setup from `interactive.nix`.
+| piece | defined in | ends up as |
+|---|---|---|
+| tmux config | `tmux.conf` here, added by `default.nix` after any other tmux lines (`interactive.nix`'s) | the end of `~/.config/tmux/tmux.conf` |
+| terminal type `tmux-256color`, tmux next-3.9 | `default.nix` | `default-terminal` in the same file; the tmux package |
+| helper script | `tmux-agent` here | `~/.config/tmux/bin/tmux-agent` |
+| plain `tmux` opens the current folder's workspace | `default.nix` | a `tmux` function in `~/.zshrc` |
+| notifier app | `terminal-notifier.nix` here, copied by `default.nix` | `~/Applications/tmux-agent.app` |
+| Claude Code hooks | `claude-hooks.json` here, merged on activation by `default.nix` | merged into each `claudeProfiles` folder's `settings.json` |
+| left Option as Alt, Shift+Enter, Alt+Shift+3 | `hosts/ebisu/home.nix` | `~/.alacritty.toml` |
+
+Only ebisu imports the module; kitsune and inari keep the plain tmux setup from
+`interactive.nix`.
 
 How a marker gets there: Claude Code runs a hook → `tmux-agent state
 working|waiting|done|clear` sets the pane option `@agent` → both status rows
@@ -48,13 +55,13 @@ and sends a macOS notification when no tmux client has focus. The bell is
 `afplay` of the sound Alacritty's bell plays (Tink), so it's heard from any
 workspace: a bell in the pane only reaches clients showing its workspace, and
 with `bell-action other` not even them when it's the tab on screen. The helper
-is macOS-only (`afplay`, `osascript`), like the module, which only ebisu imports. A *done* in
-the pane you're looking at (shown by a client with focus) is skipped; with the
-terminal behind another app it isn't, and coming back clears it.
+is macOS-only (`afplay`, `osascript`), like the module. A *done* in the pane
+you're looking at (shown by a client with focus) is skipped; with the terminal
+behind another app it isn't, and coming back clears it.
 
 Where the state comes from: Claude Code reports its own status to the terminal
-(OSC 7501), which tmux's development branch (next-3.9, pinned in
-`tmux-workspaces.nix` until 3.9 is out) keeps as `#{pane_program_state}`. The
+(OSC 7501), which tmux's development branch (next-3.9, pinned in `default.nix`
+until 3.9 is out) keeps as `#{pane_program_state}`. The
 markers trust it over the hooks: *working* and *blocked* (waiting) show as they
 are, *idle* shows nothing, so Esc, which fires no hook, leaves no stale marker,
 and *done* or *error* show until you visit. Alt+a reads the same state as the
@@ -83,10 +90,10 @@ seen`, from the `pane-focus-in` hook). Without terminal-notifier the helper
 falls back to `osascript`, whose notifications count as Script Editor's: a
 click opens Script Editor.
 
-terminal-notifier is `pkgs/terminal-notifier` (its 3.x release; nixpkgs has an
-x86_64-only 2.0.0), and the helper runs a copy of it,
-`~/Applications/tmux-agent.app`, that `tmux-workspaces.nix` makes on
-activation. Two reasons for a copy:
+terminal-notifier is `terminal-notifier.nix` here (its 3.x release; nixpkgs has
+an x86_64-only 2.0.0), and the helper runs a copy of it,
+`~/Applications/tmux-agent.app`, that `default.nix` makes on activation. Two
+reasons for a copy:
 
 - A notification's icon is always its sender's, so Claude's icon needs an app
   of its own: the copy has its own bundle id, the name tmux-agent (not Claude
@@ -116,8 +123,8 @@ Starting tmux any other way (`tmux new`, …) skips this.
 
 Claude Code writes its own settings files (`/config`, permission answers), so
 the hooks can't be read-only links into the nix store. Instead, home-manager's
-activation (`tmuxAgentClaudeHooks` in `users/paolo/tmux-workspaces.nix`) merges
-`claude-hooks.json` into both profiles' `settings.json`: it takes out every
+activation (`tmuxAgentClaudeHooks` in `default.nix`) merges `claude-hooks.json`
+into the `settings.json` of each folder in `claudeProfiles`: it takes out every
 entry that calls `tmux-agent`, in any event, adds the current ones, drops
 events left empty, and keeps everything else, so a hook removed from
 `claude-hooks.json` goes too. The merge runs through home-manager's
@@ -125,7 +132,8 @@ events left empty, and keeps everything else, so a hook removed from
 which writes atomically, keeps the file's mode, keeps the newer file if Claude
 Code writes it meanwhile, and fails the switch rather than touch a
 `settings.json` that isn't valid JSON. A profile without a `settings.json` yet
-is skipped, and plain `claude` (`~/.claude`) doesn't get them. So after
+is skipped, and on ebisu plain `claude` (`~/.claude`) isn't listed, so it
+doesn't get them. So after
 changing `claude-hooks.json`, `snix`; a hook Claude Code dropped from its
 settings comes back the same way.
 

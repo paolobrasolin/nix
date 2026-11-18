@@ -20,7 +20,7 @@
 #      TMUX_AGENT_TERMINAL app that clicking a desktop notification brings to the front
 #                       (default: the one tmux was started from, else org.alacritty)
 #      TMUX_AGENT_NOTIFIER terminal-notifier to post desktop notifications with (default:
-#                       the copy tmux-workspaces.nix makes; missing: osascript)
+#                       the copy the nix module makes; missing: osascript)
 #      TMUX_AGENT_SOUND the bell an agent rings (default: Tink, as Alacritty's bell)
 
 set -u

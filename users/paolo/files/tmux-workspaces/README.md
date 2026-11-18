@@ -48,6 +48,33 @@ notification when no tmux client has focus. A *done* in the pane you're looking
 at (shown by a client with focus) is skipped; with the terminal behind another
 app it isn't, and coming back clears it.
 
+The desktop notification goes through `terminal-notifier`: its title is the
+workspace and tab, a waiting agent's says what it needs (Claude Code's
+Notification hook passes the text), and clicking it brings Alacritty to the
+front on that tab. Each pane has at most one out, replaced by the next, and
+taken back when you visit the pane or the agent gets back to work (`tmux-agent
+seen`, from the `pane-focus-in` hook). Without terminal-notifier the helper
+falls back to `osascript`, whose notifications count as Script Editor's: a
+click opens Script Editor.
+
+terminal-notifier is `pkgs/terminal-notifier` (its 3.x release; nixpkgs has an
+x86_64-only 2.0.0), and the helper runs a copy of it,
+`~/Applications/tmux-agent.app`, that `tmux-workspaces.nix` makes on
+activation. Two reasons for a copy:
+
+- A notification's icon is always its sender's, so Claude's icon needs an app
+  of its own: the copy has its own bundle id, the name tmux-agent (not Claude
+  or Claude Code, which would pass it off as Anthropic's), and the icon of the
+  installed Claude app (not kept in this public repo), and is re-signed ad hoc.
+  Without the Claude app it keeps terminal-notifier's icon.
+- macOS lets an app post notifications only from an Applications folder: from
+  the nix store or Homebrew's Cellar it gets no permission prompt and fails, and
+  home-manager only links apps.
+
+The copy is rebuilt when the package or Claude's icon changes. Its first
+notification asks for permission (System Settings → Notifications →
+tmux-agent).
+
 ## Environment and direnv
 
 The tmux server copies the environment of the shell that starts it, once, and

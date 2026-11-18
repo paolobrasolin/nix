@@ -13,11 +13,17 @@
 #   tmux-agent demo                               fake agent in a background tab, to test notifications
 #   tmux-agent timew                              status-bar snippet: what timewarrior is tracking
 #   tmux-agent fit                                how wide workspace names can be in row 1 (tmux hooks run it)
+#   tmux-agent seen [pane-id]                     take back a pane's desktop notification (tmux hook runs it)
 #
 # Env: TMUX_AGENT_CMD   agent command (default: claude-dq under ~/dq, claude-ag under ~/ag, else ask)
 #      TMUX_AGENT_ROOTS where the picker looks for git repos (default: ~/dq ~/pb ~/ag)
+#      TMUX_AGENT_TERMINAL app that clicking a desktop notification brings to the front
+#                       (default: the one tmux was started from, else org.alacritty)
+#      TMUX_AGENT_NOTIFIER terminal-notifier to post desktop notifications with (default:
+#                       the copy tmux-workspaces.nix makes; missing: osascript)
 
 set -u
+NOTIFIER=${TMUX_AGENT_NOTIFIER:-$HOME/Applications/tmux-agent.app/Contents/MacOS/terminal-notifier}
 AGENT_CMD=${TMUX_AGENT_CMD:-}
 
 msg() {
@@ -107,9 +113,10 @@ looking_at() {
   tmux list-clients -F '#{client_flags}|#{pane_id}' | grep -q "focused[^|]*|$1\$"
 }
 
-notify() {   # $1 = waiting|done
+notify() {   # $1 = waiting|done, $2 = what the agent says it needs (optional)
   case $1 in waiting) what='needs you' ;; *) what='is done' ;; esac
-  text="$(tmux display -p -t "$TMUX_PANE" '#{session_name} › #{window_name}'): agent $what"
+  where=$(tmux display -p -t "$TMUX_PANE" '#{session_name} › #{window_name}')
+  text="$where: agent $what"
 
   # tmux toast on every client that isn't already looking at this pane
   tmux list-clients -F '#{client_name}|#{pane_id}' | while IFS='|' read -r c p; do
@@ -118,12 +125,36 @@ notify() {   # $1 = waiting|done
 
   # desktop notification only when no tmux client has focus (you're in another app)
   tmux list-clients -F '#{client_flags}' | grep -q focused && return 0
-  text=$(printf '%s' "$text" | tr -d '"\\')
-  if command -v osascript >/dev/null 2>&1; then
+  if [ -x "$NOTIFIER" ]; then
+    # One per pane: the next replaces it, and it's taken back once it's no longer
+    # news (withdraw). A click brings the terminal to the front, on this tab.
+    "$NOTIFIER" -title "$where" -message "${2:-Agent $what}" -group "tmux-agent-$TMUX_PANE" \
+      -activate "${TMUX_AGENT_TERMINAL:-${__CFBundleIdentifier:-org.alacritty}}" \
+      -execute "$(command -v tmux) ${TMUX:+-S ${TMUX%%,*}} switch-client -t $TMUX_PANE" &&
+      tmux set -p -t "$TMUX_PANE" @agent_notified 1
+  elif command -v osascript >/dev/null 2>&1; then
+    # shows up as Script Editor's, and a click opens Script Editor
+    text=$(printf '%s' "$text" | tr -d '"\\')
     osascript -e "display notification \"$text\" with title \"tmux\""
   elif command -v notify-send >/dev/null 2>&1; then
     notify-send tmux "$text"
   fi
+}
+
+# Take back pane $1's desktop notification: you visited the pane, or its agent
+# moved on
+withdraw() {
+  tmux set -p -t "$1" -u @agent_notified
+  [ -x "$NOTIFIER" ] && "$NOTIFIER" -remove "tmux-agent-$1"
+}
+
+# tmux.conf's pane-focus-in hook runs this for a pane that has a notification out
+cmd_seen() {
+  exec >/dev/null 2>&1
+  pane=${1:-${TMUX_PANE:-}}
+  [ -n "$pane" ] && [ -n "$(tmux display -p -t "$pane" '#{@agent_notified}' 2>/dev/null)" ] &&
+    withdraw "$pane"
+  exit 0
 }
 
 cmd_state() {
@@ -132,12 +163,19 @@ cmd_state() {
   [ -n "${TMUX_PANE:-}" ] || exit 0
   case $new in working|waiting|done|clear) ;; *) exit 0 ;; esac
 
-  IFS='|' read -r pid tty cur <<EOF
-$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}' 2>/dev/null)
+  IFS='|' read -r pid tty cur notified <<EOF
+$(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}|#{@agent_notified}' 2>/dev/null)
 EOF
   [ -n "${pid:-}" ] || exit 0
   [ "$new" = "$cur" ] && exit 0            # no change: keeps PostToolUse hooks cheap
   descends_from "$pid" || exit 0
+
+  # the agent moved on, so what it said before is no longer news
+  case $new in working|clear) [ -n "$notified" ] && withdraw "$TMUX_PANE" ;; esac
+  # Claude Code's Notification hook says what the agent needs, as JSON on stdin
+  # (not when run by hand or by `demo`, from a terminal)
+  said=
+  [ "$new" = waiting ] && [ ! -t 0 ] && said=$(jq -r '.message // empty' 2>/dev/null)
 
   # "done" in the pane you're already looking at isn't news; don't leave a marker.
   # Looking means a focused client shows it: with the terminal behind another app
@@ -154,7 +192,7 @@ EOF
   case $new in
     waiting|done)
       [ -w "$tty" ] && printf '\a' >"$tty"   # flags the tab; your terminal hears it if this workspace is on screen
-      notify "$new" ;;
+      notify "$new" "$said" ;;
   esac
   exit 0
 }
@@ -326,5 +364,6 @@ case ${1:-} in
   demo)  cmd_demo ;;
   timew) cmd_timew ;;
   fit)   cmd_fit ;;
-  *) sed -n '5,16p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  seen)  shift; cmd_seen "$@" ;;
+  *) sed -n '5,17p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

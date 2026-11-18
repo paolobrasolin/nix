@@ -43,10 +43,13 @@ tmux setup from `interactive.nix`.
 How a marker gets there: Claude Code runs a hook → `tmux-agent state
 working|waiting|done|clear` sets the pane option `@agent` → both status rows
 and the `C-b w` tree show it. On *waiting* and *done* the helper also rings the
-bell (flags the tab), shows a message on other tmux clients, and sends a macOS
-notification when no tmux client has focus. A *done* in the pane you're looking
-at (shown by a client with focus) is skipped; with the terminal behind another
-app it isn't, and coming back clears it.
+bell unless you're looking at the pane, shows a message on other tmux clients,
+and sends a macOS notification when no tmux client has focus. The bell is
+`afplay` of the sound Alacritty's bell plays (Tink), so it's heard from any
+workspace: a bell in the pane only reaches clients showing its workspace, and
+with `bell-action other` not even them when it's the tab on screen. A *done* in
+the pane you're looking at (shown by a client with focus) is skipped; with the
+terminal behind another app it isn't, and coming back clears it.
 
 The desktop notification goes through `terminal-notifier`: its title is the
 workspace and tab, a waiting agent's says what it needs (Claude Code's

@@ -21,6 +21,7 @@
 #                       (default: the one tmux was started from, else org.alacritty)
 #      TMUX_AGENT_NOTIFIER terminal-notifier to post desktop notifications with (default:
 #                       the copy tmux-workspaces.nix makes; missing: osascript)
+#      TMUX_AGENT_SOUND the bell an agent rings (default: Tink, as Alacritty's bell)
 
 set -u
 NOTIFIER=${TMUX_AGENT_NOTIFIER:-$HOME/Applications/tmux-agent.app/Contents/MacOS/terminal-notifier}
@@ -141,6 +142,17 @@ notify() {   # $1 = waiting|done, $2 = what the agent says it needs (optional)
   fi
 }
 
+# The bell, heard from any workspace. A bell in the pane would only reach
+# clients showing its workspace, and with bell-action other not even them when
+# it's the tab on screen, so on macOS this plays the bell's sound itself.
+ring() {
+  if command -v afplay >/dev/null 2>&1; then
+    afplay "${TMUX_AGENT_SOUND:-/System/Library/Sounds/Tink.aiff}"
+  else
+    [ -w "$tty" ] && printf '\a' >"$tty"
+  fi
+}
+
 # Take back pane $1's desktop notification: you visited the pane, or its agent
 # moved on
 withdraw() {
@@ -191,8 +203,8 @@ EOF
   refresh_bars
   case $new in
     waiting|done)
-      [ -w "$tty" ] && printf '\a' >"$tty"   # flags the tab; your terminal hears it if this workspace is on screen
-      notify "$new" "$said" ;;
+      notify "$new" "$said"
+      looking_at "$TMUX_PANE" || ring ;;
   esac
   exit 0
 }

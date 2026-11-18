@@ -4,7 +4,7 @@
     lua-language-server # lua
     marksman # markdown
     nil # nix
-    nodePackages.bash-language-server # shell
+    bash-language-server # shell
     vscode-langservers-extracted # html, css, json
     yaml-language-server # yaml
 

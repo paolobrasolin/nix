@@ -40,9 +40,9 @@
     # * `softwareupdate --install-rosetta --agree-to-license`
     # * `colima start --arch aarch64 --vm-type=vz --vz-rosetta`
     # colima # NOTE: disabled — lima 1.2.2 is marked insecure/EOL in nixpkgs 25.11
-    zathura
+    unstable.zathura # NOTE: from unstable — 26.05's appstream 1.1.2, which it needs, fails to link on darwin
     texlab
-    tmate
+    # tmate # NOTE: disabled — marked insecure in nixpkgs 26.05 (no release since 2019, CVE-2018-19387)
     unstable.devenv
     nodejs
     age

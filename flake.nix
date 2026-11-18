@@ -2,7 +2,7 @@
   description = "Paolo's Nix Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Granular modules only: do NOT import donq.darwinModules.core here — this
@@ -10,7 +10,7 @@
     # linux-builder itself), and core sets nix.enable = false.
     donq.url = "github:donq-io/donq_nix-workstations";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     disko.url = "github:nix-community/disko";
@@ -19,7 +19,7 @@
     cornelis.url = "github:isovector/cornelis";
     cornelis.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";

@@ -51,9 +51,25 @@ with `bell-action other` not even them when it's the tab on screen. A *done* in
 the pane you're looking at (shown by a client with focus) is skipped; with the
 terminal behind another app it isn't, and coming back clears it.
 
+Which hooks set what (`claude-hooks.json`, from Claude Code's hooks reference):
+
+- *working*: UserPromptSubmit, and after every tool call whether it worked or
+  failed (PostToolUse, PostToolUseFailure).
+- *waiting*: PermissionRequest, which fires as the prompt appears (the
+  permission Notification only comes after about 6 s without typing, and each
+  keystroke restarts the wait), and Notification for questions.
+- *done*: Stop, or StopFailure when an API error ends the turn. A turn that
+  ends with background agents still running stays *working* (the Stop event
+  lists them in `background_tasks`): Claude picks the work up when they finish.
+- *clear*: SessionStart (not after compaction, which fires it too) and
+  SessionEnd.
+
+Claude Code runs no hook when you interrupt it with Esc, so the marker stays as
+it was until the next prompt.
+
 The desktop notification goes through `terminal-notifier`: its title is the
-workspace and tab, a waiting agent's says what it needs (Claude Code's
-Notification hook passes the text), and clicking it brings Alacritty to the
+workspace and tab, a waiting agent's says what it needs (the tool it wants, or
+its question), a failed turn's says why, and clicking it brings Alacritty to the
 front on that tab. Each pane has at most one out, replaced by the next, and
 taken back when you visit the pane or the agent gets back to work (`tmux-agent
 seen`, from the `pane-focus-in` hook). Without terminal-notifier the helper

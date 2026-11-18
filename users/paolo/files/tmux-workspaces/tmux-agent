@@ -175,6 +175,15 @@ cmd_state() {
   [ -n "${TMUX_PANE:-}" ] || exit 0
   case $new in working|waiting|done|clear) ;; *) exit 0 ;; esac
 
+  # Claude Code's hook event, as JSON on stdin (none when run by hand or by
+  # `demo`, from a terminal). A turn that ends with background agents still
+  # running isn't done: Claude picks the work up again when they finish.
+  input=
+  case $new in waiting|done) [ -t 0 ] || input=$(cat) ;; esac
+  [ "$new" = done ] && printf '%s' "$input" | jq -e '
+    any(.background_tasks[]?; .type == "subagent" or .type == "workflow" or .type == "teammate")
+  ' && new=working
+
   IFS='|' read -r pid tty cur notified <<EOF
 $(tmux display -p -t "$TMUX_PANE" '#{pane_pid}|#{pane_tty}|#{@agent}|#{@agent_notified}' 2>/dev/null)
 EOF
@@ -184,10 +193,12 @@ EOF
 
   # the agent moved on, so what it said before is no longer news
   case $new in working|clear) [ -n "$notified" ] && withdraw "$TMUX_PANE" ;; esac
-  # Claude Code's Notification hook says what the agent needs, as JSON on stdin
-  # (not when run by hand or by `demo`, from a terminal)
-  said=
-  [ "$new" = waiting ] && [ ! -t 0 ] && said=$(jq -r '.message // empty' 2>/dev/null)
+  # what the notification says: what a waiting agent needs, or why a turn failed
+  said=$(printf '%s' "$input" | jq -r '
+    if .hook_event_name == "PermissionRequest" then "Claude needs your permission to use \(.tool_name)"
+    elif .hook_event_name == "StopFailure" then "Stopped: \(.last_assistant_message // .error)"
+    else .message // empty end
+  ' 2>/dev/null)
 
   # "done" in the pane you're already looking at isn't news; don't leave a marker.
   # Looking means a focused client shows it: with the terminal behind another app

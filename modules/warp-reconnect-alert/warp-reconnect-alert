@@ -1,0 +1,46 @@
+#!/bin/zsh
+# warp-reconnect-alert: a sound and an alert that stays on screen until clicked
+# whenever Cloudflare WARP goes from not connected to connected.
+# Usage: warp-reconnect-alert          watch forever (what the launchd agent runs)
+#        warp-reconnect-alert --test   show the alert once and exit
+
+WARP_CLI=/usr/local/bin/warp-cli
+
+alert() {
+  local now=$(date +%H:%M)
+  local answer
+  # The sound starts after `activate`, which takes about 2 s, so that it lands
+  # together with the alert rather than ahead of it.
+  answer=$(/usr/bin/osascript \
+    -e 'activate' \
+    -e 'do shell script "/usr/bin/afplay /System/Library/Sounds/Sosumi.aiff > /dev/null 2>&1 &"' \
+    -e "display alert \"WARP is back ON\" message \"Cloudflare WARP reconnected at $now.\" as critical buttons {\"Pause again\", \"OK\"} default button \"OK\"" \
+    2>/dev/null)
+  if [[ $answer == *"Pause again"* ]]; then
+    "$WARP_CLI" disconnect >/dev/null 2>&1
+  fi
+}
+
+if [[ $1 == --test ]]; then
+  alert
+  exit 0
+fi
+
+prev=""
+while true; do
+  # Each line is JSON like {"status":"Connected",...}; zsh runs the last
+  # pipeline stage in this shell, so $prev survives listener restarts.
+  "$WARP_CLI" --json -l status 2>/dev/null | while IFS= read -r line; do
+    if [[ $line == *'"status":"Connected"'* ]]; then
+      cur=connected
+    else
+      cur=other
+    fi
+    if [[ $prev == other && $cur == connected ]]; then
+      alert &!
+    fi
+    prev=$cur
+  done
+  # Listener exited (daemon restart, sleep/wake): retry shortly.
+  sleep 5
+done

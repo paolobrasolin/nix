@@ -169,6 +169,9 @@
                     claudeProfiles = [".dq/.claude" ".ag/.claude"];
                   };
                 }
+                # A loud alert when Cloudflare WARP turns itself back on after a pause
+                ./modules/warp-reconnect-alert
+                {programs.warp-reconnect-alert.enable = true;}
                 ./users/paolo/ebisu.nix
                 ({
                   pkgs,

@@ -13,7 +13,7 @@ A thick edge and a coloured name show an agent's state: pink-red, it's waiting
 on you; green, it's done (clears when you look at it); a light grey edge, it's
 working. Tabs keep their width, so nothing moves when states change. Each
 workspace's edge is coloured by folder (`~/dq` orange, `~/pb` purple, `~/ag`
-cyan) unless an agent there is busy or needs you. When the workspaces don't
+cyan, `~/vp` green) unless an agent there is busy or needs you. When the workspaces don't
 fit, every name is cut to the same length, the longest that fits (short names
 stay whole), so you still see each agent's state. Right of the tabs: what
 timewarrior is tracking, as in the prompt plus the annotation (`tmux-agent

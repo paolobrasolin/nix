@@ -16,7 +16,7 @@
 #   tmux-agent seen [pane-id]                     take back a pane's desktop notification (tmux hook runs it)
 #
 # Env: TMUX_AGENT_CMD   agent command (default: claude-dq under ~/dq, claude-ag under ~/ag, else ask)
-#      TMUX_AGENT_ROOTS where the picker looks for git repos (default: ~/dq ~/pb ~/ag)
+#      TMUX_AGENT_ROOTS where the picker looks for git repos (default: ~/dq ~/pb ~/ag ~/vp)
 #      TMUX_AGENT_TERMINAL app that clicking a desktop notification brings to the front
 #                       (default: the one tmux was started from, else org.alacritty)
 #      TMUX_AGENT_NOTIFIER terminal-notifier to post desktop notifications with (default:
@@ -39,7 +39,7 @@ pick_dir() {
     {
       tmux list-sessions -F '#{session_path}' 2>/dev/null
       command -v zoxide >/dev/null 2>&1 && zoxide query -l 2>/dev/null
-      for r in ${TMUX_AGENT_ROOTS:-$HOME/dq $HOME/pb $HOME/ag}; do
+      for r in ${TMUX_AGENT_ROOTS:-$HOME/dq $HOME/pb $HOME/ag $HOME/vp}; do
         [ -d "$r" ] && find "$r" -maxdepth 3 -type d -name .git -prune 2>/dev/null | sed 's#/\.git$##'
       done
     } | awk 'NF && !seen[$0]++' | fzf --prompt='workspace> ' --height=100% --reverse
